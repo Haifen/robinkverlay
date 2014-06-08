@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<repositories version="1.0">
+  <repo priority="50" quality="experimental" status="unofficial">
+    <name>robinkverlay</name>
+    <description>Overlay Robin's functioning ebuilds</description>
+    <homepage>https://github.com/Haifen/robinkverlay</homepage>
+    <owner>
+      <email>robink@creosotehill.org</email>
+	  <name>Robin Kauffman</name>
+    </owner>
+	<source type="git">git://github.com/Haifen/robinkverlay</source>
+	<source type="git">ssh://git@github.com/Haifen/robinkverlay</source>
+    <feed>https://github.com/Haifen/robinkverlay/commits/master.atom</feed>
+  </repo>
+</repositories>
