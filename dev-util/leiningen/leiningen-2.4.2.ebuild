@@ -8,8 +8,15 @@ EAPI=4
 
 DESCRIPTION="Leiningen is a build utility for clojure projects."
 HOMEPAGE="http://github.com/technomancy/leiningen/"
-SRC_URI="https://raw.githubusercontent.com/technomancy/leiningen/${PV}/bin/lein-pkg ->
-lein-pkg-${PV}
+
+private_script=true
+
+if [[ ${private_script} ]]; then
+	leinpkg_url="http://rgcs.creosotehill.org/gentoo/distfiles/lein-pkg-${PV}"
+else
+	leinpkg_url="https://raw.githubusercontent.com/technomancy/leiningen/${PV}/bin/lein-pkg	-> lein-pkg-{PV}"
+fi
+SRC_URI="${leinpkg_url}
 https://github.com/technomancy/leiningen/releases/download/${PV}/leiningen-${PV}-standalone.jar"
 RESTRICT="mirror"
 
