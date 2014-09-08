@@ -2,7 +2,7 @@
 <repositories version="1.0">
   <repo priority="50" quality="experimental" status="unofficial">
     <name>robinkverlay</name>
-    <description>Overlay Robin's functioning ebuilds</description>
+    <description>Overlay of Robin's functioning ebuilds</description>
     <homepage>https://github.com/Haifen/robinkverlay</homepage>
     <owner>
       <email>robink@creosotehill.org</email>
