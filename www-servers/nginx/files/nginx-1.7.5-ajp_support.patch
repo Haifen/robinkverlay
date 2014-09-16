@@ -1,0 +1,56 @@
+diff --git a/src/core/ngx_config.h b/src/core/ngx_config.h
+index 1da71f8..f83e86a 100644
+--- a/src/core/ngx_config.h
++++ b/src/core/ngx_config.h
+@@ -11,6 +11,7 @@
+ 
+ #include <ngx_auto_headers.h>
+ 
++#include <nginx.h>
+ 
+ #if defined __DragonFly__ && !defined __FreeBSD__
+ #define __FreeBSD__        4
+diff --git a/src/event/ngx_event_pipe.c b/src/event/ngx_event_pipe.c
+index eed807d..5d36f9f 100644
+--- a/src/event/ngx_event_pipe.c
++++ b/src/event/ngx_event_pipe.c
+@@ -314,6 +314,9 @@ ngx_event_pipe_read_upstream(ngx_event_pipe_t *p)
+             if (n >= size) {
+                 cl->buf->last = cl->buf->end;
+ 
++#if (nginx_version) < 1001004 
++                n -= size;
++#else
+                 /* STUB */ cl->buf->num = p->num++;
+ 
+                 if (p->input_filter(p, cl->buf) == NGX_ERROR) {
+@@ -324,11 +327,29 @@ ngx_event_pipe_read_upstream(ngx_event_pipe_t *p)
+                 ln = cl;
+                 cl = cl->next;
+                 ngx_free_chain(p->pool, ln);
++#endif
+ 
+             } else {
+                 cl->buf->last += n;
+                 n = 0;
++#if (nginx_version) < 1001004 
++                if(!p->keepalive) {
++                    continue;
++                }
++#endif
++            }
++
++#if (nginx_version) < 1001004 
++            /* STUB */ cl->buf->num = p->num++;
++
++            if (p->input_filter(p, cl->buf) == NGX_ERROR) {
++                return NGX_ABORT;
+             }
++
++            ln = cl;
++            cl = cl->next;
++            ngx_free_chain(p->pool, ln);
++#endif
+         }
+ 
+         if (cl) {
