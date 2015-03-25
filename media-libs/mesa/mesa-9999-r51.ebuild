@@ -50,8 +50,8 @@ done
 
 IUSE="${IUSE_VIDEO_CARDS}
 	bindist +classic debug +dri3 +egl +gallium +gbm gles1 gles2 +llvm nine +nptl
-	opencl openvg osmesa pax_kernel openmax pic r600-llvm-compiler selinux vaapi
-	vdpau wayland xvmc xa kernel_FreeBSD"
+	opencl openvg osmesa pax_kernel openmax pic r600-llvm-compiler selinux
+	vaapi vdpau wayland xvmc xa kernel_FreeBSD"
 
 REQUIRED_USE="
 	llvm?   ( gallium )
@@ -293,8 +293,11 @@ multilib_src_configure() {
 				--with-clang-libdir="${EPREFIX}/usr/lib"
 				"
 		fi
-		# Mesa Nine (Direct3D 9) support
-		myconf+="$(use_enable nine)"
+
+		#Gallium Direct3D9 Support
+		if use nine; then
+			myconf+="$(use_enable nine)
+		fi
 	fi
 
 	# x86 hardened pax_kernel needs glx-rts, bug 240956
