@@ -296,7 +296,7 @@ multilib_src_configure() {
 
 		#Gallium Direct3D9 Support
 		if use nine; then
-			myconf+="$(use_enable nine)
+			myconf+="$(use_enable nine)"
 		fi
 	fi
 
