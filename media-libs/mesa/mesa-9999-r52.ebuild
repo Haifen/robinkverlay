@@ -4,7 +4,8 @@
 
 EAPI=5
 
-EGIT_REPO_URI="git://anongit.freedesktop.org/mesa/mesa"
+EGIT_REPO_URI="git://people.freedesktop.org/~agd5f/mesa"
+EGIT_BRANCH="amdgpu"
 
 if [[ ${PV} = 9999* ]]; then
 	GIT_ECLASS="git-r3"
@@ -177,6 +178,16 @@ EGIT_CHECKOUT_DIR=${S}
 QA_EXECSTACK="usr/lib*/libGL.so*"
 QA_WX_LOAD="usr/lib*/libGL.so*"
 
+bash_out_Werror_stupidity_with_more_stupidity() {
+	## Nasty kludge to disable -Werror=implicit-function-declaration in src/gallium/drivers/radeon/Makefile and -Werror=missing-prototypes in src/gallium/winsys/amdgpu/drm/Makefile
+	einfo "Clobbering -Werror=implicit-function-definition for ${MULTILIB_ABI_FLAG}"
+	einfo "Clobber only occurs in ${BUILD_DIR}/src/gallium/drivers/radeon/Makefile"
+	sed -i "s/-Werror=implicit-function-declaration //g" ${BUILD_DIR}/src/gallium/drivers/radeon/Makefile
+	einfo "Clobbering -Werror=missing-prototypes for ${MULTILIB_ABI_FLAG}"
+	einfo "Clobber only occurs in ${BUILD_DIR}/src/gallium/winsys/amdgpu/drm/Makefile"
+	sed -i "s/-Werror=missing-prototypes //g" ${BUILD_DIR}/src/gallium/winsys/amdgpu/drm/Makefile
+}
+	
 pkg_setup() {
 	# warning message for bug 459306
 	if use llvm && has_version sys-devel/llvm[!debug=]; then
@@ -190,7 +201,14 @@ pkg_setup() {
 src_prepare() {
 	# fix for hardened pax_kernel, bug 240956
 	[[ ${PV} != 9999* ]] && epatch "${FILESDIR}"/glx_ro_text_segm.patch
-	[[ ${PV} == 9999* ]] && epatch "${FILESDIR}/${P}-radeon_drm_winsys_drm_version_kludge.patch"
+
+	## Make Mesa compile against newer (4.x) kernels
+	## Try dropping this for now.
+#	[[ ${PV} == 9999* ]] && epatch "${FILESDIR}/${P}-radeon_drm_winsys_drm_version_kludge.patch"
+
+	## Fix for new LLVM R600/GCN target name
+	## Handled by upstream now.
+#	[[ ${PV} == 9999* ]] && epatch "${FILESDIR}/mesa-9999-amdgpu-llvm-target.patch"
 
 	eautoreconf
 }
@@ -291,7 +309,6 @@ multilib_src_configure() {
 		--enable-shared-glapi \
 		--disable-shader-cache \
 		$(use_enable !bindist texture-float) \
-		$(use_enable d3d9 nine) \
 		$(use_enable debug) \
 		$(use_enable dri3) \
 		$(use_enable egl) \
@@ -306,6 +323,10 @@ multilib_src_configure() {
 		--with-gallium-drivers=${GALLIUM_DRIVERS} \
 		PYTHON2="${PYTHON}" \
 		${myconf}
+}
+
+post_src_configure() {
+	multilib_foreach_abi bash_out_Werror_stupidity_with_more_stupidity
 }
 
 multilib_src_install() {
@@ -467,3 +488,4 @@ gallium_enable() {
 			;;
 	esac
 }
+
