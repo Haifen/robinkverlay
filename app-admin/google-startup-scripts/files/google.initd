@@ -1,0 +1,18 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+depend() {
+	before ssh
+}
+
+start() {
+	ebegin "Starting Google Compute Engine on-boot services..."
+	/usr/share/google/onboot
+	eend $?
+}
+
+stop() {
+	start-stop-daemon -K -p /var/run/google.onboot -R TERM/10/KILL/5
+}

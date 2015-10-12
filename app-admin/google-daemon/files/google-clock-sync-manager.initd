@@ -1,0 +1,24 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+DAEMON="/usr/share/google/google_daemon/manage_clock_sync.py"
+DAEMON_ARGS=""
+PIDFILE="/var/run/google-clock-sync-manager.pid"
+
+depend() {
+	need net logger
+}
+
+start() {
+	ebegin "Starting Google Compute Engine clock manager..."
+		start-stop-daemon -S -m -b -p ${PIDFILE} -x ${DAEMON}
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping Google Compute Engine clock manager..."
+		start-stop-daemon -K -R TERM/30/KILL/5 -p ${PIDFILE}
+	eend $?
+}

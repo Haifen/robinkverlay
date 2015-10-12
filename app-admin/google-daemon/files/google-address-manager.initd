@@ -1,0 +1,27 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+DAEMON="/usr/share/google/google_daemon/manage_addresses.py"
+DAEMON_ARGS=""
+PIDFILE=/var/run/google-address-manager.pid
+
+depend() {
+
+	provide network
+}
+
+start() {
+	ebegin "Starting Google Compute Engine addresses manager..."
+		start-stop-daemon -S --quiet -m -p ${PIDFILE} -b -x ${DAEMON} ${DAEMON_ARGS}
+	eend $?
+
+}
+
+stop() {
+	ebegin "Stopping Google Compute Engine addresses manager..."
+		start-stop-daemon -K -R TERM/30/KILL/5 -p ${PIDFILE}
+	eend $?
+}
+

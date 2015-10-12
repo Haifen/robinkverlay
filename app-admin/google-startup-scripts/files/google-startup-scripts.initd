@@ -1,0 +1,21 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+depend() {
+	after *
+}
+
+start() {
+	ebegin "Running Google Compute Engine metadata-specified startup scripts..."
+		/usr/share/google/run-startup-scripts
+	eend $?
+}
+
+stop() {
+	ebegin "Running Google Compute Engine metadata-specified shutdown scripts..."
+		/usr/share/google/run-shutdown-scripts
+	eend $?
+}
+

@@ -1,0 +1,25 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+# $Id$
+
+DAEMON="/usr/share/google/google_daemon/manage_accounts.py"
+DAEMON_ARGS="--daemon"
+PIDFILE="/var/run/manage_accounts.pid"
+
+depend() {
+	before ssh
+}
+
+start() {
+	ebegin "Starting Google Compute Engine accounts manager..."
+		start-stop-daemon -S -x ${DAEMON} ${DAEMON_ARGS}
+	eend $?
+}
+
+stop() {
+	ebegin "Shutting down Google Compute Engine accounts manager..."
+		start-stop-daemon -K -R TERM/30/KILL/5 -p ${PIDFILE} -n manage_accounts
+	eend $?
+}
+
