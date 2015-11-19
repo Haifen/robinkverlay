@@ -21,6 +21,12 @@ DEPEND="x11-libs/libdrm[video_cards_amdgpu]
 		udev? ( virtual/udev )"
 RDEPEND="${DEPEND}"
 
+src_prepare() {
+	epatch "${FILESDIR}/${P}-dont_call_glamor_egl_destroy_pixmap.patch"
+
+	xorg-2_src_prepare
+}
+
 pkg_pretend() {
 	if use kernel_linux ; then
 		if kernel_is -ge 3 19; then
