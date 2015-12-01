@@ -1,6 +1,6 @@
 # Copyright 1999-2015 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
-# $Header: /var/cvsroot/gentoo-x86/app-emulation/wine/wine-9999.ebuild,v 1.178 2015/05/31 22:07:17 tetromino Exp $
+# $Id$
 
 EAPI="5"
 
@@ -8,22 +8,21 @@ AUTOTOOLS_AUTORECONF=1
 PLOCALES="ar bg ca cs da de el en en_US eo es fa fi fr he hi hr hu it ja ko lt ml nb_NO nl or pa pl pt_BR pt_PT rm ro ru sk sl sr_RS@cyrillic sr_RS@latin sv te th tr uk wa zh_CN zh_TW"
 PLOCALE_BACKUP="en"
 
-inherit autotools-utils eutils fdo-mime flag-o-matic gnome2-utils l10n multilib multilib-minimal pax-utils toolchain-funcs virtualx
+inherit autotools-utils eutils fdo-mime flag-o-matic gnome2-utils l10n multilib multilib-minimal pax-utils toolchain-funcs virtualx versionator
 
 if [[ ${PV} == "9999" ]] ; then
-	EGIT_REPO_URI="git://github.com/iXit/wine"
+	EGIT_REPO_URI="git://source.winehq.org/git/wine.git http://source.winehq.org/git/wine.git"
 	EGIT_BRANCH="master"
 	inherit git-r3
 	SRC_URI=""
 	#KEYWORDS=""
 else
-	MY_P="${PN}-${PV/_/-}"
-	SRC_URI="mirror://sourceforge/${PN}/Source/${MY_P}.tar.bz2"
+	MAJOR_V=$(get_version_component_range 1-2)
+	SRC_URI="https://dl.winehq.org/wine/source/${MAJOR_V}/${P}.tar.bz2"
 	KEYWORDS="-* ~amd64 ~x86 ~x86-fbsd"
-	S=${WORKDIR}/${MY_P}
 fi
 
-GV="2.36"
+GV="2.40"
 MV="4.5.6"
 STAGING_P="wine-staging-${PV}"
 STAGING_DIR="${WORKDIR}/${STAGING_P}"
@@ -37,20 +36,19 @@ SRC_URI="${SRC_URI}
 		abi_x86_64? ( mirror://sourceforge/${PN}/Wine%20Gecko/${GV}/wine_gecko-${GV}-x86_64.msi )
 	)
 	mono? ( mirror://sourceforge/${PN}/Wine%20Mono/${MV}/wine-mono-${MV}.msi )
-	gstreamer? ( http://dev.gentoo.org/~tetromino/distfiles/${PN}/${GST_P}.patch.bz2 )
-	http://dev.gentoo.org/~tetromino/distfiles/${PN}/${WINE_GENTOO}.tar.bz2"
+	gstreamer? ( https://dev.gentoo.org/~tetromino/distfiles/${PN}/${GST_P}.patch.bz2 )
+	https://dev.gentoo.org/~tetromino/distfiles/${PN}/${WINE_GENTOO}.tar.bz2"
 
 if [[ ${PV} == "9999" ]] ; then
 	STAGING_EGIT_REPO_URI="git://github.com/wine-compholio/wine-staging.git"
 else
 	SRC_URI="${SRC_URI}
-	staging? ( https://github.com/wine-compholio/wine-staging/archive/v${PV}.tar.gz -> ${STAGING_P}.tar.gz )
-	pulseaudio? ( https://github.com/wine-compholio/wine-staging/archive/v${PV}.tar.gz -> ${STAGING_P}.tar.gz )"
+	staging? ( https://github.com/wine-compholio/wine-staging/archive/v${PV}.tar.gz -> ${STAGING_P}.tar.gz )"
 fi
 
 LICENSE="LGPL-2.1"
 SLOT="0"
-IUSE="+abi_x86_32 +abi_x86_64 +alsa capi cups custom-cflags d3d9 dos elibc_glibc +fontconfig +gecko gphoto2 gsm gstreamer +jpeg +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap pipelight +png +prelink pulseaudio +realtime +run-exes s3tc samba scanner selinux +ssl staging test +threads +truetype +udisks v4l vaapi +X +xcomposite xinerama +xml"
+IUSE="+abi_x86_32 +abi_x86_64 +alsa capi cups custom-cflags d3d9 dos elibc_glibc +fontconfig +gecko gphoto2 gsm gstreamer +jpeg +lcms ldap +mono mp3 ncurses netapi nls odbc openal opencl +opengl osmesa oss +perl pcap pipelight +png prelink pulseaudio +realtime +run-exes s3tc samba scanner selinux +ssl staging test +threads +truetype +udisks v4l vaapi +X +xcomposite xinerama +xml"
 REQUIRED_USE="|| ( abi_x86_32 abi_x86_64 )
 	test? ( abi_x86_32 )
 	elibc_glibc? ( threads )
@@ -58,6 +56,7 @@ REQUIRED_USE="|| ( abi_x86_32 abi_x86_64 )
 	pipelight? ( staging )
 	s3tc? ( staging )
 	vaapi? ( staging )
+	?? ( gstreamer staging )
 	osmesa? ( opengl )" #286560
 
 # FIXME: the test suite is unsuitable for us; many tests require net access
@@ -67,7 +66,7 @@ RESTRICT="test"
 COMMON_DEPEND="
 	truetype? ( >=media-libs/freetype-2.0.0[${MULTILIB_USEDEP}] )
 	capi? ( net-dialup/capi4k-utils )
-	ncurses? ( >=sys-libs/ncurses-5.2:=[${MULTILIB_USEDEP}] )
+	ncurses? ( >=sys-libs/ncurses-5.2:0=[${MULTILIB_USEDEP}] )
 	udisks? ( sys-apps/dbus[${MULTILIB_USEDEP}] )
 	fontconfig? ( media-libs/fontconfig:=[${MULTILIB_USEDEP}] )
 	gphoto2? ( media-libs/libgphoto2:=[${MULTILIB_USEDEP}] )
@@ -166,10 +165,18 @@ wine_build_environment_check() {
 	[[ ${MERGE_TYPE} = "binary" ]] && return 0
 
 	# bug #549768
-	if [[ $(gcc-major-version) = 5 ]]; then
-		eerror "You need gcc-4.x to build wine; see https://bugs.gentoo.org/549768"
-		eerror
-		return 1
+	if use abi_x86_64 && [[ $(gcc-major-version) = 5 && $(gcc-minor-version) -le 2 ]]; then
+		einfo "Checking for gcc-5 ms_abi compiler bug ..."
+		$(tc-getCC) -O2 "${FILESDIR}"/pr66838.c -o "${T}"/pr66838 || die
+		# Run in subshell to prevent "Aborted" message
+		if ! ( "${T}"/pr66838 || false ) >/dev/null 2>&1; then
+			eerror "64-bit wine cannot be built with gcc-5.1 or initial patchset of 5.2.0"
+			eerror "due to compiler bugs; please re-emerge the latest gcc-5.2.x ebuild,"
+			eerror "or use gcc-config to select a different compiler version."
+			eerror "See https://bugs.gentoo.org/549768"
+			eerror
+			return 1
+		fi
 	fi
 
 	if use abi_x86_64 && [[ $(( $(gcc-major-version) * 100 + $(gcc-minor-version) )) -lt 404 ]]; then
@@ -203,8 +210,8 @@ src_unpack() {
 			EGIT_CHECKOUT_DIR=${STAGING_DIR} git-r3_src_unpack
 		fi
 	else
-		unpack ${MY_P}.tar.bz2
-		use staging || use pulseaudio && unpack "${STAGING_P}.tar.gz"
+		unpack ${P}.tar.bz2
+		use staging && unpack "${STAGING_P}.tar.gz"
 	fi
 
 	unpack "${WINE_GENTOO}.tar.bz2"
@@ -257,8 +264,6 @@ src_prepare() {
 			source "${STAGING_DIR}/patches/patchinstall.sh"
 		)
 		eend $?
-	elif use pulseaudio; then
-		PATCHES+=( "${STAGING_DIR}/patches/winepulse-PulseAudio_Support"/*.patch )
 	fi
 	autotools-utils_src_prepare
 
@@ -269,7 +274,7 @@ src_prepare() {
 	fi
 	sed -i '/^UPDATE_DESKTOP_DATABASE/s:=.*:=true:' tools/Makefile.in || die
 	if ! use run-exes; then
-		sed -i '/^MimeType/d' tools/wine.desktop || die #117785
+		sed -i '/^MimeType/d' loader/wine.desktop || die #117785
 	fi
 
 	# hi-res default icon, #472990, http://bugs.winehq.org/show_bug.cgi?id=24652
@@ -315,6 +320,7 @@ multilib_src_configure() {
 		$(use_with oss)
 		$(use_with pcap)
 		$(use_with png)
+		$(use_with pulseaudio)
 		$(use_with threads pthread)
 		$(use_with scanner sane)
 		$(use_enable test tests)
@@ -327,9 +333,6 @@ multilib_src_configure() {
 		$(use_with xml xslt)
 	)
 
-	if use pulseaudio || use staging; then
-		myconf+=( $(use_with pulseaudio pulse) )
-	fi
 	use staging && myconf+=(
 		--with-xattr
 		$(use_with vaapi va)
