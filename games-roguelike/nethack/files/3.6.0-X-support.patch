@@ -1,26 +1,46 @@
---- include/config.h.orig	2003-06-21 20:58:57.000000000 -0400
-+++ include/config.h	2003-06-21 20:59:44.000000000 -0400
-@@ -46 +46 @@
--/* #define X11_GRAPHICS */	/* X11 interface */
-+#define X11_GRAPHICS 1
-@@ -127 +127 @@
--/* # define USE_XPM */		/* Disable if you do not have the XPM library */
-+# define USE_XPM 1
---- Makefile.orig	2003-06-21 21:01:03.000000000 -0400
-+++ Makefile	2003-06-21 21:01:16.000000000 -0400
-@@ -43 +43 @@
--VARDATND = 
+diff --git a/Makefile b/Makefile
+index 7575012..11482fa 100644
+--- a/Makefile
++++ b/Makefile
+@@ -59,7 +59,7 @@ DIRPERM  = 0755
+ #SHELLDIR = $(PREFIX)/games
+ 
+ # per discussion in Install.X11 and Install.Qt
+-#VARDATND = 
 +VARDATND =  x11tiles pet_mark.xbm rip.xpm
---- src/Makefile.orig	2003-06-21 21:02:01.000000000 -0400
-+++ src/Makefile	2003-06-21 21:02:11.000000000 -0400
-@@ -207,2 +207,2 @@
--WINSRC = $(WINTTYSRC)
--WINOBJ = $(WINTTYOBJ)
+ # VARDATND = x11tiles NetHack.ad pet_mark.xbm pilemark.xpm
+ # VARDATND = x11tiles NetHack.ad pet_mark.xbm pilemark.xpm rip.xpm
+ # for Atari/Gem
+diff --git a/src/Makefile b/src/Makefile
+index 7da32c7..995b353 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -236,8 +236,8 @@ WINBEOBJ =
+ 
+ #
+ #
+-#WINSRC = $(WINTTYSRC)
+-#WINOBJ = $(WINTTYOBJ)
 +WINSRC = $(WINTTYSRC) $(WINX11SRC)
 +WINOBJ = $(WINTTYOBJ) $(WINX11OBJ)
-@@ -228 +228 @@
+ 
+ # on some systems the termcap library is in -ltermcap or -lcurses
+ # on 386 Xenix, the -ltermlib tputs() seems not to work; use -lcurses instead
+@@ -257,7 +257,7 @@ WINTTYLIB = -lncurses -ltinfo
+ #
+ # libraries for X11
+ # If USE_XPM is defined in config.h, you will also need -lXpm here.
 -WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11
 +WINX11LIB = -lXaw -lXmu -lXext -lXt -lX11 -lXpm
-@@ -248 +248 @@
--WINLIB = $(WINTTYLIB)
+ # WINX11LIB = -lXaw -lXmu -lXt -lX11
+ # WINX11LIB = -lXaw -lXmu -lXext -lXt -lXpm -lX11 -lm
+ # WINX11LIB = -lXaw -lXmu -lXpm -lXext -lXt -lX11 -lSM -lICE -lm # BSD/OS 2.0
+@@ -277,7 +277,7 @@ WINGEMLIB = -le_gem -lgem
+ # libraries for BeOS 
+ WINBELIB = -lbe
+ 
+-#WINLIB = $(WINTTYLIB)
 +WINLIB = $(WINTTYLIB) $(WINX11LIB)
+ 
+ # any other strange libraries your system needs (for Sysunix only -- the more
+ # specialized targets should already be right)

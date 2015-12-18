@@ -1,10 +1,12 @@
---- include/unixconf.h.orig	2003-08-07 23:18:03.070299152 -0400
-+++ include/unixconf.h	2003-08-07 23:18:39.699730632 -0400
-@@ -96,13 +96,13 @@
+diff --git a/include/unixconf.h b/include/unixconf.h
+index 0447b82..f63c0bb 100644
+--- a/include/unixconf.h
++++ b/include/unixconf.h
+@@ -95,13 +95,13 @@
   */
  
- /* #define NO_FILE_LINKS */	/* if no hard links */
--/* #define LOCKDIR "/usr/games/lib/nethackdir" */	/* where to put locks */
+ /* #define NO_FILE_LINKS */                       /* if no hard links */
+-/* #define LOCKDIR "/usr/games/lib/nethackdir" */ /* where to put locks */
 +#define LOCKDIR "GENTOO_STATEDIR"
  
  /*
@@ -14,5 +16,5 @@
 -/* #define VAR_PLAYGROUND "/var/lib/games/nethack" */
 +#define VAR_PLAYGROUND "GENTOO_STATEDIR"
  
- 
  /*
+  * Define DEF_PAGER as your default pager, e.g. "/bin/cat" or "/usr/ucb/more"
