@@ -23,7 +23,7 @@ IUSE=""
 RDEPEND="virtual/libusb:1
 	dev-lang/orc
 	dev-libs/boost:=
-	sys-libs/ncurses
+	sys-libs/ncurses:0
 	"
 DEPEND="${RDEPEND}
 	dev-python/cheetah
