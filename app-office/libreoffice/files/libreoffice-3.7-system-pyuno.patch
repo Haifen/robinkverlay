@@ -29,10 +29,10 @@ index 4ff2606..6a05eed 100644
  import pyuno
  
  try:
-diff --git a/pyuno/source/officehelper.py b/pyuno/source/officehelper.py
+diff --git a/scripting/source/pyprov/officehelper.py b/scripting/source/pyprov/officehelper.py
 index 99d3b03..704edab 100755
---- a/pyuno/source/officehelper.py
-+++ b/pyuno/source/officehelper.py
+--- a/scripting/source/pyprov/officehelper.py
++++ b/scripting/source/pyprov/officehelper.py
 @@ -44,7 +44,7 @@ def bootstrap():
          if "UNO_PATH" in os.environ:
              sOffice = os.environ["UNO_PATH"]
