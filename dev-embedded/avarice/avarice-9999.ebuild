@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit subversion
+inherit autotools subversion
 
 DESCRIPTION="Interface for GDB to Atmel AVR JTAGICE in circuit emulator"
 HOMEPAGE="http://avarice.sourceforge.net/"
@@ -16,3 +16,21 @@ KEYWORDS="~amd64 ~x86"
 IUSE=""
 
 DOCS="AUTHORS ChangeLog doc/*.txt"
+
+src_prepare() {
+		eapply_user
+		eautoreconf
+}
+
+src_configure() {
+	econf
+}
+
+src_compile() {
+	emake
+}
+
+src_install() {
+	emake install DESTDIR=${D}
+}
+
