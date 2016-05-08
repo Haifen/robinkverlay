@@ -68,7 +68,6 @@ src_configure() {
 			--without-crt \
 			|| die
 		popd > /dev/null
-		emake install
 		append-cppflags "-I${T}/tmproot/include"
 	fi
 
