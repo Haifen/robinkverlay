@@ -127,13 +127,6 @@ HTTP_AJP_MODULE_SHA1="bf6cd93f2098b59260de8d494f0f4b1f11a84627"
 HTTP_AJP_MODULE_URI="https://codeload.github.com/${HTTP_AJP_MODULE_AUTHOR}/${HTTP_AJP_MODULE_P}/tar.gz/${HTTP_AJP_MODULE_SHA1} -> ${HTTP_AJP_MODULE_P}-${HTTP_AJP_MODULE_SHA1}.tar.gz"
 HTTP_AJP_MODULE_WD="${WORKDIR}/nginx_ajp_module-${HTTP_AJP_MODULE_SHA1}"
 
-# http_tcp_proxy ( http://yaoweibin.github.com/nginx_tcp_proxy_module/, BSD-2 license )
-HTTP_TCP_PROXY_MODULE_AUTHOR="yaoweibin"
-HTTP_TCP_PROXY_MODULE_P="nginx_tcp_proxy_module"
-HTTP_TCP_PROXY_MODULE_SHA1="50996eca724eeee172c30678068c1fd3ad73e967"
-HTTP_TCP_PROXY_MODULE_URI="https://codeload.github.com/${HTTP_TCP_PROXY_MODULE_AUTHOR}/${HTTP_TCP_PROXY_MODULE_P}/tar.gz/${HTTP_TCP_PROXY_MODULE_SHA1} -> ${HTTP_TCP_PROXY_MODULE_P}-${HTTP_TCP_PROXY_MODULE_SHA1}.tar.gz"
-HTTP_TCP_PROXY_MODULE_WD="${WORKDIR}/nginx_tcp_proxy_module-${HTTP_TCP_PROXY_MODULE_SHA1}"
-
 # http_accept_language ( http://github.com/giom/nginx_accept_language_module/, BSD-2 license )
 HTTP_ACCEPT_LANGUAGE_MODULE_AUTHOR="giom"
 HTTP_ACCEPT_LANGUAGE_MODULE_P="nginx_accept_language_module"
@@ -199,7 +192,6 @@ SRC_URI="http://nginx.org/download/${P}.tar.gz
 	nginx_modules_http_push_stream? ( ${HTTP_PUSH_STREAM_MODULE_URI} -> ${HTTP_PUSH_STREAM_MODULE_P}.tar.gz )
 	nginx_modules_http_sticky? ( ${HTTP_STICKY_MODULE_URI} -> ${HTTP_STICKY_MODULE_P}.tar.bz2 )
 	nginx_modules_http_ajp? ( ${HTTP_AJP_MODULE_URI} )
-	nginx_modules_http_tcp_proxy? ( ${HTTP_TCP_PROXY_MODULE_URI} )
 	nginx_modules_http_accept_language? ( ${HTTP_ACCEPT_LANGUAGE_MODULE_URI} )
 	nginx_modules_http_auth_digest? ( ${HTTP_AUTH_DIGEST_MODULE_URI} )
 	nginx_modules_http_clojure? ( ${HTTP_CLOJURE_MODULE_URI} )
@@ -239,7 +231,6 @@ NGINX_MODULES_3RD="
 	http_push_stream
 	http_sticky
 	http_ajp
-	http_tcp_proxy
 	http_accept_language
 	http_auth_digest
 	http_clojure
@@ -386,8 +377,6 @@ src_prepare() {
 		fi
 	done
 
-	use nginx_modules_http_tcp_proxy && epatch ${FILESDIR}/nginx-${PV}-tcp_proxy_support.patch
-
 	eapply_user
 }
 
@@ -531,11 +520,6 @@ src_configure() {
 	if use nginx_modules_http_ajp ; then
 		http_enabled=1
 		myconf+=( --add-module=${HTTP_AJP_MODULE_WD} )
-	fi
-
-	if use nginx_modules_http_tcp_proxy; then
-		http_enabled=1
-		myconf+=( --add-module=${HTTP_TCP_PROXY_MODULE_WD} )
 	fi
 
 	if use nginx_modules_http_auth_digest; then
