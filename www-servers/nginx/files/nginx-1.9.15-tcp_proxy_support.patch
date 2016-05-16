@@ -48,7 +48,7 @@ index 1bacf82..ac73846 100644
      ngx_uint_t                       tries;
      ngx_msec_t                       start_time;
  
-+    ngx_unit_t                       check_index;
++    ngx_uint_t                       check_index;
 +
      ngx_event_get_peer_pt            get;
      ngx_event_free_peer_pt           free;
