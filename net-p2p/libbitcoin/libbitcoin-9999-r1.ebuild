@@ -4,28 +4,29 @@
 
 EAPI=6
 
-EGIT_REPO_URI="git://github.com/libbitcoin/libbitcoin.git"
 inherit autotools git-r3 multilib-minimal
 
 DESCRIPTION="libbitcoin asynchronous C++ library for Bitcoin"
 HOMEPAGE="http://libbitcoin.org/"
-SRC_URI=""
+EGIT_REPO_URI="git://github.com/libbitcoin/libbitcoin.git"
 
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="+leveldb testnet debug doc"
+IUSE="debug doc examples icu png qrencode"
 
 RDEPEND="
-	>=dev-libs/boost-1.48.0
+	>=dev-libs/boost-1.56.0
+	icu? ( >=dev-libs/icu-54.1 )
+	png? ( >=dev-libs/libpng-1.6.19 )
+	qrencode? ( >=media-gfx/qrencode-3.4.4 )
 	>=dev-libs/openssl-0.9
 	dev-libs/libsecp256k1
-	leveldb? ( dev-libs/leveldb )
 "
 
 src_prepare() {
 		eautoreconf
-		default
+		eapply_user
 }
 
 DEPEND="${RDEPEND}
@@ -33,7 +34,9 @@ DEPEND="${RDEPEND}
 "
 
 multilib_src_configure() {
-	ECONF_SOURCE="${S}" econf $(use_enable leveldb) $(use_enable testnet) $(use_enable debug) || die "Configure failed"
+	local myconf=()
+	myconf+=( $(use_with examples) $(use_with icu) $(use_with png) $(use_with qrencode) $(use_enable !debug ndebug) )
+	ECONF_SOURCE="${S}" econf "${myconf[@]}" || die "Configure failed"
 }
 
 multilib_src_compile() {
