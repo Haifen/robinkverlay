@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit autotools flag-o-matic multilib-minimal git-r3
+inherit autotools flag-o-matic git-r3
 
 DESCRIPTION="library for making brushstrokes"
 HOMEPAGE="https://github.com/mypaint/libmypaint"
@@ -30,9 +30,9 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=( )
 	myconf+=( $(use_enable doc docs) $(use_enable gegl) $(use_with glib) $(use_enable openmp) )
-	ECONF_SOURCE="${S}" econf ${myconf[@]}
+	econf ${myconf[@]}
 }
 
