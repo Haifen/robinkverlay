@@ -4,7 +4,7 @@
 
 EAPI=5
 
-inherit autotools flag-o-matic git-r3
+inherit autotools flag-o-matic multilib-minimal git-r3
 
 DESCRIPTION="library for making brushstrokes"
 HOMEPAGE="https://github.com/mypaint/libmypaint"
@@ -13,18 +13,26 @@ EGIT_REPO_URI="https://github.com/mypaint/libmypaint.git"
 LICENSE="ISC"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
-IUSE="openmp"
+IUSE="doc gegl glib json openmp"
 
 DEPEND="
 	dev-lang/python
 	dev-libs/glib
 	dev-libs/json-c
-	media-libs/gegl:0.3
+	gegl? ( media-libs/gegl:0.3 )
 	openmp? ( sys-devel/gcc[openmp] )
 	"
 RDEPEND="${DEPEND}
 	!media-gfx/mypaint
 	"
 src_prepare() {
-   eautoreconf
+	eapply_user
+	eautoreconf
 }
+
+multilib_src_configure() {
+	local myconf=( )
+	myconf+=( $(use_enable doc docs) $(use_enable gegl) $(use_with glib) $(use_enable openmp) )
+	ECONF_SOURCE="${S}" econf ${myconf[@]}
+}
+
