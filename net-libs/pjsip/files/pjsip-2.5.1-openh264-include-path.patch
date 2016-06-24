@@ -1,0 +1,28 @@
+diff --git a/aconfigure.ac b/aconfigure.ac
+index 846a782..e2cb315 100644
+--- a/aconfigure.ac
++++ b/aconfigure.ac
+@@ -1156,8 +1156,8 @@ AC_ARG_ENABLE(openh264,
+ 			OPENH264_LDFLAGS="-L$OPENH264_PREFIX/lib" 
+ 			AC_MSG_RESULT([Using OpenH264 prefix... $with_openh264])
+ 		  else
+-		  	OPENH264_CFLAGS=""
+-			OPENH264_LDFLAGS="" 
++		  	OPENH264_CFLAGS="-I/usr/include/openh264"
++			OPENH264_LDFLAGS=""
+ 		  fi
+ 
+ 		  AC_MSG_CHECKING([OpenH264 usability])
+diff --git a/aconfigure b/aconfigure
+index d7db69f..102b81b 100755
+--- a/aconfigure
++++ b/aconfigure
+@@ -7241,7 +7241,7 @@ else
+ 			{ $as_echo "$as_me:${as_lineno-$LINENO}: result: Using OpenH264 prefix... $with_openh264" >&5
+ $as_echo "Using OpenH264 prefix... $with_openh264" >&6; }
+ 		  else
+-		  	OPENH264_CFLAGS=""
++		  	OPENH264_CFLAGS="-I/usr/include/openh264"
+ 			OPENH264_LDFLAGS=""
+ 		  fi
+ 

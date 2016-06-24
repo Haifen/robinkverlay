@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI="2"
+EAPI="6"
 
 DESCRIPTION="Multimedia communication libraries written in C language
 for building VoIP applications."
@@ -29,6 +29,11 @@ DEPEND="virtual/pkgconfig
 RDEPEND="${DEPEND}"
 
 S="${WORKDIR}/pjproject-${PV}"
+
+src_prepare() {
+	eapply_user
+	epatch "${FILESDIR}/${P}-openh264-include-path.patch"
+}
 
 src_configure() {
 	local myconf=()
