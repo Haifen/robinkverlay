@@ -12,7 +12,7 @@ KEYWORDS="~amd64 ~x86"
 
 LICENSE="GPL-2"
 SLOT="0"
-IUSE="alsa amr doc epoll examples ext-sound ffmpeg g711 g722 g7221 gsm ilbc ipv6 l16 libyuv openh264 oss python resample small-filter large-filter opus silk sound speex srtp static-libs sdl ssl v3l2 video webrtc"
+IUSE="alsa amr doc epoll examples ext-sound ffmpeg g711 g722 g7221 gsm ilbc ipv6 l16 libyuv openh264 oss python resample small-filter large-filter opus silk sound speex srtp static-libs sdl ssl v4l2 video webrtc"
 
 DEPEND="virtual/pkgconfig
 	alsa? ( media-libs/alsa-lib )
