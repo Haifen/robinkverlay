@@ -1,0 +1,28 @@
+--- Makefile.orig	2013-10-13 15:28:29.000000000 +0400
++++ Makefile	2013-10-13 15:30:05.153752805 +0400
+@@ -25,7 +25,7 @@
+ ldflags-from-ldlibdirs = $(addprefix -L,$(1))
+ ldlibs-from-libs       = $(addprefix -l,$(1))
+ 
+-CFLAGS	+= -Wall -enable-threads -O3
++CFLAGS	+= -Wall -enable-threads
+ 
+ CFLAGS  += $(call cflags-from-defines,$(CDEFINES))
+ CFLAGS  += $(call cflags-from-defines,$(ADDED_DEFINES))
+@@ -82,13 +82,13 @@
+ $(TARGET): $(OBJS)
+ 	$(ARCHIVE.cmdline)
+ 
+-encoder$(EXESUFFIX): $(ENCODER_OBJS)	
++encoder$(EXESUFFIX): $(ENCODER_OBJS) $(TARGET)
+ 	$(LINK.o.cmdline)
+ 
+-decoder$(EXESUFFIX): $(DECODER_OBJS)	
++decoder$(EXESUFFIX): $(DECODER_OBJS) $(TARGET)
+ 	$(LINK.o.cmdline)
+ 
+-signalcompare$(EXESUFFIX): $(SIGNALCMP_OBJS)	
++signalcompare$(EXESUFFIX): $(SIGNALCMP_OBJS) $(TARGET)
+ 	$(LINK.o.cmdline)
+ 
+ clean:

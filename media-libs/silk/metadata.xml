@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+	<herd>voip</herd>
+	<use>
+		<flag name="bindist">SILK license doesn't allow redistribution</flag>
+		<flag name="pic">Force generation of PIC code</flag>
+		<flag name="utils">Install encoder, decoder and signalcompare utilities</flag>
+	</use>
+	</pkgmetadata>
