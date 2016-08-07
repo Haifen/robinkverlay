@@ -279,6 +279,7 @@ src_compile() {
 	python uwsgiconfig.py --build gentoo || die "building uwsgi failed"
 
 	if use java ; then
+		einfo "\$(get_system_arch) returns \"$(get_system_arch)\""
 		export UWSGICONFIG_JVM_INCPATH="${JAVA_HOME}/include"
 		export UWSGICONFIG_JVM_LIBPATH="${JAVA_HOME}/lib"
 		export C_INCLUDE_PATH="${JAVA_HOME}/include/linux"
