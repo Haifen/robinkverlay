@@ -337,7 +337,7 @@ src_install() {
 
 	if use java ; then
 		insinto /usr/share/java
-		doins "${T}/plugins/jvm/uwsgi.jar"
+		doins "${S}/plugins/jvm/uwsgi.jar"
 	fi
 
 	use cgi && dosym uwsgi /usr/bin/uwsgi_cgi
