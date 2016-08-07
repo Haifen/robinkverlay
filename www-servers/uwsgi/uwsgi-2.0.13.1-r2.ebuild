@@ -276,18 +276,18 @@ python_install_symlinks() {
 src_compile() {
 	mkdir -p "${T}/plugins"
 
-	einfo "\$(get_system_arch) returns \"$(get_system_arch)\""
 	python uwsgiconfig.py --build gentoo || die "building uwsgi failed"
 
 	if use java ; then
-		export UWSGICONFIG_JVM_INCPATH="${JAVA_HOME}/include"
-		export UWSGICONFIG_JVM_LIBPATH="${JAVA_HOME}/lib"
-		export C_INCLUDE_PATH="${JAVA_HOME}/include/linux"
-		export LIBRARY_PATH="${JAVA_HOME}/jre/lib/$(get_system_arch)/server"
+		UWSGICONFIG_JVM_INCPATH="${JAVA_HOME}/include" \
+		UWSGICONFIG_JVM_LIBPATH="${JAVA_HOME}/lib" \
+		C_INCLUDE_PATH="${JAVA_HOME}/include/linux" \
+		LIBRARY_PATH="${JAVA_HOME}/jre/lib/$(get_system_arch)/server" \
 		python uwsgiconfig.py --plugin plugins/jvm gentoo || die "building plugin for JVM support failed"
 	fi
 
 	if use clojure ; then
+		C_INCLUDE_PATH="{JAVA_HOME}/include/linux" \
 		python uwsgiconfig.py --plugin plugins/ring gentoo || die "building plugin for Clojure/Ring failed"
 	fi
 
@@ -296,6 +296,7 @@ src_compile() {
 	fi
 
 	if use java ; then
+		C_INCLUDE_PATH="${JAVA_HOME}/include/linux" \
 		python uwsgiconfig.py --plugin plugins/jwsgi gentoo || die "building plugin for Java/JWSHGI failed"
 	fi
 
