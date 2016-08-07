@@ -27,14 +27,14 @@ dev-python/mailmanclient[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
 
 src_unpack() {
-	git-r3_fetch "https://gitlab.com/mailman/postorius_standalone.git" "refs/heads/master" "${CATEGORY}/${PN}/live"
-	git-r3_checkout "https://gitlab.com/mailman/postorius_standalone.git" "${WORKDIR}/postorius_standalone" "${CATEGORY}/${PN}/live"
+#	git-r3_fetch "https://gitlab.com/mailman/postorius_standalone.git" "refs/heads/master" "${CATEGORY}/${PN}/live"
+#	git-r3_checkout "https://gitlab.com/mailman/postorius_standalone.git" "${WORKDIR}/postorius_standalone" "${CATEGORY}/${PN}/live"
 	git-r3_src_unpack
 }
 
 src_install() {
 	insinto /usr/share/postorius
-	doins "${WORKDIR}/${PN}_standalone"/{manage,settings,urls,wsgi}.py
+	doins "${S}/example_project/{manage,settings,urls,wsgi}.py"
 	distutils-r1_src_install
 }
 
