@@ -279,7 +279,7 @@ src_compile() {
 	python uwsgiconfig.py --build gentoo || die "building uwsgi failed"
 
 	use java && \
-		python uwsgiconfig.py --plugins plugins/jvm gentoo || die "building plugin for JVM support failed"
+		python uwsgiconfig.py --plugin plugins/jvm gentoo || die "building plugin for JVM support failed"
 
 	if use clojure ; then
 		python uwsgiconfig.py --plugin plugins/ring gentoo || die "building plugin for Clojure/Ring failed"
