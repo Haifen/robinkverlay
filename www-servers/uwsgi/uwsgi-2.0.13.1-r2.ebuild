@@ -278,8 +278,11 @@ src_compile() {
 
 	python uwsgiconfig.py --build gentoo || die "building uwsgi failed"
 
-	use java && \
+	if use java ; then
+		export UWSGICONFIG_JVM_INCPATH="${JAVA_HOME}/include"
+		export UWSGICONFIG_JVM_LIBPATH="${JAVA_HOME}/lib"
 		python uwsgiconfig.py --plugin plugins/jvm gentoo || die "building plugin for JVM support failed"
+	fi
 
 	if use clojure ; then
 		python uwsgiconfig.py --plugin plugins/ring gentoo || die "building plugin for Clojure/Ring failed"
