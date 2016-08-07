@@ -11,9 +11,6 @@ inherit distutils-r1 git-r3
 DESCRIPTION="A web user interface for GNU Mailman"
 HOMEPAGE="https://launchpad.net/postorius"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-EGIT_REPO_URI="https://gitlab.com/mailman/postorius_standalone.git"
-EGIT_COMMIT="fb9facd0"
-EGIT_CHECKOUT_DIR="${WORKDIR}/${P}_standalone"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -30,7 +27,8 @@ dev-python/mailmanclient[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
 
 src_unpack() {
-	git-r3_src_unpack
+	git-r3_fetch "https://gitlab.com/mailman/postorius_standalone.git" "fb9facd06c5aca758f29ee72b4544e7391e8d0e3"
+	git-r3_checkout "https://gitlab.com/mailman/postorius_standalone.git" "${WORKDIR}/postorius_standalone"
 	default_src_unpack
 }
 
@@ -43,3 +41,4 @@ src_install() {
 pkg_postint() {
 	elog "Example config files have been installed in /usr/share/postorius"
 }
+
