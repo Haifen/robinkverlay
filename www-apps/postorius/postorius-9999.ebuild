@@ -29,7 +29,7 @@ RDEPEND="${DEPEND}"
 src_unpack() {
 	git-r3_fetch "https://gitlab.com/mailman/postorius_standalone.git" "master"
 	git-r3_checkout "https://gitlab.com/mailman/postorius_standalone.git" "${WORKDIR}/postorius_standalone"
-	default_src_unpack
+	git-r3-src_unpack
 }
 
 src_install() {
