@@ -34,7 +34,7 @@ src_unpack() {
 
 src_install() {
 	insinto /usr/share/postorius
-	doins "${S}/example_project/{manage,settings,urls,wsgi}.py"
+	doins "${S}/example_project/"{manage,settings,urls,wsgi}".py"
 	distutils-r1_src_install
 }
 
