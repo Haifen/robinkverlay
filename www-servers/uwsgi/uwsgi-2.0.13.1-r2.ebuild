@@ -287,7 +287,7 @@ src_compile() {
 	fi
 
 	if use clojure ; then
-		C_INCLUDE_PATH="{JAVA_HOME}/include/linux" \
+		C_INCLUDE_PATH="${JAVA_HOME}/include/linux" \
 		python uwsgiconfig.py --plugin plugins/ring gentoo || die "building plugin for Clojure/Ring failed"
 	fi
 
