@@ -17,7 +17,7 @@ USE_PHP="php5-5 php5-6 php7-0" # deps must be registered separately below
 
 MY_P="${P/_/-}"
 
-inherit apache-module distutils-r1 eutils flag-o-matic multilib pax-utils php-ext-source-r2 python-r1 ruby-ng versionator
+inherit apache-module distutils-r1 eutils flag-o-matic java-vm-2 multilib pax-utils php-ext-source-r2 python-r1 ruby-ng versionator
 
 DESCRIPTION="uWSGI server for Python web applications"
 HOMEPAGE="http://projects.unbit.it/uwsgi/"
@@ -281,6 +281,8 @@ src_compile() {
 	if use java ; then
 		export UWSGICONFIG_JVM_INCPATH="${JAVA_HOME}/include"
 		export UWSGICONFIG_JVM_LIBPATH="${JAVA_HOME}/lib"
+		export C_INCLUDE_PATH="${JAVA_HOME}/include/linux"
+		export LIBRARY_PATH="${JAVA_HOME}/jre/lib/$(get_system_arch)/server"
 		python uwsgiconfig.py --plugin plugins/jvm gentoo || die "building plugin for JVM support failed"
 	fi
 
