@@ -27,7 +27,7 @@ dev-python/mailmanclient[${PYTHON_USEDEP}]
 RDEPEND="${DEPEND}"
 
 src_unpack() {
-	git-r3_fetch "https://gitlab.com/mailman/postorius_standalone.git" "master" "${CATEGORY}/${PN}/live"
+	git-r3_fetch "https://gitlab.com/mailman/postorius_standalone.git" "refs/heads/master" "${CATEGORY}/${PN}/live"
 	git-r3_checkout "https://gitlab.com/mailman/postorius_standalone.git" "${WORKDIR}/postorius_standalone" "${CATEGORY}/${PN}/live"
 	git-r3_src_unpack
 }
