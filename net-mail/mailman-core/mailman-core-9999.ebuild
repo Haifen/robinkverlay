@@ -6,9 +6,6 @@ EAPI=5
 
 PYTHON_COMPAT=( python{3_4,3_5} )
 
-MY_PN=mailman
-MY_P=${MY_PN}-${PV}
-
 inherit distutils-r1 git-r3
 
 DESCRIPTION="Mailman -- the GNU mailing list manager"
@@ -41,7 +38,6 @@ dev-python/zope-event[${PYTHON_USEDEP}]
 dev-python/zope-interface[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
-S=${WORKDIR}/${MY_P}
 
 src_install() {
 	newinitd "${FILESDIR}"/mailman-initd mailman
