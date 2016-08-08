@@ -1,0 +1,13 @@
+diff --git a/src/postorius/views/rest.py b/src/postorius/views/rest.py
+index 1d21b55..9a4a2e0 100644
+--- a/src/postorius/views/rest.py
++++ b/src/postorius/views/rest.py
+@@ -17,7 +17,7 @@
+ # Postorius.  If not, see <http://www.gnu.org/licenses/>.
+ import json
+ 
+-from email.Header import decode_header
++from email.header import decode_header
+ from email.parser import Parser as EmailParser
+ from email.parser import HeaderParser
+ 

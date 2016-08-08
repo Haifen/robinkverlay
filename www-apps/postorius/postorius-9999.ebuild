@@ -12,7 +12,7 @@ DESCRIPTION="A web user interface for GNU Mailman"
 HOMEPAGE="https://launchpad.net/postorius"
 EGIT_REPO_URI="https://gitlab.com/mailman/postorius.git"
 
-PATCHES=( "${FILESDIR}/${P}-forcibly-declare-_count.patch" )
+PATCHES=( "${FILESDIR}/${P}-forcibly-declare-_count.patch" "${FILESDIR}/${P}-fix-email.header-caps.patch" )
 
 LICENSE="GPL-3"
 SLOT="0"
