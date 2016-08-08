@@ -1,0 +1,22 @@
+diff --git a/src/mailmanclient/_client.py b/src/mailmanclient/_client.py
+index 1ec3652..6c6dcbe 100644
+--- a/src/mailmanclient/_client.py
++++ b/src/mailmanclient/_client.py
+@@ -442,7 +442,7 @@ class Client:
+             return []
+         return [Domain(self._connection, entry['self_link'])
+                 for entry in sorted(content['entries'],
+-                                    key=itemgetter('url_host'))]
++                                    key=itemgetter('mail_host'))]
+ 
+     @property
+     def members(self):
+@@ -534,7 +534,7 @@ class Client:
+ 
+ class Domain(RESTObject):
+ 
+-    _properties = ('base_url', 'description', 'mail_host', 'self_link', 'url_host')
++    _properties = ('base_url', 'description', 'mail_host', 'self_link')
+ 
+     def __repr__(self):
+         return '<Domain "{0}">'.format(self.mail_host)
