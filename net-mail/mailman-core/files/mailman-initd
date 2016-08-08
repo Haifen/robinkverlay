@@ -1,0 +1,44 @@
+#!/sbin/runscript
+# Copyright 1999-2015 Gentoo Foundation
+# Distributed under the terms of the GNU General Public License v2
+
+extra_commands="reload"
+
+depend() {
+	need net
+}
+
+checkconfig() {
+    if ! [ -e /etc/mailman.cfg ]; then
+        eerror "Please create a config file at /etc/mailman.cfg"
+        return 1
+    fi
+}
+
+start() {
+        checkconfig || return 1
+
+	ebegin "Starting mailman"
+	if mailman status | grep -qw "is not running"; then
+            mailman start || eerror $? "Failed to start mailman"
+	fi
+	eend ${?}
+}
+
+reload() {
+	ebegin "Reloading mailman"
+	if mailman status | grep -qw "is running"; then
+            mailman restart || eerror $? "Failed to restart mailman"
+	else
+		eerror "Mailman is not running"
+	fi
+	eend ${?}
+}
+
+stop() {
+	ebegin "Stopping mailman"
+	if mailman status | grep -qw "is running"; then
+            mailman stop || eerror $? "Failed to stop mailman"
+	fi
+	eend ${?}
+}
