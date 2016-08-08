@@ -12,6 +12,8 @@ DESCRIPTION="A web user interface for GNU Mailman"
 HOMEPAGE="https://launchpad.net/postorius"
 EGIT_REPO_URI="https://gitlab.com/mailman/postorius.git"
 
+PATCHES=( "${FILESDIR}/${P}-forcibly-declare-_count.patch" )
+
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -41,3 +43,4 @@ src_install() {
 pkg_postint() {
 	elog "Example config files have been installed in /usr/share/postorius"
 }
+

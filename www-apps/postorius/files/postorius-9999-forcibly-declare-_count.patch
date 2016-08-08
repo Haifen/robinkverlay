@@ -1,0 +1,12 @@
+diff --git a/src/postorius/utils.py b/src/postorius/utils.py
+index b393568..ebb8645 100644
+--- a/src/postorius/utils.py
++++ b/src/postorius/utils.py
+@@ -75,6 +75,7 @@ class MailmanPaginator(Paginator):
+             result = self.function(count=1, page=1)
+             self._count = result.total_size
+         return self._count
++    _count = None
+     count = property(_get_count)
+ 
+ 
