@@ -6,7 +6,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python2_7 )
 
-inherit git-r3 multilib-minimal python-single-r1 scons-utils toolchain-funcs
+inherit git-r3 python-single-r1 scons-utils toolchain-funcs
 
 DESCRIPTION="Support library for mypaint, also known as libbrush"
 HOMEPAGE="https://github.com/mypaint/libmypaint"
@@ -26,12 +26,11 @@ src_prepare() {
 		# Call sphinx-build instead of sphinx-build2
 		sed -i -e 's/sphinx-build2/sphinx-build/' "${S}/doc/SConscript"
 		eapply_user
-		multilib_copy_sources # SCons sucks
 }
 
 multilib_src_configure() {
 	MYSCONS=(
-			prefix="${EPREFIX}/usr"
+			prefix="${D}/usr/" # Scons sucks, but libmypaint SConstruct sucks more
 			CC="$(tc-getCC)"
 			enable_i18n="$(usex i18n True False)"
 			enable_introspection="$(usex introspection True False)"
@@ -41,11 +40,11 @@ multilib_src_configure() {
 	)
 }
 
-multilib_src_compile() {
+src_compile() {
 		escons "${MYSCONS[@]}"
 }
 
-multilib_src_install() {
-		escons "${MYSCONS[@]}" DESTDIR="${D}"
+src_install() {
+		escons "${MYSCONS[@]}" install
 }
 
