@@ -281,7 +281,7 @@ multilib_src_configure() {
 
 	if use vulkan; then
 		use video_cards_i965 && myvulkdr+=( intel )
-		use video_cards_radeonsi && myvulkdr+=( amd )
+		use video_cards_radeonsi && myvulkdr+=( radeon )
 		local IFStemp="${IFS}"
 		IFS=","
 		myconf+=" --with-vulkan-drivers=${myvulkdr[*]}"
