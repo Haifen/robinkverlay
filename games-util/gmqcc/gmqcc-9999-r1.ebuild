@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Header: $
 
-EAPI=5
+EAPI=6
 
 inherit git-r3 toolchain-funcs
 
@@ -17,14 +17,14 @@ LICENSE="MIT"
 SLOT="0"
 [[ ${PV} == *9999* ]] || \
 KEYWORDS="~amd64 ~x86"
-IUSE=""
+IUSE="qcvm"
 
 src_configure() {
 	tc-export CC
 }
 
 src_compile() {
-	make_targets=( "qmqcc" )
+	make_targets=( "gmqcc" )
 	use qcvm && make_targets+=( "qcvm" )
 	emake ${make_targets[@]}
 }
@@ -33,7 +33,7 @@ src_install() {
 	dobin gmqcc
 	use qcvm && dobin qcvm
 	doman doc/gmqcc.1
-	use qvcm && doman doc/qvcm.1
-	dodoc README AUTHORS TODO CHANGES
+	use qcvm && doman doc/qcvm.1
+	dodoc README AUTHORS LICENSE
 }
 
