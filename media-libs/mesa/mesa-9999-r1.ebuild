@@ -284,7 +284,7 @@ multilib_src_configure() {
 		use video_cards_radeonsi && myvulkdr+=( amd )
 		local IFStemp = "${IFS}"
 		IFS=","
-		myconf += " --with-vulkan=${myvulkdr[*]}"
+		myconf+=" --with-vulkan=${myvulkdr[*]}"
 		IFS="${IFStemp}"
 		unset IFStemp
 	fi
