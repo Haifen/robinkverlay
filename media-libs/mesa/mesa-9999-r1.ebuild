@@ -184,6 +184,7 @@ pkg_setup() {
 
 src_prepare() {
 	[[ ${PV} == 9999 ]] && eautoreconf
+	eapply_user
 }
 
 multilib_src_configure() {
