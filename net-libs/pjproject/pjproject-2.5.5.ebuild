@@ -16,7 +16,7 @@ SLOT="0"
 CODEC_FLAGS="g711 g722 g7221 gsm ilbc speex l16"
 VIDEO_FLAGS="sdl ffmpeg v4l2 openh264 libyuv"
 SOUND_FLAGS="alsa oss portaudio"
-IUSE="amr debug doc epoll examples ipv6 opus resample silk static-libs webrtc ${CODEC_FLAGS} ${VIDEO_FLAGS} ${SOUND_FLAGS}"
+IUSE="amr debug doc epoll examples ipv6 opus resample silk ssl static-libs webrtc ${CODEC_FLAGS} ${VIDEO_FLAGS} ${SOUND_FLAGS}"
 
 RDEPEND="alsa? ( media-libs/alsa-lib )
 	oss? ( media-libs/portaudio[oss] )
@@ -27,6 +27,7 @@ RDEPEND="alsa? ( media-libs/alsa-lib )
 	ilbc? ( dev-libs/ilbc-rfc3951 )
 	opus? ( media-libs/opus )
 	speex? ( media-libs/speex )
+	ssl? ( dev-libs/openssl )
 
 	ffmpeg? ( virtual/ffmpeg:= )
 	sdl? ( media-libs/libsdl )
