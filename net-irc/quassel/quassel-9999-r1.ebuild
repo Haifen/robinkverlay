@@ -106,9 +106,7 @@ src_configure() {
 		-DWITH_OXYGEN=OFF
 		-DEMBED_DATA=OFF
 		-DCMAKE_SKIP_RPATH=ON
-		$(cmake-utils_use_find_package crypt QCA2-QT5)
-		$(cmake-utils_use_find_package dbus dbusmenu-qt5)
-		$(cmake-utils_use_find_package snorenotify LibsnoreQt5)
+		-DWITH_QCA2-QT5=$(usex crypt)
 	)
 
 	cmake-utils_src_configure
