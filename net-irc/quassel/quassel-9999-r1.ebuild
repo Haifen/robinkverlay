@@ -16,7 +16,7 @@ HOMEPAGE="http://quassel-irc.org/"
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="ayatana +breeze crypt +dbus debug kde monolithic oxygen postgres +server snorenotify +ssl syslog urlpreview X"
+IUSE="ayatana +breeze crypt +dbus debug monolithic oxygen postgres +server snorenotify +ssl syslog urlpreview X"
 
 SERVER_RDEPEND="
 	dev-qt/qtscript:5
@@ -34,16 +34,6 @@ GUI_RDEPEND="
 	dbus? (
 		>=dev-libs/libdbusmenu-qt-0.9.3_pre20140619[qt5]
 		dev-qt/qtdbus:5
-	)
-	kde? (
-		kde-frameworks/kconfigwidgets:5
-		kde-frameworks/kcoreaddons:5
-		kde-frameworks/knotifications:5
-		kde-frameworks/knotifyconfig:5
-		kde-frameworks/ktextwidgets:5
-		kde-frameworks/kwidgetsaddons:5
-		kde-frameworks/kxmlgui:5
-		kde-frameworks/sonnet:5
 	)
 	oxygen? ( kde-frameworks/oxygen-icons:5 )
 	snorenotify? ( >=x11-libs/snorenotify-0.7.0 )
@@ -73,7 +63,6 @@ DOCS=( AUTHORS ChangeLog README.md )
 REQUIRED_USE="
 	|| ( X server monolithic )
 	crypt? ( || ( server monolithic ) )
-	kde? ( || ( X monolithic ) )
 	monolithic? ( || ( breeze oxygen ) )
 	postgres? ( || ( server monolithic ) )
 	snorenotify? ( || ( X monolithic ) )
@@ -98,7 +87,6 @@ src_configure() {
 		-DWANT_CORE=$(usex server)
 		-DWANT_MONO=$(usex monolithic)
 		-DWANT_QTCLIENT=$(usex X)
-		-DWITH_KDE=$(usex kde)
 		-DWITH_WEBKIT=OFF
 		-DWITH_WEBENGINE=$(usex urlpreview)
 		-DWITH_BREEZE=OFF
