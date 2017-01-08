@@ -71,8 +71,9 @@ src_configure() {
 			--with-headers \
 			--without-crt \
 			|| die
+		emake -C "${WORKDIR}/headers" install
 		popd > /dev/null
-		append-cppflags "/usr/${CHOST}/sys-include"
+		append-cppflags "-I${T}/tmproot"
 	fi
 
 	CHOST=${CTARGET} econf \
@@ -92,9 +93,6 @@ src_configure() {
 }
 
 src_compile() {
-	if ! just_headers; then
-		emake -C "${WORKDIR}/headers" install
-	fi
 	default
 }
 
