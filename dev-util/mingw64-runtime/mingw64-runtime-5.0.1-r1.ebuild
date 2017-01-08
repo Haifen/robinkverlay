@@ -72,10 +72,10 @@ src_configure() {
 			--without-crt \
 			|| die
 		popd > /dev/null
-		append-cppflags "-I${T}/tmproot/include"
+		append-cppflags "/usr/${CHOST}/include"
 	fi
 
-	CBUILD= CHOST=${CTARGET} econf \
+	CHOST=${CTARGET} econf \
 		--prefix=/usr/${CTARGET} \
 		--includedir=/usr/${CTARGET}/usr/include \
 		--with-headers \
