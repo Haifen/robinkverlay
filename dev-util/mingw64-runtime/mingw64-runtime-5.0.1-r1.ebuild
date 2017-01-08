@@ -75,7 +75,7 @@ src_configure() {
 		append-cppflags "-I${T}/tmproot/include"
 	fi
 
-	CBUILD=false CHOST=${CTARGET} econf \
+	CBUILD= CHOST=${CTARGET} econf \
 		--prefix=/usr/${CTARGET} \
 		--includedir=/usr/${CTARGET}/usr/include \
 		--with-headers \
