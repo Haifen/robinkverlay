@@ -73,7 +73,7 @@ src_configure() {
 			|| die
 		emake -C "${WORKDIR}/headers" install
 		popd > /dev/null
-		append-cppflags "-I${T}/tmproot"
+		append-cppflags "-I${T}/tmproot/include"
 	fi
 
 	CHOST=${CTARGET} econf \
