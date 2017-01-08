@@ -72,7 +72,7 @@ src_configure() {
 			--without-crt \
 			|| die
 		popd > /dev/null
-		append-cppflags "/usr/${CHOST}/include"
+		append-cppflags "/usr/${CHOST}/sys-include"
 	fi
 
 	CHOST=${CTARGET} econf \
