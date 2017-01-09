@@ -73,10 +73,9 @@ src_configure() {
 			|| die
 		popd > /dev/null
 		append-cppflags "-I${T}/tmproot/include"
-		export CC="${CHOST}-gcc"
 	fi
 
-	CHOST=${CTARGET} econf \
+	CHOST=${CTARGET} CC="${CHOST}-gcc" econf \
 		--prefix=/usr/${CTARGET} \
 		--includedir=/usr/${CTARGET}/usr/include \
 		--with-headers \
