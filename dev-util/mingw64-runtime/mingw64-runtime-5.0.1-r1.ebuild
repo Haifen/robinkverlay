@@ -4,6 +4,7 @@
 
 EAPI=6
 
+export CHOST=x86_64-w64-mingw32
 export CBUILD=${CBUILD:-${CHOST}}
 export CTARGET=${CTARGET:-${CHOST}}
 if [[ ${CTARGET} == ${CHOST} ]] ; then
@@ -75,7 +76,7 @@ src_configure() {
 		append-cppflags "-I${T}/tmproot/include"
 	fi
 
-	CHOST=${CTARGET} CC="${CHOST}-gcc" econf \
+	CHOST=${CTARGET} econf \
 		--prefix=/usr/${CTARGET} \
 		--includedir=/usr/${CTARGET}/usr/include \
 		--with-headers \
