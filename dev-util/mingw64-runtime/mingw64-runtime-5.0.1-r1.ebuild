@@ -71,9 +71,9 @@ src_configure() {
 			--with-headers \
 			--without-crt \
 			|| die
-		emake -C "${WORKDIR}/headers" install
 		popd > /dev/null
-		append-cppflags "-I${T}/tmproot/include -D_WIN32 -D_WIN64 -D__x86_64"
+		append-cppflags "-I${T}/tmproot/include"
+		export CC="${CHOST}-gcc"
 	fi
 
 	CHOST=${CTARGET} econf \
@@ -93,6 +93,9 @@ src_configure() {
 }
 
 src_compile() {
+	if ! just_headers; then
+		emake -C "${WORKDIR}/headers" install
+	fi
 	default
 }
 
