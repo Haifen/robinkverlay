@@ -49,7 +49,7 @@ src_prepare() {
 
 src_configure() {
 	./configure.py \
-		--with-llvm-config="${EPREFIX}/usr/bin/llvm-config" \
+		--with-llvm-config="$(get_llvm_prefix)/bin/llvm-config" \
 		--prefix="${EPREFIX}/usr" || die
 }
 
