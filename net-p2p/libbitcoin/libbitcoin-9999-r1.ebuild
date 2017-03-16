@@ -13,13 +13,14 @@ EGIT_REPO_URI="git://github.com/libbitcoin/libbitcoin.git"
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS=""
-IUSE="debug doc examples icu png qrencode"
+IUSE="debug doc examples icu leveldb png qrencode"
 
 RDEPEND="
 	>=dev-libs/boost-1.56.0
 	icu? ( >=dev-libs/icu-54.1 )
 	png? ( >=dev-libs/libpng-1.6.19 )
 	qrencode? ( >=media-gfx/qrencode-3.4.4 )
+	leveldb? ( dev-libs/leveldb )
 	>=dev-libs/openssl-0.9
 	dev-libs/libsecp256k1
 "
@@ -35,7 +36,7 @@ DEPEND="${RDEPEND}
 
 multilib_src_configure() {
 	local myconf=()
-	myconf+=( $(use_with examples) $(use_with icu) $(use_with png) $(use_with qrencode) $(use_enable !debug ndebug) )
+	myconf+=( $(use_with examples) $(use_with icu) $(use_with png) $(use_with qrencode) $(use_enable !debug ndebug) $(use_enable leveldb) )
 	ECONF_SOURCE="${S}" econf "${myconf[@]}" || die "Configure failed"
 }
 
