@@ -30,7 +30,7 @@ src_prepare() {
 
 multilib_src_configure() {
 	local myconf=( )
-	myconf+=( $(use_with java $(java-config -O)) )
+	myconf+=( $(use_with java java $(java-config -O)) )
 	myconf+=( $(use_with python) )
 	myconf+=( $(use_with !debug ndebug) )
 	ECONF_SOURCE="${S}" econf ${myconf[@]}
