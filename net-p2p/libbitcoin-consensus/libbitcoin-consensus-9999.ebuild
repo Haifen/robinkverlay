@@ -6,7 +6,7 @@ EAPI=6
 
 PYTHON_COMPAT=( python2_7 python3_4 python3_5 )
 
-inherit autotools git-r3 java-pkg-2 multilib-minimal python-r1
+inherit autotools git-r3 java-pkg-2 python-r1
 
 DESCRIPTION="libbitcoin consensus library"
 HOMEPAGE="https://github.com/libbitcoin/libbitcoin-consensus"
@@ -28,7 +28,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=( )
 	myconf+=( $(use_with java java $(java-config -O)) )
 	myconf+=( $(use_with python) )
