@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal
+inherit autotools git-r3
 
 DESCRIPTION="Bitcoin P2P Network Library"
 HOMEPAGE="https://github.com/libbitcoin/libbitcoin-network"
@@ -24,7 +24,7 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
-	ECONF_SOURCE="${S}" econf || die "Configure failed."
+src_configure() {
+	econf || die "Configure failed."
 }
 
