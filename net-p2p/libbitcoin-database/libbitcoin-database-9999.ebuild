@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal
+inherit autotools git-r3
 
 DESCRIPTION="libbitcoin high performance blockchain database"
 HOMEPAGE="https://github.com/libbitcoin/libbitcoin-database"
@@ -24,10 +24,10 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=()
 	myconf+=( $(use_with tools) )
 	myconf+=( $(use_enable !debug ndebug) )
-	ECONF_SOURCE="${S}" econf "${myconf[@]}" || die "Configure failed."
+	econf "${myconf[@]}"
 }
 
