@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit autotools git-r3 multilib-minimal
+inherit autotools git-r3
 
 DESCRIPTION=""
 HOMEPAGE="https://github.com/libbitcoin/libbitcoin-blockchain"
@@ -25,9 +25,9 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 	local myconf=()
 	myconf+=( $(use_with consensus) $(use_with tools) )
-	ECONF_SOURCE="${S}" econf "${myconf[@]}" || die "Configure failed"
+	econf "${myconf[@]}" || die "Configure failed"
 }
 
