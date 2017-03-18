@@ -4,9 +4,9 @@
 
 EAPI=6
 
-inherit autotools bash-completion-r1 git-r3 multilib-minimal
+inherit autotools bash-completion-r1 git-r3
 
-DESCRIPTION="libbitcoin full node library"
+DESCRIPTION="Bitcoin full node based on libbitcoin-blockchain"
 HOMEPAGE="https://github.com/libbitcoin/libbitcoin-node"
 EGIT_REPO_URI="git://github.com/libbitcoin/libbitcoin-node"
 
@@ -25,10 +25,10 @@ src_prepare() {
 	eautoreconf
 }
 
-multilib_src_configure() {
+src_configure() {
 		local myconf=( )
 		myconf+=( "--with-pkgconfigdir" $(use_with console) )
 		use bash-completion && myconf+=( "--with-bash-completiondir=$(get_bashcompdir)" )
-		ECONF_SOURCE="${S}" econf "${myconf[@]}"
+		econf "${myconf[@]}" || die "Configure failed."
 }
 
