@@ -27,7 +27,7 @@ src_prepare() {
 
 src_configure() {
 		local myconf=( )
-		myconf+=( "--with-pkgconfigdir" $(use_with console) )
+		myconf+=( $(use_with console) )
 		use bash-completion && myconf+=( "--with-bash-completiondir=$(get_bashcompdir)" )
 		econf "${myconf[@]}" || die "Configure failed."
 }
