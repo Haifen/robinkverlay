@@ -36,6 +36,6 @@ src_configure() {
 	myconf+=( $(use_with console) )
 	use icu && support_defines+=( "-DWITH_ICU" )
 	use qrencode && support_defines+=( "-DWITH_QRENCODE" )
-	econf "${myconf[@]}" CFLAGS="${support_defines[@]}"  || die "Configure failed."
+	econf "${myconf[@]}" CFLAGS="${support_defines[*]}"  || die "Configure failed."
 }
 
