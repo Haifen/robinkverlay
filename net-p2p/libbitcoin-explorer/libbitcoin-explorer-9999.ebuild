@@ -33,9 +33,13 @@ src_configure() {
 	local myconf=()
 	use bash-completion && myconf+=( "--with-bash-completiondir=$(get_bashcompdir)" )
 	myconf+=( $(use_with console) )
+	econf "${myconf[@]}" || die "Configure failed."
+}
+
+src_compile() {
 	use icu && CFLAGS="${CFLAGS} -DWITH_ICU"
 	use png && CFLAGS="${CFLAGS} -DWITH_PNG"
 	use qrencode && CFLAGS="${CFLAGS} -DWITH_QRENCODE"
-	econf "${myconf[@]}" || die "Configure failed."
+	emake || die "Compile failed."
 }
 
