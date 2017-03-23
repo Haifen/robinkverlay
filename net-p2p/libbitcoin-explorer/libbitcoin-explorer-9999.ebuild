@@ -32,7 +32,10 @@ src_prepare() {
 src_configure() {
 	local myconf=()
 	use bash-completion && myconf+=( "--with-bash-completiondir=$(get_bashcompdir)" )
-	myconf+=( $(use_with console) $(use_with icu) $(use_with png) $(use_with qrencode) )
+	myconf+=( $(use_with console) )
+	use icu && CFLAGS="${CFLAGS} -DWITH_ICU"
+	use png && CFLAGS="${CFLAGS} -DWITH_PNG"
+	use qrencode && CFLAGS="${CFLAGS} -DWITH_QRENCODE"
 	econf "${myconf[@]}" || die "Configure failed."
 }
 
