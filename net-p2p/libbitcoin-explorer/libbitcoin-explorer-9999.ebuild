@@ -13,12 +13,13 @@ EGIT_REPO_URI="git://github.com/libbitcoin/libbitcoin-explorer"
 LICENSE="AGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
-IUSE="bash-completion +console"
+IUSE="bash-completion +console +icu"
 
 DEPEND=">=dev-libs/boost-1.57.0
 		>=net-p2p/libbitcoin-client-4.0.0
 		>=net-p2p/libbitcoin-network-4.0.0
-		bash-completion? ( app-shells/bash-completion )"
+		bash-completion? ( app-shells/bash-completion )
+		icu? ( dev-libs/icu )"
 RDEPEND="${DEPEND}"
 
 src_prepare() {
@@ -29,7 +30,7 @@ src_prepare() {
 src_configure() {
 	local myconf=()
 	use bash-completion && myconf+=( "--with-bash-completiondir=$(get_bashcompdir)" )
-	myconf+=( $(use_with console) )
+	myconf+=( $(use_with console) $(use_with icu) )
 	econf "${myconf[@]}" || die "Configure failed."
 }
 
