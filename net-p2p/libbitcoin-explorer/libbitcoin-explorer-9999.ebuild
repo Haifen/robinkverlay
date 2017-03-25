@@ -4,7 +4,7 @@
 
 EAPI=6
 
-inherit autotools bash-completion-r1 git-r3
+inherit autotools bash-completion-r1 flag-o-matic git-r3
 
 DESCRIPTION="The Bitcoin command-line tool"
 HOMEPAGE="https://github.com/libbitcoin/libbitcoin-explorer"
@@ -31,11 +31,10 @@ src_prepare() {
 
 src_configure() {
 	local myconf=()
-	local support_defines=()
 	use bash-completion && myconf+=( "--with-bash-completiondir=$(get_bashcompdir)" )
 	myconf+=( $(use_with console) )
-	use icu && support_defines+=( "-DWITH_ICU" )
-	use qrencode && support_defines+=( "-DWITH_QRENCODE" )
-	econf "${myconf[@]}" CFLAGS="${support_defines[*]}"  || die "Configure failed."
+	use icu && append-flags "-DWITH_ICU"
+	use qrencode && append-flags "-DWITH_QRENCODE"
+	econf "${myconf[@]}" || die "Configure failed."
 }
 
