@@ -16,7 +16,7 @@ SLOT="0"
 KEYWORDS=""
 IUSE="debug tools"
 
-DEPEND=">=net-p2p/libbitcoin-3.0.0
+DEPEND=">=net-p2p/libbitcoin-3.2.0
 		>=dev-libs/boost-1.57.0"
 RDEPEND="${DEPEND}"
 
