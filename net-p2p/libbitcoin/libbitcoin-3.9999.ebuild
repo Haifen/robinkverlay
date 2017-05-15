@@ -19,7 +19,7 @@ IUSE="debug doc examples icu leveldb png qrencode"
 RDEPEND="
 	>=dev-libs/boost-1.56.0
 	icu? ( >=dev-libs/icu-54.1 )
-	png? ( >=dev-libs/libpng-1.6.19 )
+	png? ( >=media-libs/libpng-1.6.19 )
 	qrencode? ( >=media-gfx/qrencode-3.4.4 )
 	leveldb? ( dev-libs/leveldb )
 	>=dev-libs/openssl-0.9
