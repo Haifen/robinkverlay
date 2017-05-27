@@ -29,14 +29,11 @@ IUSE="+boost +bullet +dds +elbeem +game-engine +openexr collada colorio \
 # If you have nVidia, use CUDA.
 REQUIRED_USE="${PYTHON_REQUIRED_USE}
 	player? ( game-engine !headless )
-	cuda? ( cycles !opencl )
 	cycles? ( boost openexr tiff openimageio )
 	colorio? ( boost )
 	openvdb? ( boost )
-	opensubdiv? ( cuda )
 	nls? ( boost )
 	openal? ( boost )
-	opencl? ( cycles )
 	game-engine? ( boost )
 	?? ( ffmpeg libav )"
 
@@ -59,7 +56,6 @@ RDEPEND="${PYTHON_DEPS}
 	boost? ( >=dev-libs/boost-1.62:=[nls?,threads(+)] )
 	collada? ( >=media-libs/opencollada-1.6.18:= )
 	colorio? ( >=media-libs/opencolorio-1.0.9-r2 )
-	cuda? ( =dev-util/nvidia-cuda-toolkit-8.0*:= )
 	ffmpeg? ( media-video/ffmpeg:=[x264,mp3,encode,theora,jpeg2k?] )
 	libav? ( >=media-video/libav-11.3:=[x264,mp3,encode,theora,jpeg2k?] )
 	fftw? ( sci-libs/fftw:3.0= )
@@ -79,7 +75,6 @@ RDEPEND="${PYTHON_DEPS}
 	nls? ( virtual/libiconv )
 	openal? ( media-libs/openal )
 	openimageio? ( >=media-libs/openimageio-1.6.9 )
-	opencl? ( x11-drivers/ati-drivers:* )
 	openexr? (
 		>=media-libs/ilmbase-2.2.0:=
 		>=media-libs/openexr-2.2.0:=
@@ -164,7 +159,6 @@ src_configure() {
 		-DWITH_BULLET=$(usex bullet)
 		-DWITH_CODEC_FFMPEG=$(usex ffmpeg)
 		-DWITH_CODEC_SNDFILE=$(usex sndfile)
-		-DWITH_CUDA=$(usex cuda)
 		-DWITH_CYCLES_DEVICE_CUDA=$(usex cuda TRUE FALSE)
 		-DWITH_CYCLES=$(usex cycles)
 		-DWITH_CYCLES_OSL=OFF
@@ -183,7 +177,6 @@ src_configure() {
 		-DWITH_MOD_FLUID=$(usex elbeem)
 		-DWITH_MOD_OCEANSIM=$(usex fftw)
 		-DWITH_OPENAL=$(usex openal)
-		-DWITH_OPENCL=$(usex opencl)
 		-DWITH_CYCLES_DEVICE_OPENCL=$(usex opencl TRUE FALSE)
 		-DWITH_OPENCOLORIO=$(usex colorio)
 		-DWITH_OPENCOLLADA=$(usex collada)
