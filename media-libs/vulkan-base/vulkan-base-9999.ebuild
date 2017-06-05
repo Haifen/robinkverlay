@@ -2,7 +2,7 @@
 
 EAPI=6
 
-inherit git-r3
+inherit flag-o-matic git-r3
 
 DESCRIPTION="Official Vulkan headerfiles, loader, validation layers and sample binaries"
 HOMEPAGE="https://vulkan.lunarg.com"
@@ -34,6 +34,8 @@ src_unpack() {
 }
 
 src_compile() {
+	append-cflags "-Wno-error=implicit-fallthrough"
+	append-cxxflags "-Wno-error=implicit-fallthrough"
 	einfo "Building glslang"
 	cd "${S}"/glslang
 	cmake -DCMAKE_INSTALL_PREFIX="${D}" -H. -Bbuild
