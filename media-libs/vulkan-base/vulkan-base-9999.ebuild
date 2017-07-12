@@ -13,7 +13,7 @@ LICENSE="MIT"
 IUSE=""
 SLOT="0"
 
-KEYWORDS="netcrave"
+KEYWORDS="~amd64 ~x86 ~arm ~arm64"
 
 DEPEND="dev-util/cmake
 	>=dev-lang/python-3"
