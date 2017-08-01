@@ -23,6 +23,11 @@ RDEPEND="dev-python/prawcore
 DOCS=""
 RESTRICT="test"
 
+src_compile() {
+	addpredict "${WORKDIR}"
+	default
+}
+
 python_test() {
 	${EPYTHON} setup.py test
 }
