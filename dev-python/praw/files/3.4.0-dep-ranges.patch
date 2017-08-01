@@ -1,0 +1,16 @@
+--- setup.py.bak	2016-05-13 13:09:29.557839188 +0200
++++ setup.py	2016-05-13 13:10:37.560140878 +0200
+@@ -38,10 +38,10 @@
+                    'reddit\'s API.'),
+       entry_points={'console_scripts': [
+           'praw-multiprocess = praw.multiprocess:run']},
+-      install_requires=['decorator >=4.0.9, <4.1',
++      install_requires=['decorator >=3.4.2',
+                         'requests >=2.3.0',
+-                        'six ==1.10',
+-                        'update_checker ==0.11'],
++                        'six >=1.4',
++                        'update_checker >=0.11'],
+       keywords='reddit api wrapper',
+       license='GPLv3',
+       long_description=README,
