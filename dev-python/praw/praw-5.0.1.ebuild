@@ -24,7 +24,7 @@ DOCS=""
 RESTRICT="test"
 
 src_compile() {
-	addpredict "${WORKDIR}"
+	addwrite "${WORKDIR}"
 	default
 }
 
