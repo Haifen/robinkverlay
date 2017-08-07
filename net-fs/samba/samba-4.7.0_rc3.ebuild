@@ -13,8 +13,7 @@ MY_P="${PN}-${MY_PV}"
 SRC_PATH="stable"
 [[ ${PV} = *_rc* ]] && SRC_PATH="rc"
 
-SRC_URI="mirror://samba/${SRC_PATH}/${MY_P}.tar.gz
-	https://dev.gentoo.org/~polynomial-c/samba-4.6.0-disable-python-patches.tar.xz"
+SRC_URI="mirror://samba/${SRC_PATH}/${MY_P}.tar.gz"
 [[ ${PV} = *_rc* ]] || \
 KEYWORDS="~amd64 ~arm64 ~hppa ~x86"
 
@@ -135,9 +134,6 @@ pkg_setup() {
 
 src_prepare() {
 	default
-
-	# install the patches from tarball(s)
-	eapply "${WORKDIR}/patches"
 
 	# un-bundle dnspython
 	sed -i -e '/"dns.resolver":/d' "${S}"/third_party/wscript || die
