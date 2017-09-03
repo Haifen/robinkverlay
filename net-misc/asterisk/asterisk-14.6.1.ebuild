@@ -10,7 +10,7 @@ MY_P="${PN}-${PV/_/-}"
 DESCRIPTION="Asterisk: A Modular Open Source PBX System"
 HOMEPAGE="http://www.asterisk.org/"
 SRC_URI="http://downloads.asterisk.org/pub/telephony/asterisk/releases/${MY_P}.tar.gz
-	 mirror://gentoo/gentoo-asterisk-patchset-4.04.tar.bz2"
+	 https://storage.googleapis.com/rgcs.creosotehill.org/gentoo/distfiles/asterisk-patchset-14.6.1.tar.xz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
@@ -28,7 +28,7 @@ REQUIRED_USE="gtalk? ( xmpp )
 "
 
 EPATCH_SUFFIX="patch"
-PATCHES=( "${WORKDIR}/asterisk-patchset" )
+PATCHES=( "${WORKDIR}/asterisk-patchset-${PV}" )
 
 CDEPEND="dev-db/sqlite:3
 	dev-libs/popt
