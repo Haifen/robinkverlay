@@ -41,14 +41,18 @@ CXX="clang++"
 pkg_setup() {
 	llvm_pkg_setup
 	python_setup
+	einfo "Trimming C(XX)FLAGS known not to work with Clang(++)..."
 	filter-flags "-mfxsr" "-mlwp" "-msahf" "-mxsave"
 }
 
 src_prepare() {
 	cd "${S}"
+	einfo "Copying wscript.config from wscript.config.template..."
 	cp wscript.config.template wscript.config
+	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n$(get_llvm_prefix 5)/bin/llvm-config ..."
 	sed -i -e "s:\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1$(get_llvm_prefix 5)/bin/llvm-config\\2:" wscript.config
-	"${WAF_BINARY}" update_submodules
+	einfo "Running Clasp-specific automated build prep..."
+	"${WAF_BINARY}" update_submodules # Submodules have already been fetched and checked out, this just concatenates some stuff for the build
 	eapply_user
 }
 
