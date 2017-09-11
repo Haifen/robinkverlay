@@ -4,7 +4,10 @@
 
 EAPI=6
 
-inherit flag-o-matic git-r3 waf-utils
+PYTHON_COMPAT=( python3_3 python3_4 python3_5 )
+PYTHON_REQ_USE="+threads"
+
+inherit flag-o-matic git-r3 llvm python-r1 waf-utils
 
 LLVM_MAX_SLOT="5"
 
@@ -32,20 +35,25 @@ DEPEND="sys-devel/llvm:5
 		net-libs/zeromq"
 RDEPEND="${DEPEND}"
 
+CC="clang"
+CXX="clang++"
+
 pkg_setup() {
-	append-flags "-mcmodel=medium"
 	llvm_pkg_setup
+	python_setup
+	filter-flags "-mfxsr" "-mlwp" "-msahf" "-mxsave"
 }
 
 src_prepare() {
 	cd "${S}"
-	cp "wscript.config{.template,}"
-	sed -i -e "s/\(LLVM_CONFIG_BINARY = '\).*\('\)/\1$(get_llvm_prefix 5)\2/" wscript.config
+	cp wscript.config.template wscript.config
+	sed -i -e "s:\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1$(get_llvm_prefix 5)/bin/llvm-config\\2:" wscript.config
+	"${WAF_BINARY}" update_submodules
+	eapply_user
 }
 
 src_compile() {
-	cd "${S}"
-	./waf build_cboehm
+	"${WAF_BINARY}" build_cboehm
 }
 
 src_install() {
