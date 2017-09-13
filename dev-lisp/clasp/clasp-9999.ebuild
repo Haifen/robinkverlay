@@ -57,7 +57,7 @@ src_prepare() {
 }
 
 src_compile() {
-	addpredict /tmp/dispatch-history/dispatch-miss.log
+	addwrite /tmp/dispatch-history/dispatch-miss.log
 	"${S}/waf" build_cboehm
 }
 
