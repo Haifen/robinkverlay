@@ -57,7 +57,7 @@ src_prepare() {
 }
 
 src_compile() {
-	addwrite /tmp
+	addpredict /tmp
 	"${S}/waf" build_cboehm
 }
 
