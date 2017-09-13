@@ -57,11 +57,12 @@ src_prepare() {
 }
 
 src_compile() {
+	addpredict /tmp/dispatch-history/dispatch-miss.log
 	"${S}/waf" build_cboehm
 }
 
 src_install() {
-	into /usr/bin
+	into /usr
 	newbin ${S}/build/boehm/iclasp-boehm clasp
 }
 
