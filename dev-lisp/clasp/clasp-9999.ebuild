@@ -52,12 +52,13 @@ src_prepare() {
 	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n$(get_llvm_prefix 5)/bin/llvm-config ..."
 	sed -i -e "s:\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1$(get_llvm_prefix 5)/bin/llvm-config\\2:" wscript.config
 	einfo "Running Clasp-specific automated build prep..."
-	"${S}/waf" update_submodules # Submodules have already been fetched and checked out, this just concatenates some stuff for the build
+	"${S}/waf" update_submodules # Submodules have already been fetched
+								 # and checked out, this just concatenates
+								 # some stuff for the build
 	eapply_user
 }
 
 src_compile() {
-	addpredict /tmp
 	"${S}/waf" build_cboehm
 }
 
