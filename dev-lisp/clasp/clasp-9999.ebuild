@@ -7,7 +7,7 @@ EAPI=6
 PYTHON_COMPAT=( python3_3 python3_4 python3_5 )
 PYTHON_REQ_USE="+threads"
 
-inherit flag-o-matic git-r3 llvm python-r1 waf-utils
+inherit flag-o-matic git-r3 llvm multilib python-r1 waf-utils
 
 LLVM_MAX_SLOT="5"
 
@@ -63,7 +63,6 @@ src_compile() {
 }
 
 src_install() {
-	into /usr
-	newbin ${S}/build/boehm/iclasp-boehm clasp
+	"${S}/waf" install_cboehm --destdir="${D}"
 }
 
