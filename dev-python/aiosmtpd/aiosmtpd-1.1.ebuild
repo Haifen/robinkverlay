@@ -20,8 +20,8 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 
-src_prepare() {
+src_configure() {
 	sed -i -e '/examples/d' "${S}/${PN}.egg-info/"{SOURCES,top_level}".txt"
-	eapply_user
+	default
 }
 
