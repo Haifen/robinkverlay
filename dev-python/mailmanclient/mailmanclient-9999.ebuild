@@ -11,8 +11,6 @@ DESCRIPTION="Python bindings for the Mailman 3 REST API."
 HOMEPAGE="https://launchpad.net/mailman.client"
 EGIT_REPO_URI="https://gitlab.com/mailman/mailmanclient.git"
 
-PATCHES=( "${FILESDIR}/${P}-api31.patch" )
-
 LICENSE="LGPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
