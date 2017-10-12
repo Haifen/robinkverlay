@@ -20,7 +20,7 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 
-src_install() {
+src_prepare() {
 	sed -i -e '/examples/d' "${S}/${PN}.egg-info/"{SOURCES,top_level}".txt"
 	rm -rf "${S}/examples"
 	default
