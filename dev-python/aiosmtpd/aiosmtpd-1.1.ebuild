@@ -22,6 +22,7 @@ RDEPEND="${DEPEND}"
 
 src_install() {
 	sed -i -e '/examples/d' "${S}/${PN}.egg-info/"{SOURCES,top_level}".txt"
+	rm -rf "${S}/examples"
 	default
 }
 
