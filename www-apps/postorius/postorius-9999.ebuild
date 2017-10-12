@@ -12,8 +12,6 @@ DESCRIPTION="A web user interface for GNU Mailman"
 HOMEPAGE="https://launchpad.net/postorius"
 EGIT_REPO_URI="https://gitlab.com/mailman/postorius.git"
 
-PATCHES=( "${FILESDIR}/${P}-forcibly-declare-_count.patch" "${FILESDIR}/${P}-fix-email.header-caps.patch" )
-
 LICENSE="GPL-3"
 SLOT="0"
 KEYWORDS="~amd64"
@@ -22,8 +20,7 @@ IUSE="apache2"
 DEPEND="
 virtual/httpd-cgi
 apache2? ( www-apache/mod_wsgi[${PYTHON_USEDEP}] )
->=dev-python/django-1.6[${PYTHON_USEDEP}]
-dev-python/django-browserid[${PYTHON_USEDEP}]
+>=dev-python/django-1.8[${PYTHON_USEDEP}]
 dev-python/mailmanclient[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
