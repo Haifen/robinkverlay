@@ -21,7 +21,7 @@ DEPEND=""
 RDEPEND="${DEPEND}"
 
 src_prepare() {
-	sed -i -e '/examples/d' "${S}/${PN}.egg-info/{SOURCES,top_level}.txt"
+	sed -i -e '/examples/d' "${S}/${PN}.egg-info/"{SOURCES,top_level}".txt"
 	eapply_user
 }
 
