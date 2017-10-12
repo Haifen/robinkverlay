@@ -4,13 +4,16 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python{3_4,3_5} )
+PYTHON_COMPAT=( python{3_5,3_6} )
 
-inherit distutils-r1 git-r3
+MY_PN=mailman
+MY_P=${MY_PN}-${PV}
+
+inherit distutils-r1
 
 DESCRIPTION="Mailman -- the GNU mailing list manager"
 HOMEPAGE="http://www.list.org"
-EGIT_REPO_URI="https://gitlab.com/mailman/mailman.git"
+SRC_URI="mirror://pypi/${MY_PN:0:1}/${MY_PN}/${MY_P}.tar.gz"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -21,7 +24,7 @@ DEPEND="
 virtual/mta
 postgres? ( dev-python/psycopg:2[${PYTHON_USEDEP}] )
 dev-python/alembic[${PYTHON_USEDEP}]
->=dev-python/falcon-1.0.0[${PYTHON_USEDEP}]
+>=dev-python/falcon-0.3.0[${PYTHON_USEDEP}]
 dev-python/flufl-bounce[${PYTHON_USEDEP}]
 dev-python/flufl-i18n[${PYTHON_USEDEP}]
 dev-python/flufl-lock[${PYTHON_USEDEP}]
@@ -38,6 +41,7 @@ dev-python/zope-event[${PYTHON_USEDEP}]
 dev-python/zope-interface[${PYTHON_USEDEP}]
 "
 RDEPEND="${DEPEND}"
+S=${WORKDIR}/${MY_P}
 
 src_install() {
 	newinitd "${FILESDIR}"/mailman-initd mailman
