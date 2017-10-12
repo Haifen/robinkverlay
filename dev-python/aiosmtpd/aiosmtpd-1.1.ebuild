@@ -20,3 +20,8 @@ IUSE=""
 DEPEND=""
 RDEPEND="${DEPEND}"
 
+src_prepare() {
+	sed -i -e 'd/examples/g' "${S}/${PN}.egg-info/SOURCES.txt"
+	eapply_user
+}
+
