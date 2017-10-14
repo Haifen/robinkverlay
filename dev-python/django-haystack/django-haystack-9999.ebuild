@@ -5,7 +5,7 @@ EAPI=5
 
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} pypy )
 
-inherit distutils-r1
+inherit distutils-r1 git-r3
 
 DESCRIPTION="Pluggable search for Django"
 HOMEPAGE="http://haystacksearch.org/"
