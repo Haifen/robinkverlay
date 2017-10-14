@@ -47,7 +47,7 @@ RDEPEND="${DEPEND}"
 src_install() {
 	insinto /usr/share/HyperKitty
 	doins "${S}/example_project"/{manage,settings,urls,wsgi}.py
-	doins "${S}/example_project"/{crontab,hyperkitty.apache.conf}
+	doins "${S}/example_project"/{crontab,apache.conf}
 	distutils-r1_src_install
 }
 
