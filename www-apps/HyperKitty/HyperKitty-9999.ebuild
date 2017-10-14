@@ -9,10 +9,7 @@ inherit distutils-r1 git-r3
 
 DESCRIPTION="A web interface to access GNU Mailman v3 archives"
 HOMEPAGE="https://gitlab.com/mailman/hyperkitty"
-SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
-EGIT_REPO_URI="https://gitlab.com/mailman/hyperkitty_standalone.git"
-EGIT_BRANCH="v1.1.4"
-EGIT_CHECKOUT_DIR="${WORKDIR}/${P}_standalone"
+EGIT_REPO_URI="https://gitlab.com/mailman/hyperkitty"
 
 LICENSE="GPL-3"
 SLOT="0"
@@ -47,15 +44,10 @@ dev-lang/lessjs
 "
 RDEPEND="${DEPEND}"
 
-src_unpack() {
-	git-r3_src_unpack
-	default_src_unpack
-}
-
 src_install() {
 	insinto /usr/share/HyperKitty
-	doins "${EGIT_CHECKOUT_DIR}"/{manage,settings,urls,wsgi}.py
-	doins "${EGIT_CHECKOUT_DIR}"/{crontab,hyperkitty.apache.conf}
+	doins "${S}/example_project"/{manage,settings,urls,wsgi}.py
+	doins "${S}/example_project"/{crontab,hyperkitty.apache.conf}
 	distutils-r1_src_install
 }
 
