@@ -11,7 +11,7 @@ DESCRIPTION="A web interface to access GNU Mailman v3 archives"
 HOMEPAGE="https://gitlab.com/mailman/hyperkitty"
 SRC_URI="mirror://pypi/${PN:0:1}/${PN}/${P}.tar.gz"
 EGIT_REPO_URI="https://gitlab.com/mailman/hyperkitty_standalone.git"
-EGIT_COMMIT="v1.1.4"
+EGIT_BRANCH="v1.1.4"
 EGIT_CHECKOUT_DIR="${WORKDIR}/${P}_standalone"
 
 LICENSE="GPL-3"
