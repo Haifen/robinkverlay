@@ -10,7 +10,6 @@ inherit distutils-r1 git-r3
 DESCRIPTION="A web interface to access GNU Mailman v3 archives"
 HOMEPAGE="https://gitlab.com/mailman/hyperkitty"
 EGIT_REPO_URI="https://gitlab.com/mailman/hyperkitty_standalone.git"
-EGIT_CHECKOUT_DIR="${WORKDIR}/${P}_standalone"
 
 LICENSE="GPL-3"
 SLOT="0"
