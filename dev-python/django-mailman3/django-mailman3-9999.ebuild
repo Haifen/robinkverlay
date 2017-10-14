@@ -15,6 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE=""
 
+PATCHES=( "${FILESDIR}/0001-Bump-HTTP-REST-API-version-in-mailman.py.patch" )
+
 DEPEND=">=dev-python/django-1.8
 		dev-python/mailmanclient
 		dev-python/django-allauth

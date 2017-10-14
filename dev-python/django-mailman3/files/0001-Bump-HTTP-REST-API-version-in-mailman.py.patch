@@ -1,0 +1,27 @@
+From 187e4cb2f2de9a8c95374ab6406f6953ad332760 Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Fri, 13 Oct 2017 21:12:15 -0700
+Subject: [PATCH] Bump HTTP/REST API version in mailman.py
+
+Mailman 3.2alpha (& Git master) wants nothing to do with any client
+asking for anything at /3.0/.*.  Fix that.
+---
+ django_mailman3/lib/mailman.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/django_mailman3/lib/mailman.py b/django_mailman3/lib/mailman.py
+index d7bcd51..14a38f2 100644
+--- a/django_mailman3/lib/mailman.py
++++ b/django_mailman3/lib/mailman.py
+@@ -37,7 +37,7 @@ logger = logging.getLogger(__name__)
+ def get_mailman_client():
+     # easier to patch during unit tests
+     client = MailmanClient(
+-        '%s/3.0' %
++        '%s/3.1' %
+         settings.MAILMAN_REST_API_URL,
+         settings.MAILMAN_REST_API_USER,
+         settings.MAILMAN_REST_API_PASS)
+-- 
+2.9.0
+
