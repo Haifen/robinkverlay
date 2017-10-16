@@ -12,7 +12,7 @@ DESCRIPTION="A web user interface for GNU Mailman"
 HOMEPAGE="https://launchpad.net/postorius"
 EGIT_REPO_URI="https://gitlab.com/mailman/postorius.git"
 
-PATCHES=( "${FILESDIR}/${P}-List-Index-filter.patch" )
+#PATCHES=( "${FILESDIR}/${P}-List-Index-filter.patch" )
 
 LICENSE="GPL-3"
 SLOT="0"
