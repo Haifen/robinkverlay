@@ -1,0 +1,191 @@
+From dbc2bf5d1888cd33845e1c660d3f6cbeab06816f Mon Sep 17 00:00:00 2001
+From: Anirudh Dahiya <anirudhdahiya9@gmail.com>
+Date: Sun, 5 Jun 2016 16:58:40 +0530
+Subject: [PATCH] List Index filter
+
+correct indentation
+
+Correct Indentation
+---
+ src/postorius/static/postorius/css/style.css |  5 ++
+ src/postorius/templates/postorius/index.html | 90 ++++++++++++++++++++--------
+ src/postorius/views/list.py                  | 46 ++++++++++----
+ 3 files changed, 104 insertions(+), 37 deletions(-)
+
+diff --git a/src/postorius/static/postorius/css/style.css b/src/postorius/static/postorius/css/style.css
+index b4f0ebf..ee96a1a 100644
+--- a/src/postorius/static/postorius/css/style.css
++++ b/src/postorius/static/postorius/css/style.css
+@@ -45,3 +45,8 @@ table.header-matches td .errorlist {
+     display: none;
+     margin-left: 1em;
+ }
++
++#filter-form{
++    word-wrap: break-word;
++    overflow: auto;
++}
+diff --git a/src/postorius/templates/postorius/index.html b/src/postorius/templates/postorius/index.html
+index 6c76350..76e3b70 100644
+--- a/src/postorius/templates/postorius/index.html
++++ b/src/postorius/templates/postorius/index.html
+@@ -22,33 +22,71 @@
+         </p>
+     {% endif %}
+     {% if lists|length > 0 %}
+-        <div class="table-responsive">
+-            <table class="table table-bordered table-striped">
+-                <thead>
+-                    <tr>
+-                        <th>{% trans 'List name' %}</th>
+-                        <th>{% trans 'Post address' %}</th>
+-                        <th>{% trans 'Description' %}</th>
+-                    </tr>
+-                </thead>
+-                <tbody>
+-                    {% for list in lists %}
+-                        <tr>
+-                            <td>
+-                                <a href="{% url 'list_summary' list_id=list.list_id %}">{{ list.display_name }}</a>
+-                                {% if user.is_superuser and not list.settings.advertised %} ({% trans 'unadvertised' %}*){% endif %}
+-                            </td>
+-                            <td>{{ list.fqdn_listname }}</td>
+-                            <td>{{ list.settings.description }}</td>
+-                        </tr>
+-                    {% endfor %}
+-                </tbody>
+-            </table>
++        <div class="row">
++            <div class="col-sm-2">
++                <div id="filter-form">
++                    <div id="heading">
++                        <h4> {% trans 'Filter' %}</h4>
++                    </div>
++                    <form action="" method="get">
++                        {% for domain in filter_display %}
++                            {% if domain in filters_applied %}
++                                <div class="checkbox">
++                                    <label>
++                                        <input type="checkbox" id="{{domain}}" name="filter" value="{{domain}}" checked/>
++                                        {{domain}}
++                                    </label>
++                                </div>
++                            {% else %}
++                                <div class="checkbox">
++                                    <label>
++                                        <input type="checkbox" name="filter" value="{{domain}}" />
++                                        {{domain}} </label>
++                                </div>
++                            {% endif %}
++                        {% endfor %}
++                        <button type="submit" class="btn btn-primary btn-sm">
++                            {% trans 'Apply' %}
++                        </button>
++                        <a href="{% url 'list_index' %}" class="btn btn-sm">
++                                {% trans 'Reset' %}
++                        </a>
++                        <br/>
++                    </form>
++                </div>
++            </div>
++            <div class="col-sm-10">
++                <div class="table-responsive">
++                    <table class="table table-bordered table-striped">
++                        <thead>
++                            <tr>
++                                <th>{% trans 'List name' %}</th>
++                                <th>{% trans 'Post address' %}</th>
++                                <th>{% trans 'Description' %}</th>
++                            </tr>
++                        </thead>
++                        <tbody>
++                            {% for list in lists %}
++                                <tr>
++                                    <td>
++                                        <a href="{% url 'list_summary' list_id=list.list_id %}">{{ list.display_name }}</a>
++                                        {% if not list.settings.advertised %}
++                                            ({% trans 'unadvertised' %}*)
++                                        {% endif %}
++                                    </td>
++                                    <td>{{ list.fqdn_listname }}</td>
++                                    <td>{{ list.settings.description }}</td>
++                                </tr>
++                            {% endfor %}
++                        </tbody>
++                    </table>
++                </div>
++                {% if user.is_superuser %}
++                    <small>* {% trans 'Only admins see unadvertised lists in the list index.' %}</small>
++                {% endif %}
++            </div>
+         </div>
+-        {% if user.is_superuser %}
+-            <small>* {% trans 'Only admins see unadvertised lists in the list index.' %}</small>
+-        {% endif %}
+-        {% paginator lists %}
++        {% include 'postorius/lib/pagination.html' with page=lists %}
+     {% else %}
+         <p>{% trans 'There are currently no mailing lists.' %}</p>
+     {% endif %}
+diff --git a/src/postorius/views/list.py b/src/postorius/views/list.py
+index 4baf9cf..4771f54 100644
+--- a/src/postorius/views/list.py
++++ b/src/postorius/views/list.py
+@@ -578,19 +578,43 @@ def list_index(request, template='postorius/index.html'):
+     """
+     if request.method == 'POST':
+         return redirect("list_summary", list_id=request.POST["list"])
+-
+-    def _get_list_page(count, page):
+-        client = get_mailman_client()
+-        advertised = not request.user.is_superuser
+-        return client.get_list_page(
+-            advertised=advertised, count=count, page=page)
+-    lists = paginate(
+-        _get_list_page, request.GET.get('page'), request.GET.get('count'),
+-        paginator_class=MailmanPaginator)
++    lists = []
++    error = None
++    only_public = True
++    if request.user.is_superuser:
++        only_public = False
++    try:
++        lists = sorted(List.objects.all(only_public=only_public),
++                       key=lambda l: l.fqdn_listname)
++        logger.debug(lists)
++    except MailmanApiError:
++        return utils.render_api_error(request)
++    # Create mapping between mailhosts and mailing lists
++    mhost_mlist_map = {}
++    for ilist in lists:
++        try:
++            mhost_mlist_map[str(ilist.mail_host)] += [ilist]
++        except KeyError:
++            mhost_mlist_map[str(ilist.mail_host)] = [ilist]
++    # Get and apply filters
++    filters = request.GET.getlist('filter')
++    filtered_lists = []
++    if filters == []:
++        filtered_lists = lists
++    else:
++        for ifilter in filters:
++            if ifilter in mhost_mlist_map.keys():
++                filtered_lists += mhost_mlist_map[ifilter]
+     choosable_domains = _get_choosable_domains(request)
+     return render(request, template,
+-                  {'lists': lists,
+-                   'domain_count': len(choosable_domains)})
++                  {'count_options': [10, 25, 50, 100, 200], 'error': error,
++                   'lists': utils.paginate(request,
++                                           filtered_lists,
++                                           count=request.GET.get('count', 10)
++                                           ),
++                   'domain_count': len(choosable_domains),
++                   'filters_applied': filters,
++                   'filter_display': mhost_mlist_map.keys()})
+ 
+ 
+ @login_required
+-- 
+2.9.0
+

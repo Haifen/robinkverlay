@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-PYTHON_COMPAT=( python{2_7,3_4,3_5,3_6} )
+PYTHON_COMPAT=( python{2_7,3_{4,5,6}} )
 #WEBAPP_NO_AUTO_INSTALL="yes"
 
 inherit distutils-r1 git-r3
@@ -11,6 +11,8 @@ inherit distutils-r1 git-r3
 DESCRIPTION="A web user interface for GNU Mailman"
 HOMEPAGE="https://launchpad.net/postorius"
 EGIT_REPO_URI="https://gitlab.com/mailman/postorius.git"
+
+PATCHES=( "${FILESDIR}/${P}-List-Index-filter.patch" )
 
 LICENSE="GPL-3"
 SLOT="0"
