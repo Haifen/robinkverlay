@@ -6,7 +6,7 @@ EAPI=5
 
 inherit git-r3 linux-info xorg-2
 
-DESCRIPTION="AMD GPU X11 driver"
+DESCRIPTION="Accelerated Open Source driver for AMDGPU cards"
 HOMEPAGE="http://cgit.freedesktop.org/xorg/driver/xf86-video-amdgpu/log/?h=master"
 EGIT_REPO_URI="git://anongit.freedesktop.org/xorg/driver/xf86-video-amdgpu"
 
