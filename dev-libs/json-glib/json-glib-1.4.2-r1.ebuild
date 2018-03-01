@@ -44,3 +44,8 @@ multilib_src_test() {
 multilib_src_install() {
 	gnome-meson_src_install
 }
+
+# Necessary to bypass header checksum verification.
+src_install() {
+	multilib_foreach_abi multilib_src_install
+}
