@@ -26,6 +26,8 @@ RDEPEND="!<${CATEGORY}/${PN/-common}-${PV}"
 # Use !<${PV} because mixing gobject-introspection with different version of -common can cause issues like:
 # http://forums.gentoo.org/viewtopic-p-7421930.html
 
+S="${WORKDIR}/${GNOME_ORG_MODULE}-common-${PV}"
+
 src_install() {
 	dodir /usr/share/aclocal
 	insinto /usr/share/aclocal
