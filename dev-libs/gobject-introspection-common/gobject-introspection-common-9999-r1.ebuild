@@ -6,7 +6,6 @@ GNOME_ORG_MODULE="gobject-introspection"
 
 inherit gnome.org
 if [[ ${PV} = 9999 ]]; then
-	GCONF_DEBUG="no"
 	inherit gnome2-live
 fi
 
