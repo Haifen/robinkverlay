@@ -85,6 +85,8 @@ if [[ ${PV} = 9999 ]]; then
 	"
 fi
 
+S="${WORKDIR}/evolution-data-server-9999"
+
 pkg_setup() {
 	python-any-r1_pkg_setup
 }
