@@ -96,8 +96,8 @@ src_unpack() {
 }
 
 src_prepare() {
-	cd ${S}
 	use vala && vala_src_prepare
+	cd ${S}
 
 	# Fix relink issues in src_install
 	ELTCONF="--reverse-deps"
