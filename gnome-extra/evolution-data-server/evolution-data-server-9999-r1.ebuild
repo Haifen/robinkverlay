@@ -97,12 +97,15 @@ src_unpack() {
 
 src_prepare() {
 	use vala && vala_src_prepare
-	cd ${S}
 
 	# Fix relink issues in src_install
 	ELTCONF="--reverse-deps"
 
-	gnome2_src_prepare
+	eapply_user
+	[[ -e ChangeLog ]] || touch ChangeLog
+	xdg_src_prepare
+	eautoreconf
+	elibtoolize ${ELTCONF}
 
 	# Fix compilation flags crazyness, upstream bug #653157
 	sed 's/^\(AM_CFLAGS="\)$WARNING_FLAGS/\1/' \
