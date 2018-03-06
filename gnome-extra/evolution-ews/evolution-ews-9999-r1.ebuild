@@ -4,10 +4,7 @@
 
 EAPI="6"
 
-inherit cmake-utils gnome2
-if [[ ${PV} = 9999 ]]; then
-	inherit gnome2-live
-fi
+inherit cmake-utils gnome2 gnome2-live git-r3
 
 DESCRIPTION="Evolution module for connecting to Microsoft Exchange Web Services"
 HOMEPAGE="https://wiki.gnome.org/Apps/Evolution"
@@ -37,6 +34,10 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	test? ( net-libs/uhttpmock )
 "
+
+src_unpack() {
+	git-r3_src_unpack
+}
 
 src_configure() {
 	# We don't have libmspack, needing internal lzx
