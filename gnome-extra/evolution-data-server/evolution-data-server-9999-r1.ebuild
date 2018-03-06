@@ -96,6 +96,7 @@ src_unpack() {
 }
 
 src_prepare() {
+	cd ${S}
 	use vala && vala_src_prepare
 
 	# Fix relink issues in src_install
