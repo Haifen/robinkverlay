@@ -39,6 +39,12 @@ src_unpack() {
 	git-r3_src_unpack
 }
 
+src_prepare() {
+	eapply_user
+	xdg_src_prepare
+	gnome2_environment_reset
+}
+
 src_configure() {
 	# We don't have libmspack, needing internal lzx
 	local mycmakeargs=( -DWITH_MSPACK=on -DENABLE_TESTS=$(usex test) )
