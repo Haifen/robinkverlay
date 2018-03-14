@@ -15,6 +15,7 @@ KEYWORDS="~amd64 ~x86"
 IUSE="abort benchmark debug doc dynamic-malloc-change +exact-alloc-count examples fmalloc futex libedit libevent lz4 mecab msgpack +nfkc static-libs uyield zeromq zlib zstd"
 
 RDEPEND="benchmark? ( >=dev-libs/glib-2.8 )
+	doc? ( dev-python/sphinx dev-python/sphinxcontrib-websupport )
 	libedit? ( >=dev-libs/libedit-3 )
 	libevent? ( dev-libs/libevent )
 	lz4? ( app-arch/lz4 )
@@ -85,6 +86,4 @@ src_install() {
 	fowners groonga:groonga /var/{log,lib}/${PN}
 
 	use examples || rm -r "${D}usr/share/${PN}" || die
-	# Extra init script
-	rm -r "${D}usr/sbin/groonga-httpd-restart" || die
 }
