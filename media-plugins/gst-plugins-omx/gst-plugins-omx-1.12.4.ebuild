@@ -39,13 +39,13 @@ multilib_src_configure() {
 	GST_PLUGINS_BUILD=""
 	local emesonargs=()
 	if use rpi; then
-		emesonargs+="-Dwith_omx_target=$(usex rpi rpi none) -Dwith-omx-header-path=/opt/vc/include/IL"
+		emesonargs+="-Dwith_omx_target=$(usex rpi rpi none) -Dwith_omx_header_path=/opt/vc/include/IL"
 	fi
 	if use bellagio; then
-		emesonargs+="-Dwith-omx-target=$(usex bellagio bellagio none)"
+		emesonargs+="-Dwith_omx_target=$(usex bellagio bellagio none)"
 	fi
 	if ! use rpi && ! use bellagio; then
-		emesonargs+="-Dwith-omx-target=generic"
+		emesonargs+="-Dwith_omx_target=generic"
 	fi
 	meson_src_configure
 	sed -e 's/^(.*GST_PACKAGE_NAME\s+").+(".*)$/\1Gentoo GStreamer ebuild\2' -i -r ${S}/config.h
