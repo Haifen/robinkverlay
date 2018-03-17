@@ -48,8 +48,8 @@ multilib_src_configure() {
 		emesonargs+="-Dwith_omx_target=generic"
 	fi
 	meson_src_configure
-	sed -e 's/(#DEFINE\sGST_PACKAGE_NAME\s").+(".*)/\1Gentoo GStreamer ebuild\2/' -i -r ${S}/config.h
-	sed -e 's/(#DEFINE\sGST_PACKAGE_ORIGIN\s").+(".*)/\1https:\/\/www.gentoo.org\/\2/' -i -r ${S}/config.h
+	sed -e 's/\(#define\sGST_PACKAGE_NAME\s"\).\+\(".*\)/\1Gentoo GStreamer ebuild\2/' -i ${S}/config.h
+	sed -e 's/\(#define\sGST_PACKAGE_ORIGIN\s"\).\+\(".*\)/\1https:\/\/www.gentoo.org\/\2/' -i -r ${S}/config.h
 }
 
 multilib_src_compile() {
