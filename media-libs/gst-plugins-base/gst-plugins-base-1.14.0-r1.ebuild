@@ -73,6 +73,9 @@ multilib_src_configure() {
 		$(use_enable gles2) \
 		$(use_enable opengl) \
 		$(use_enable opengl glx) \
+		$(if [[ use opengl || use gles2 ]]; then
+			echo --enable-gl
+		fi) \
 		$(use_enable orc) \
 		$(use_enable pango) \
 		$(use_enable theora) \
@@ -85,7 +88,7 @@ multilib_src_configure() {
 		--enable-zlib \
 		--disable-debug \
 		--disable-examples \
-		--disable-static
+		--disable-static 
 	# cdparanoia and libvisual are split out, per leio's request
 
 	# bug #366931, flag-o-matic for the whole thing is overkill
