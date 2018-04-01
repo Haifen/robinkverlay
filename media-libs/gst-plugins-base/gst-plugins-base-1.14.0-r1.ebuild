@@ -73,7 +73,7 @@ multilib_src_configure() {
 		$(use_enable gles2) \
 		$(use_enable opengl) \
 		$(use_enable opengl glx) \
-		$(if [[ use opengl || use gles2 ]]; then
+		$(if [[ $(use opengl) || $(use gles2) ]]; then
 			echo --enable-gl
 		fi) \
 		$(use_enable orc) \
