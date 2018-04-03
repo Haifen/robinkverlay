@@ -1,0 +1,15 @@
+diff --git a/contrib/test/Makefile.am b/contrib/test/Makefile.am
+index 0188fe214..c7c38e7a6 100644
+--- a/contrib/test/Makefile.am
++++ b/contrib/test/Makefile.am
+@@ -17,8 +17,10 @@ noinst_PROGRAMS += v4l2gl
+ endif
+ 
+ if HAVE_SDL
++if HAVE_JPEG
+ noinst_PROGRAMS += sdlcam
+ endif
++endif
+ 
+ driver_test_SOURCES = driver-test.c
+ driver_test_LDADD = ../../utils/libv4l2util/libv4l2util.la
