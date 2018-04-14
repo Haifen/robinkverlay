@@ -9,6 +9,8 @@ if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
 
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gobject-introspection.git"
+
 DESCRIPTION="Build infrastructure for GObject Introspection"
 HOMEPAGE="http://live.gnome.org/GObjectIntrospection/"
 
