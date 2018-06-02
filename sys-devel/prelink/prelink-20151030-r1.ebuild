@@ -32,6 +32,8 @@ src_prepare() {
 	eapply "${FILESDIR}"/${PN}-20130503-prelink-conf.patch
 	eapply "${FILESDIR}"/${PN}-20130503-libiberty-md5.patch
 
+	eapply_user
+
 	sed -i -e '/^CC=/s: : -Wl,--disable-new-dtags :' testsuite/functions.sh #100147
 
 	has_version 'dev-libs/elfutils[threads]' && append-ldflags -pthread
