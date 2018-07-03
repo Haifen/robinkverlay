@@ -6,8 +6,8 @@
  #
  # Plot the output of "bcftools +guess-ploidy -v"
  #
---- misc/plot-roh.py
-+++ misc/plot-roh.py
+--- a/misc/plot-roh.py
++++ b/misc/plot-roh.py
 @@ -1,4 +1,4 @@
 -#!/usr/bin/env python
 +#!/usr/bin/env python2.7
