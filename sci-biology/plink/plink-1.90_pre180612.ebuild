@@ -30,9 +30,8 @@ S="${WORKDIR}/1.9"
 # Package contains bytecode-only jar gPLINK.jar. Ignored, notified upstream.
 
 src_prepare() {
-	rm -rf zlib-1.2.8 || die
 	sed \
-		-e 's:zlib-1.2.8/zlib.h:zlib.h:g' \
+		-e 's:../zlib-1.2.11/zlib.h:zlib.h:g' \
 		-i *.{c,h} || die
 
 	sed \
@@ -64,3 +63,4 @@ src_install() {
 pkg_postinst(){
 	einfo "plink binary is now renamed to p-link to avoid file collision"
 }
+
