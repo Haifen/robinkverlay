@@ -6,14 +6,14 @@
  #
  # Plot the output of "bcftools +guess-ploidy -v"
  #
---- a/misc/plot-roh.py
-+++ b/misc/plot-roh.py
+--- misc/plot-roh.py
++++ misc/plot-roh.py
 @@ -1,4 +1,4 @@
--#!/usr/bin/python
+-#!/usr/bin/env python
 +#!/usr/bin/env python2.7
- 
- import glob, gzip, csv, sys, os, copy, re
- csv.register_dialect('tab', delimiter='\t', quoting=csv.QUOTE_NONE)
+ #  
+ #  The MIT License
+ #  
 --- a/misc/vcfutils.pl
 +++ b/misc/vcfutils.pl
 @@ -1,4 +1,4 @@

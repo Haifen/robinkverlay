@@ -26,7 +26,7 @@ DEPEND="${RDEPEND}"
 
 PATCHES=(
 	"${FILESDIR}"/${PN}-1.5-buildsystem.patch
-	"${FILESDIR}"/${PN}-1.5-fix-shebangs.patch
+	"${FILESDIR}"/${PN}-1.8-fix-shebangs.patch
 )
 
 src_prepare() {
