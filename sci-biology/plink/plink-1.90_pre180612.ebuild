@@ -3,7 +3,7 @@
 
 EAPI=5
 
-inherit eutils toolchain-funcs
+inherit eutils flag-o-matic toolchain-funcs
 
 DESCRIPTION="Whole genome association analysis toolset"
 HOMEPAGE="http://pngu.mgh.harvard.edu/~purcell/plink
@@ -44,6 +44,8 @@ src_prepare() {
 		sed -e 's@^// #define NOLAPACK@#define NOLAPACK@' -i plink_common.h || die
 	fi
 	tc-export PKG_CONFIG
+	# Append the LDFLAGS specified in the Makefile
+	append-ldflags "-lm -lpthread -ldl"
 }
 
 src_compile() {
