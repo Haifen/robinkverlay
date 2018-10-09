@@ -15,6 +15,8 @@ SLOT="0"
 KEYWORDS="~amd64 ~x86"
 IUSE="doc gegl glib json openmp"
 
+SLOT="2.0"
+
 DEPEND="
 	dev-lang/python
 	dev-libs/glib
