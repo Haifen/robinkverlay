@@ -7,7 +7,7 @@ GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.18"
 
-inherit bash-completion-r1 check-reqs eutils gnome2-live meson user systemd udev vala
+inherit bash-completion-r1 check-reqs eutils gnome2-live meson multilib-minimal user systemd udev vala
 
 DESCRIPTION="System service to accurately color manage input and output devices"
 HOMEPAGE="http://www.freedesktop.org/software/colord/"
@@ -84,7 +84,7 @@ src_prepare() {
 	gnome2_environment_reset
 }
 
-src_configure() {
+multilib_src_configure() {
 	# bash-completion test does not work on gentoo
 	local emesonargs=(
 		-Denable-bash-completion=false
@@ -103,9 +103,14 @@ src_configure() {
 	meson_src_configure
 }
 
-src_install() {
+multilib_src_install() {
+	DESTDIR="${D}" eninja -C "${BUILD_DIR}" install
+}
+
+multilib_src_install_all() {
 	DOCS="AUTHORS MAINTAINERS NEWS README.md"
-	meson_src_install
+
+	einstalldocs
 
 	newbashcomp data/colormgr colormgr
 	rm -vr "${ED}etc/bash_completion.d"
@@ -120,3 +125,4 @@ src_install() {
 		doins examples/*.c
 	fi
 }
+
