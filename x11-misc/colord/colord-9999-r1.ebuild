@@ -2,7 +2,7 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="6"
+EAPI=6
 GNOME2_LA_PUNT="yes"
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.18"
@@ -92,8 +92,7 @@ src_configure() {
 		-Ddefault-library-type=shared
 		-Denable-libcolordcompat=true
 		-Dwith-daemon-user=colord
-		-Dlocalstatedir="${EPREFIX}"/var
-		$(meson-use extra-print-profiles enable-print-profiles)
+		$(meson_use extra-print-profiles enable-print-profiles)
 		$(meson_use scanner enable-sane)
 		$(meson_use systemd enable-systemd)
 		$(meson_use udev enable-udev-rules)
