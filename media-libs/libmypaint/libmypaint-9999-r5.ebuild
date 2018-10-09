@@ -27,6 +27,8 @@ RDEPEND="${DEPEND}
 	"
 src_prepare() {
 	eapply_user
+	pushd "${S}"
+	python2 generate.py mypaint-brush-settings-gen.h brushsettings-gen.h
 	eautoreconf
 }
 
