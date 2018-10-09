@@ -77,7 +77,7 @@ src_configure() {
 }
 
 src_install() {
-	DOCS="AUTHORS CONTRIBUTORS ChangeLog NEWS README TODO"
+	DOCS="NEWS README.rst TODO"
 	gnome2_src_install
 
 	# Prevent collision with gobject-introspection-common
