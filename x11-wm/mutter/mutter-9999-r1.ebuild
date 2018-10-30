@@ -11,7 +11,7 @@ HOMEPAGE="https://git.gnome.org/browse/mutter/"
 
 LICENSE="GPL-2+"
 SLOT="0"
-IUSE="+introspection +kms test wayland"
+IUSE="+introspection +kms remote test wayland"
 if [[ ${PV} = 9999 ]]; then
 	KEYWORDS=""
 else
@@ -66,6 +66,7 @@ COMMON_DEPEND="
 		>=dev-libs/wayland-1.6.90
 		>=media-libs/clutter-1.20[wayland]
 		x11-base/xorg-server[wayland] )
+	remote? ( >=media-video/pipewire-0.2.2 )
 "
 DEPEND="${COMMON_DEPEND}
 	>=dev-util/intltool-0.41
@@ -89,6 +90,7 @@ src_configure() {
 		--with-libcanberra \
 		$(use_enable introspection) \
 		$(use_enable kms native-backend) \
+		$(use_enable remote remote-desktop) \
 		$(use_enable wayland)
 }
 
