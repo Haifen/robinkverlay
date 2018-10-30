@@ -26,10 +26,10 @@ DEPEND="${RDEPEND}
 
 src_configure() {
 	local emesonargs=(
-		-Denable_docs=$(usex doc true false)
-		-Denable_gstreamer=$(usex gstreamer true false)
-		-Denable_man=true
-		-Denable_systemd=$(usex systemd true false)
+		-Ddocs=$(usex doc true false)
+		-Dgstreamer=$(usex gstreamer true false)
+		-Dman=true
+		-Dsystemd=$(usex systemd true false)
 	)
 	meson_src_configure
 }
