@@ -13,7 +13,7 @@ HOMEPAGE="https://github.com/myriadrf/LimeSuite"
 if [[ ${PV} == 9999* ]]; then
 	inherit git-r3
 	SRC_URI=""
-	EGIT_REPO_URI="git://git.github.com/myriadrf/${PN}.git"
+	EGIT_REPO_URI="https://github.com/myriadrf/${PN}.git"
 	KEYWORDS=""
 else
 	SRC_URI="https://github.com/myriadrf/${PN}/archive/v${PV}.tar.gz -> ${P}.tar.gz"
