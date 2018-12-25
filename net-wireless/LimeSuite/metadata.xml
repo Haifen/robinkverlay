@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE pkgmetadata SYSTEM "http://www.gentoo.org/dtd/metadata.dtd">
+<pkgmetadata>
+  <maintainer type="person">
+    <email>andy@ndyk.de</email>
+    <name>Andrew Karpow</name>
+  </maintainer>
+  <longdescription lang="en">
+The Lime Suite application software provides drivers and SDR application support for the LMS7002M RFIC, and hardware like the LimeSDR, NovenaRF7, and others.
+  </longdescription>
+  <use>
+    <flag name='novena'>Enable support for NovenaRF7</flag>
+    <flag name='soapysdr'>Enable support for SoapySDR (GnuRadio wrapper)</flag>
+  </use>
+</pkgmetadata>
+
