@@ -18,12 +18,7 @@ S="${WORKDIR}/manpages"
 src_install() {
 	# rename because doman do not yet understand manl files
 	# Not all systems have the rename command, like say FreeBSD
-	local f t
-	for f in blas/man/manl/*.l; do
-		t="${f%%.l}.n"
-		mv "${f}" "${t}"
-	done
-	doman blas/man/manl/*.n
+	doman blas/man/man3/*.3
 	dodoc README "${DISTDIR}"/blas{-report,qr}.pdf
 }
 
