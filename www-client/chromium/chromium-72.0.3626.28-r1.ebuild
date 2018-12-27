@@ -1,30 +1,31 @@
-# Copyright 1999-2018 Gentoo Foundation
+# Copyright 1999-2018 Gentoo Authors
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI=7
 PYTHON_COMPAT=( python2_7 )
 
 CHROMIUM_LANGS="am ar bg bn ca cs da de el en-GB es es-419 et fa fi fil fr gu he
 	hi hr hu id it ja kn ko lt lv ml mr ms nb nl pl pt-BR pt-PT ro ru sk sl sr
 	sv sw ta te th tr uk vi zh-CN zh-TW"
 
-inherit check-reqs chromium-2 eutils gnome2-utils flag-o-matic llvm multilib ninja-utils pax-utils portability python-any-r1 readme.gentoo-r1 toolchain-funcs versionator xdg-utils
+inherit check-reqs chromium-2 desktop flag-o-matic multilib ninja-utils pax-utils portability python-any-r1 readme.gentoo-r1 toolchain-funcs xdg-utils
 
 DESCRIPTION="Open-source version of Google Chrome web browser"
 HOMEPAGE="http://chromium.org/"
-SRC_URI="https://commondatastorage.googleapis.com/chromium-browser-official/${P}.tar.xz"
+SRC_URI="https://commondatastorage.googleapis.com/chromium-browser-official/${P}.tar.xz
+	https://dev.gentoo.org/~floppym/dist/chromium-webrtc-includes.patch.xz"
 
 LICENSE="BSD"
 SLOT="0"
-KEYWORDS="amd64 ~arm64 ~x86"
+KEYWORDS="~amd64 ~x86"
 IUSE="component-build cups gnome-keyring +hangouts jumbo-build kerberos neon pic +proprietary-codecs pulseaudio selinux +suid +system-ffmpeg +system-icu +system-libvpx +tcmalloc widevine"
 RESTRICT="!system-ffmpeg? ( proprietary-codecs? ( bindist ) )"
 
 COMMON_DEPEND="
-	app-accessibility/at-spi2-atk:2
+	>=app-accessibility/at-spi2-atk-2.26:2
 	app-arch/bzip2:=
 	cups? ( >=net-print/cups-1.3.11:= )
-	dev-libs/atk
+	>=dev-libs/atk-2.26
 	dev-libs/expat:=
 	dev-libs/glib:2
 	system-icu? ( >=dev-libs/icu-59:= )
@@ -32,24 +33,24 @@ COMMON_DEPEND="
 	dev-libs/libxslt:=
 	dev-libs/nspr:=
 	>=dev-libs/nss-3.26:=
-	>=dev-libs/re2-0.2016.05.01:=
+	>=dev-libs/re2-0.2016.11.01:=
 	gnome-keyring? ( >=gnome-base/libgnome-keyring-3.12:= )
 	>=media-libs/alsa-lib-1.0.19:=
 	media-libs/fontconfig:=
 	media-libs/freetype:=
-	>=media-libs/harfbuzz-1.6.0:=[icu(-)]
+	>=media-libs/harfbuzz-2.0.0:0=[icu(-)]
 	media-libs/libjpeg-turbo:=
 	media-libs/libpng:=
 	system-libvpx? ( media-libs/libvpx:=[postproc,svc] )
 	>=media-libs/openh264-1.6.0:=
 	pulseaudio? ( media-sound/pulseaudio:= )
 	system-ffmpeg? (
-		>=media-video/ffmpeg-3:=
+		>=media-video/ffmpeg-4:=
 		|| (
 			media-video/ffmpeg[-samba]
 			>=net-fs/samba-4.5.10-r1[-debug(-)]
 		)
-		!=net-fs/samba-4.5.12
+		!=net-fs/samba-4.5.12-r0
 		media-libs/opus:=
 	)
 	sys-apps/dbus:=
@@ -78,7 +79,6 @@ COMMON_DEPEND="
 "
 # For nvidia-drivers blocker, see bug #413637 .
 RDEPEND="${COMMON_DEPEND}
-	!=www-client/chromium-9999
 	!<www-plugins/chrome-binary-plugins-57
 	x11-misc/xdg-utils
 	virtual/opengl
@@ -90,35 +90,29 @@ RDEPEND="${COMMON_DEPEND}
 # dev-vcs/git - https://bugs.gentoo.org/593476
 # sys-apps/sandbox - https://crbug.com/586444
 DEPEND="${COMMON_DEPEND}
+"
+BDEPEND="
 	>=app-arch/gzip-1.7
 	!arm? (
 		dev-lang/yasm
 	)
 	dev-lang/perl
+	dev-util/gn
 	>=dev-util/gperf-3.0.3
 	>=dev-util/ninja-1.7.2
-	>=net-libs/nodejs-6.9.4
+	>=net-libs/nodejs-7.6.0[inspector]
 	sys-apps/hwids[usb(+)]
 	>=sys-devel/bison-2.4.3
 	sys-devel/flex
-	>=sys-devel/clang-5
 	virtual/pkgconfig
 	dev-vcs/git
-	$(python_gen_any_dep '
-		dev-python/beautifulsoup:python-2[${PYTHON_USEDEP}]
-		>=dev-python/beautifulsoup-4.3.2:4[${PYTHON_USEDEP}]
-		dev-python/html5lib[${PYTHON_USEDEP}]
-		dev-python/simplejson[${PYTHON_USEDEP}]
-	')
 "
 
-# Keep this in sync with the python_gen_any_dep call.
-python_check_deps() {
-	has_version --host-root "dev-python/beautifulsoup:python-2[${PYTHON_USEDEP}]" &&
-	has_version --host-root ">=dev-python/beautifulsoup-4.3.2:4[${PYTHON_USEDEP}]" &&
-	has_version --host-root "dev-python/html5lib[${PYTHON_USEDEP}]" &&
-	has_version --host-root "dev-python/simplejson[${PYTHON_USEDEP}]"
-}
+: ${CHROMIUM_FORCE_CLANG=no}
+
+if [[ ${CHROMIUM_FORCE_CLANG} == yes ]]; then
+	BDEPEND+=" >=sys-devel/clang-5"
+fi
 
 if ! has chromium_pkg_die ${EBUILD_DEATH_HOOKS}; then
 	EBUILD_DEATH_HOOKS+=" chromium_pkg_die";
@@ -130,7 +124,6 @@ Some web pages may require additional fonts to display properly.
 Try installing some of the following packages if some characters
 are not displayed properly:
 - media-fonts/arphicfonts
-- media-fonts/bitstream-cyberbit
 - media-fonts/droid
 - media-fonts/ipamonafont
 - media-fonts/noto
@@ -145,19 +138,13 @@ GTK+ icon theme.
 "
 
 PATCHES=(
-	"${FILESDIR}/chromium-widevine-r1.patch"
-	"${FILESDIR}/chromium-FORTIFY_SOURCE-r2.patch"
+	"${FILESDIR}/chromium-compiler-r7.patch"
+	"${FILESDIR}/chromium-widevine-r4.patch"
 	"${FILESDIR}/chromium-webrtc-r0.patch"
 	"${FILESDIR}/chromium-memcpy-r0.patch"
-	"${FILESDIR}/chromium-clang-r2.patch"
 	"${FILESDIR}/chromium-math.h-r0.patch"
 	"${FILESDIR}/chromium-stdint.patch"
-	"${FILESDIR}/chromium-clang-r4.patch"
-	"${FILESDIR}/chromium-ffmpeg-r1.patch"
-	"${FILESDIR}/chromium-ffmpeg-clang.patch"
 )
-
-LLVM_MAX_SLOT=6
 
 pre_build_checks() {
 	#if [[ ${MERGE_TYPE} != binary ]]; then
@@ -175,14 +162,12 @@ pre_build_checks() {
 	# Check build requirements, bug #541816 and bug #471810 .
 	CHECKREQS_MEMORY="3G"
 	CHECKREQS_DISK_BUILD="5G"
-	eshopts_push -s extglob
-	if is-flagq '-g?(gdb)?([1-9])'; then
+	if ( shopt -s extglob; is-flagq '-g?(gdb)?([1-9])' ); then
 		CHECKREQS_DISK_BUILD="25G"
 		if ! use component-build; then
 			CHECKREQS_MEMORY="16G"
 		fi
 	fi
-	eshopts_pop
 	check-reqs_pkg_setup
 }
 
@@ -196,15 +181,15 @@ pkg_setup() {
 	chromium_suid_sandbox_check_kernel_config
 }
 
-post_pkg_setup() {
-	llvm_pkg_setup
-}
-
 src_prepare() {
 	# Calling this here supports resumption via FEATURES=keepwork
 	python_setup
 
 	default
+
+	pushd third_party/webrtc >/dev/null || die
+	eapply "${WORKDIR}"/chromium-webrtc-includes.patch
+	popd >/dev/null || die
 
 	mkdir -p third_party/node/linux/node-linux-x64/bin || die
 	ln -s "${EPREFIX}"/usr/bin/node third_party/node/linux/node-linux-x64/bin/node || die
@@ -223,20 +208,28 @@ src_prepare() {
 		buildtools/third_party/libc++abi
 		chrome/third_party/mozilla_security_manager
 		courgette/third_party
+		net/third_party/http2
 		net/third_party/mozilla_security_manager
 		net/third_party/nss
-		third_party/WebKit
-		third_party/analytics
+		net/third_party/quic
+		net/third_party/spdy
+		net/third_party/uri_template
+		third_party/abseil-cpp
 		third_party/angle
 		third_party/angle/src/common/third_party/base
 		third_party/angle/src/common/third_party/smhasher
+		third_party/angle/src/common/third_party/xxhash
 		third_party/angle/src/third_party/compiler
 		third_party/angle/src/third_party/libXNVCtrl
 		third_party/angle/src/third_party/trace_event
 		third_party/angle/third_party/glslang
 		third_party/angle/third_party/spirv-headers
 		third_party/angle/third_party/spirv-tools
+		third_party/angle/third_party/vulkan-headers
+		third_party/angle/third_party/vulkan-loader
+		third_party/angle/third_party/vulkan-tools
 		third_party/angle/third_party/vulkan-validation-layers
+		third_party/apple_apsl
 		third_party/blink
 		third_party/boringssl
 		third_party/boringssl/src/third_party/fiat
@@ -247,7 +240,10 @@ src_prepare() {
 		third_party/catapult
 		third_party/catapult/common/py_vulcanize/third_party/rcssmin
 		third_party/catapult/common/py_vulcanize/third_party/rjsmin
+		third_party/catapult/third_party/beautifulsoup4
+		third_party/catapult/third_party/html5lib-python
 		third_party/catapult/third_party/polymer
+		third_party/catapult/third_party/six
 		third_party/catapult/tracing/third_party/d3
 		third_party/catapult/tracing/third_party/gl-matrix
 		third_party/catapult/tracing/third_party/jszip
@@ -256,6 +252,9 @@ src_prepare() {
 		third_party/catapult/tracing/third_party/pako
 		third_party/ced
 		third_party/cld_3
+		third_party/closure_compiler
+		third_party/crashpad
+		third_party/crashpad/crashpad/third_party/zlib
 		third_party/crc32c
 		third_party/cros_system_api
 		third_party/devscripts
@@ -264,7 +263,6 @@ src_prepare() {
 		third_party/flatbuffers
 		third_party/flot
 		third_party/freetype
-		third_party/glslang-angle
 		third_party/google_input_tools
 		third_party/google_input_tools/third_party/closure_library
 		third_party/google_input_tools/third_party/closure_library/third_party/closure
@@ -273,17 +271,20 @@ src_prepare() {
 		third_party/iccjpeg
 		third_party/inspector_protocol
 		third_party/jinja2
+		third_party/jsoncpp
 		third_party/jstemplate
 		third_party/khronos
 		third_party/leveldatabase
 		third_party/libXNVCtrl
 		third_party/libaddressinput
 		third_party/libaom
+		third_party/libaom/source/libaom/third_party/vector
 		third_party/libaom/source/libaom/third_party/x86inc
 		third_party/libjingle
 		third_party/libphonenumber
 		third_party/libsecret
 		third_party/libsrtp
+		third_party/libsync
 		third_party/libudev
 		third_party/libwebm
 		third_party/libxml/chromium
@@ -295,6 +296,7 @@ src_prepare() {
 		third_party/mesa
 		third_party/metrics_proto
 		third_party/modp_b64
+		third_party/nasm
 		third_party/node
 		third_party/node/node_modules/polymer-bundler/lib/third_party/UglifyJS2
 		third_party/openmax_dl
@@ -309,19 +311,24 @@ src_prepare() {
 		third_party/pdfium/third_party/libpng16
 		third_party/pdfium/third_party/libtiff
 		third_party/pdfium/third_party/skia_shared
+		third_party/perfetto
 		third_party/ply
 		third_party/polymer
 		third_party/protobuf
 		third_party/protobuf/third_party/six
+		third_party/pyjson5
 		third_party/qcms
+		third_party/rnnoise
 		third_party/s2cellid
 		third_party/sfntly
+		third_party/simplejson
 		third_party/skia
 		third_party/skia/third_party/gif
+		third_party/skia/third_party/skcms
 		third_party/skia/third_party/vulkan
 		third_party/smhasher
 		third_party/spirv-headers
-		third_party/spirv-tools-angle
+		third_party/SPIRV-Tools
 		third_party/sqlite
 		third_party/swiftshader
 		third_party/swiftshader/third_party/llvm-subzero
@@ -329,10 +336,16 @@ src_prepare() {
 		third_party/unrar
 		third_party/usrsctp
 		third_party/vulkan
-		third_party/vulkan-validation-layers
 		third_party/web-animations-js
 		third_party/webdriver
 		third_party/webrtc
+		third_party/webrtc/common_audio/third_party/fft4g
+		third_party/webrtc/common_audio/third_party/spl_sqrt_floor
+		third_party/webrtc/modules/third_party/fft
+		third_party/webrtc/modules/third_party/g711
+		third_party/webrtc/modules/third_party/g722
+		third_party/webrtc/rtc_base/third_party/base64
+		third_party/webrtc/rtc_base/third_party/sigslot
 		third_party/widevine
 		third_party/woff2
 		third_party/zlib/google
@@ -340,6 +353,7 @@ src_prepare() {
 		v8/src/third_party/valgrind
 		v8/src/third_party/utf8-decoder
 		v8/third_party/inspector_protocol
+		v8/third_party/v8
 
 		# gyp -> gn leftovers
 		base/third_party/libevent
@@ -367,22 +381,6 @@ src_prepare() {
 	build/linux/unbundle/remove_bundled_libraries.py "${keeplibs[@]}" --do-remove || die
 }
 
-bootstrap_gn() {
-	if tc-is-cross-compiler; then
-		local -x AR=${BUILD_AR}
-		local -x CC=${BUILD_CC}
-		local -x CXX=${BUILD_CXX}
-		local -x NM=${BUILD_NM}
-		local -x CFLAGS=${BUILD_CFLAGS}
-		local -x CXXFLAGS=${BUILD_CXXFLAGS}
-		local -x LDFLAGS=${BUILD_LDFLAGS}
-	fi
-	einfo "Building GN..."
-	set -- tools/gn/bootstrap/bootstrap.py -s -v --no-clean
-	echo "$@"
-	"$@" || die
-}
-
 src_configure() {
 	# Calling this here supports resumption via FEATURES=keepwork
 	python_setup
@@ -392,7 +390,7 @@ src_configure() {
 	# Make sure the build system will use the right tools, bug #340795.
 	tc-export AR CC CXX NM
 
-	if ! tc-is-clang; then
+	if [[ ${CHROMIUM_FORCE_CLANG} == yes ]] && ! tc-is-clang; then
 		# Force clang since gcc is pretty broken at the moment.
 		CC=${CHOST}-clang
 		CXX=${CHOST}-clang++
@@ -514,6 +512,10 @@ src_configure() {
 	elif [[ $myarch = x86 ]] ; then
 		myconf_gn+=" target_cpu=\"x86\""
 		ffmpeg_target_arch=ia32
+
+		# This is normally defined by compiler_cpu_abi in
+		# build/config/compiler/BUILD.gn, but we patch that part out.
+		append-flags -msse2 -mfpmath=sse -mmmx
 	elif [[ $myarch = arm64 ]] ; then
 		myconf_gn+=" target_cpu=\"arm64\""
 		ffmpeg_target_arch=arm64
@@ -555,7 +557,11 @@ src_configure() {
 	export TMPDIR="${WORKDIR}/temp"
 	mkdir -p -m 755 "${TMPDIR}" || die
 
-	if ! use system-ffmpeg; then
+	# https://bugs.gentoo.org/654216
+	addpredict /dev/dri/ #nowarn
+
+	#if ! use system-ffmpeg; then
+	if false; then
 		local build_ffmpeg_args=""
 		if use pic && [[ "${ffmpeg_target_arch}" == "ia32" ]]; then
 			build_ffmpeg_args+=" --disable-asm"
@@ -571,19 +577,23 @@ src_configure() {
 		popd > /dev/null || die
 	fi
 
-	bootstrap_gn
-
 	einfo "Configuring Chromium..."
-	set -- out/Release/gn gen --args="${myconf_gn} ${EXTRA_GN}" out/Release
+	set -- gn gen --args="${myconf_gn} ${EXTRA_GN}" out/Release
 	echo "$@"
 	"$@" || die
 }
 
 src_compile() {
+	# Final link uses lots of file descriptors.
+	ulimit -n 2048
+
 	# Calling this here supports resumption via FEATURES=keepwork
 	python_setup
 
 	#"${EPYTHON}" tools/clang/scripts/update.py --force-local-build --gcc-toolchain /usr --skip-checkout --use-system-cmake --without-android || die
+
+	# Work around broken deps
+	eninja -C out/Release gen/ui/accessibility/ax_enums.mojom{,-shared}.h
 
 	# Build mksnapshot and pax-mark it.
 	local x
@@ -637,11 +647,6 @@ src_install() {
 	chromium_remove_language_paks
 	popd
 
-	if use widevine; then
-		# These will be provided by chrome-binary-plugins
-		rm out/Release/libwidevinecdm*.so || die
-	fi
-
 	insinto "${CHROMIUM_HOME}"
 	doins out/Release/*.bin
 	doins out/Release/*.pak
@@ -689,17 +694,21 @@ src_install() {
 	readme.gentoo_create_doc
 }
 
-pkg_preinst() {
-	gnome2_icon_savelist
-}
-
 pkg_postrm() {
-	gnome2_icon_cache_update
+	if type gtk-update-icon-cache &>/dev/null; then
+		ebegin "Updating GTK icon cache"
+		gtk-update-icon-cache "${EROOT}/usr/share/icons/hicolor"
+		eend $?
+	fi
 	xdg_desktop_database_update
 }
 
 pkg_postinst() {
-	gnome2_icon_cache_update
+	if type gtk-update-icon-cache &>/dev/null; then
+		ebegin "Updating GTK icon cache"
+		gtk-update-icon-cache "${EROOT}/usr/share/icons/hicolor"
+		eend $?
+	fi
 	xdg_desktop_database_update
 	readme.gentoo_print_elog
 }
