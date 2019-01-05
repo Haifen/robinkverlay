@@ -37,7 +37,7 @@ BUILD_DIR="${PN}-build"
 DIR="/usr/share/${PN}"
 
 src_prepare() {
-	default
+	eapply_user
 	cd "${WORKDIR}"
 	eapply "${FILESDIR}"/${P}-makefile.patch \
 		"${FILESDIR}"/${P}-unbundling.patch
