@@ -1,8 +1,8 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI=6
-inherit desktop flag-o-matic versionator
+EAPI=7
+inherit desktop flag-o-matic
 
 DESCRIPTION="Open-source replacement for Quake 3 Arena"
 HOMEPAGE="http://openarena.ws/"
@@ -39,8 +39,7 @@ DIR="/usr/share/${PN}"
 src_prepare() {
 	eapply_user
 	cd "${WORKDIR}"
-	eapply "${FILESDIR}"/${P}-makefile.patch \
-		"${FILESDIR}"/${P}-unbundling.patch
+	eapply "${FILESDIR}"/${P}-makefile.patch" "${FILESDIR}"/${P}-unbundling.patch"
 	cd "${MY_S}"
 	touch jpegint.h
 }
