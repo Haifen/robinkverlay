@@ -4,7 +4,7 @@
 
 EAPI=6
 
-PYTHON_COMPAT=( python3_3 python3_4 python3_5 )
+PYTHON_COMPAT=( python3_4 python3_5 python3_6 python3_7 )
 PYTHON_REQ_USE="+threads"
 
 inherit flag-o-matic git-r3 llvm multilib python-r1 waf-utils
@@ -41,20 +41,20 @@ CXX="clang++"
 pkg_setup() {
 	llvm_pkg_setup
 	python_setup
-	einfo "Trimming C(XX)FLAGS known not to work with Clang(++)..."
-	filter-flags "-mfxsr" "-mlwp" "-msahf" "-mxsave"
 }
 
 src_prepare() {
 	cd "${S}"
 	einfo "Copying wscript.config from wscript.config.template..."
 	cp wscript.config.template wscript.config
-	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n$(get_llvm_prefix 5)/bin/llvm-config ..."
-	sed -i -e "s:\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1$(get_llvm_prefix 5)/bin/llvm-config\\2:" wscript.config
+	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n$(get_llvm_prefix 6)/bin/llvm-config ..."
+	sed -i -e "s:\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1$(get_llvm_prefix 6)/bin/llvm-config\\2:" wscript.config
+	einfo "Munging wscript.config to install to /usr/share/clasp"
+	sed -i -e "s:\\(PREFIX = '\\).*\\('\\):\\1${EPREFIX}/usr/share/clasp\\2:" wscript.config
 	einfo "Running Clasp-specific automated build prep..."
-	"${S}/waf" update_submodules # Submodules have already been fetched
-								 # and checked out, this just concatenates
-								 # some stuff for the build
+	"${S}/waf" configure		# Submodules have already been fetched
+								# and checked out, this just sets up
+								# some stuff for the build
 	eapply_user
 }
 
