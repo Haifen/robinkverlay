@@ -44,8 +44,8 @@ src_prepare() {
 	cd "${S}"
 	einfo "Copying wscript.config from wscript.config.template..."
 	cp wscript.config.template wscript.config
-	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n$(get_llvm_prefix 6)/bin/llvm-config ..."
-	sed -i -e "s:\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1$(get_llvm_prefix 6)/bin/llvm-config\\2:" wscript.config
+	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n/usr/lib/llvm/6/bin/llvm-config ..."
+	sed -i -e "s:\#\\s\\(LLVM_CONFIG_BINARY = '\\).*\\('\\):\\1/usr/lib/llvm/6/bin/llvm-config\\2:" wscript.config
 	einfo "Munging wscript.config to install to /usr"
 	sed -i -e "s:\\(PREFIX = '\\).*\\('\\):\\1${EPREFIX}/usr\\2:" wscript.config
 	if has_version dev-libs/boehm-gc[handle-fork]; then
@@ -60,10 +60,10 @@ src_prepare() {
 		einfo "Leaving default debug enablements alone..."
 	else
 		einfo "Disabling extra debugging features (DEBUG_CCLASP_LISP is still on)."
-		sed -i -e "s::\\(DEBUG_OPTIONS.+\\)\\s\\(\"DEBUG_RELEASE.+\\):\1\#\2:" wscript.config
-		sed -i -e "s::\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\1:" wscript.config
-		sed -i -e "s::\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\1:" wscript.config
-		sed -i -e "s::\\s\\(\\s+\"DEBUG_SLOW\",\\):\#\1:" wscript.config
+		sed -i -e "s::\\(DEBUG_OPTIONS.+\\)\\s\\(\"DEBUG_RELEASE.+\\):\\1\#\\2:" wscript.config
+		sed -i -e "s::\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
+		sed -i -e "s::\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
+		sed -i -e "s::\\s\\(\\s+\"DEBUG_SLOW\",\\):\#\\1:" wscript.config
 	fi
 	eapply_user
 }
