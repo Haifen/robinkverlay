@@ -16,7 +16,9 @@ LICENSE="boehm-gc"
 # We've been using subslot 0 for these instead of "1.1".
 SLOT="0"
 KEYWORDS="alpha amd64 arm arm64 hppa ia64 ~mips ppc ppc64 s390 sparc x86 ~amd64-fbsd ~x86-fbsd ~amd64-linux ~x86-linux ~ppc-macos ~x64-macos ~x86-macos ~sparc-solaris ~sparc64-solaris ~x64-solaris ~x86-solaris"
-IUSE="cxx static-libs +threads"
+IUSE="cxx handle-fork static-libs +threads"
+
+REQUIRED_USE="handle-fork? ( threads )"
 
 DEPEND="
 	>=dev-libs/libatomic_ops-7.4[${MULTILIB_USEDEP}]
@@ -35,7 +37,7 @@ multilib_src_configure() {
 		--with-libatomic-ops
 		$(use_enable cxx cplusplus)
 		$(use_enable static-libs static)
-		$(use_enable threads handle-fork)
+		$(use_enable handle-fork)
 		$(use threads || echo --disable-threads)
 	)
 
