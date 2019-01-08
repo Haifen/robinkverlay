@@ -4,12 +4,17 @@
 
 EAPI=7
 
+# This is excessive and arguably unnessecary, but I want to let WAF/Clasp play
+# outside the sandbox, and I also don't want to cripple Clasp's
+# stack-frame-reporting system.
+RESTRICT="splitdebug strip test userpriv usersandbox"
+
 PYTHON_COMPAT=( python3_4 python3_5 python3_6 python3_7 )
 PYTHON_REQ_USE="+threads"
 
 inherit flag-o-matic git-r3 multilib python-r1
 
-DESCRIPTION="Common LISP implementation targetting LLVM 6"
+DESCRIPTION="Common Lisp implementation targetting LLVM 6"
 HOMEPAGE="https://github.com/clasp-developers/clasp/wiki"
 EGIT_REPO_URI="https://github.com/clasp-developers/clasp"
 EGIT_BRANCH="dev"
@@ -35,8 +40,15 @@ RDEPEND="${DEPEND}"
 CC="clang"
 CXX="clang++"
 
+# This function shouldn't normally be called, but I need a way to test
+# iclasp-boehm's behavior
+iclasp_boehm_test() {
+	einfo "Firing up iclasp-boehm to see how it behaves..."
+	strace "${S}/build/boehm/iclasp-boehm -t -b" |& \
+		tee "${T}/iclasp_boehm_strace_$(date +%s).log"
+}
+
 pkg_setup() {
-	llvm_pkg_setup
 	python_setup
 }
 
@@ -71,6 +83,7 @@ src_prepare() {
 		sed -i -e "s:\\(DEBUG_OPTIONS.+\\)\\s\\(\"DEBUG_RELEASE.+\\):\\1\#\\2:" wscript.config
 		sed -i -e "s:\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
 		sed -i -e "s:\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
+		sed -i -e "s:\\s\\(\\s+\"DEBUG_CCLASP_LISP\",\\):\#\\1:" wscript.config
 		sed -i -e "s:\\s\\(\\s+\"DEBUG_SLOW\",\\):\#\\1:" wscript.config
 	fi
 	eapply_user
