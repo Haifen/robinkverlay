@@ -56,23 +56,7 @@ src_unpack() {
 	git-r3_src_unpack
 	cd ${S}
 	# Bluhhh, this bit is ugly, but it should work (I want nested arrays)
-	eapply "${FILESDIR}/clasp-9999-wscript-record-repo-urls.patch"
-	${S}/waf update_dependencies
-	egms=$(<${S}/.egitmodules)
-	egsubmodules=(${egms[@]})
-	for sru in egsubmodules; do
-		_IFS="${IFS}"
-		IFS=";"
-		sr=( ${sru[@]} )
-		IFS="${_IFS}"
-		unset _IFS
-		git-r3_fetch sr[0] sr[1]
-		git-r3_checkout sr[0] ${S}/sr[2]
-	done
-}
-
-src_prepare() {
-	cd "${S}"
+	# Also, doing prepare/configure work in src_unpack (doubly ugly)
 	einfo "Copying wscript.config from wscript.config.template..."
 	cp wscript.config.template wscript.config
 	einfo "Munging wscript.config to point LLVM_CONFIG_BINARY to:\n/usr/lib/llvm/6/bin/llvm-config ..."
@@ -97,14 +81,28 @@ src_prepare() {
 		sed -i -e "s:\\s\\(\\s+\"DEBUG_CCLASP_LISP\",\\):\#\\1:" wscript.config
 		sed -i -e "s:\\s\\(\\s+\"DEBUG_SLOW\",\\):\#\\1:" wscript.config
 	fi
+	eapply "${FILESDIR}/clasp-9999-wscript-record-repo-urls.patch"
+	${S}/waf configure
+	egms=$(<${S}/.egitmodules)
+	egsubmodules=(${egms[@]})
+	for sru in egsubmodules; do
+		_IFS="${IFS}"
+		IFS=";"
+		sr=( ${sru[@]} )
+		IFS="${_IFS}"
+		unset _IFS
+		git-r3_fetch sr[0] sr[1]
+		git-r3_checkout sr[0] ${S}/sr[2]
+	done
+}
+
+src_prepare() {
+	cd "${S}"
 	eapply_user
 }
 
 src_configure() {
-	einfo "Running Clasp-specific automated build prep..."
-	"${S}/waf" configure		# Submodules have already been fetched
-								# and checked out, this just sets up
-								# some stuff for the build
+	einfo "Clasp was \"configured\" in the src_unpack phase, NOOP here..."
 }
 
 src_compile() {
