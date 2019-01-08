@@ -45,7 +45,7 @@ src_unpack() {
 	# Eventually we probably want to handle the various sub-repositories
 	# ourselves, but for now be lazy and rely on Clasp's wscript
 	cd ${S}
-	./waf update_submodules
+	./waf update_dependencies
 }
 
 src_prepare() {
