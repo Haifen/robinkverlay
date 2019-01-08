@@ -85,7 +85,7 @@ src_unpack() {
 	${S}/waf configure
 	egms=$(<${S}/.egitmodules)
 	egsubmodules=(${egms[@]})
-	for sru in egsubmodules; do
+	for sru in ${egsubmodules[@]}; do
 		_IFS="${IFS}"
 		IFS=";"
 		sr=( ${sru[@]} )
