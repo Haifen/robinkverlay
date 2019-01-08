@@ -9,8 +9,6 @@ PYTHON_REQ_USE="+threads"
 
 inherit flag-o-matic git-r3 multilib python-r1
 
-LLVM_MAX_SLOT="5"
-
 DESCRIPTION="Common LISP implementation targetting LLVM 6"
 HOMEPAGE="https://github.com/clasp-developers/clasp/wiki"
 EGIT_REPO_URI="https://github.com/clasp-developers/clasp"
