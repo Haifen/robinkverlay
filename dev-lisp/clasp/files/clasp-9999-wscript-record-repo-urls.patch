@@ -1,0 +1,63 @@
+diff --git a/wscript b/wscript
+index 3c7739faf..d7cdb52cc 100644
+--- a/wscript
++++ b/wscript
+@@ -239,6 +239,14 @@ def fetch_git_revision(path, url, revision = "", label = "master"):
+     if ( ret != 0 ):
+         raise Exception("Failed to fetch git url %s" % url)
+ 
++def record_git_revision(path, url, revision = "", label = "master"):
++    log.info("Git repository %s  url: %s\n     revision: %s  label: %s\n" % (path, url, revision, label))
++    try:
++        smf
++    except NameError:
++        smf = open(".egitmodules", "a")
++    smf.write('{};{};{}\n'.format(url, revision, path))
++
+ def add_cando_extension_dev(cfg):
+     log.pprint('BLUE', 'add_cando_extension_dev')
+     fetch_git_revision("extensions/cando",
+@@ -270,27 +278,27 @@ def update_dependencies(cfg):
+ #    fetch_git_revision("src/lisp/kernel/contrib/sicl",
+ #                       "https://github.com/robert-strandh/SICL.git",
+ #                       "master")
+-    fetch_git_revision("src/lisp/kernel/contrib/sicl",
++    record_git_revision("src/lisp/kernel/contrib/sicl",
+                        "https://github.com/Bike/SICL.git",
+                        "78052fb5f02a3814eb7295f3dcac09f21f98702b")
+-    fetch_git_revision("src/lisp/kernel/contrib/Concrete-Syntax-Tree",
++    record_git_revision("src/lisp/kernel/contrib/Concrete-Syntax-Tree",
+                        "https://github.com/robert-strandh/Concrete-Syntax-Tree.git",
+                        "8d8c5abf8f1690cb2b765241d81c2eb86d60d77e")
+-    fetch_git_revision("src/lisp/kernel/contrib/closer-mop",
++    record_git_revision("src/lisp/kernel/contrib/closer-mop",
+                        "https://github.com/pcostanza/closer-mop.git",
+                        "d4d1c7aa6aba9b4ac8b7bb78ff4902a52126633f")
+-    fetch_git_revision("src/lisp/kernel/contrib/Acclimation",
++    record_git_revision("src/lisp/kernel/contrib/Acclimation",
+                        "https://github.com/robert-strandh/Acclimation.git",
+                        "dd15c86b0866fc5d8b474be0da15c58a3c04c45c")
+-    fetch_git_revision("src/lisp/kernel/contrib/Eclector",
++    record_git_revision("src/lisp/kernel/contrib/Eclector",
+                        "https://github.com/robert-strandh/Eclector.git",
+                        "287ce817c0478668bd389051d2cc6b26ddc62ec9")
+     
+ #                      "7b63e7bbe6c60d3ad3413a231835be6f5824240a") works with AST clasp
+-    fetch_git_revision("src/lisp/kernel/contrib/alexandria",
++    record_git_revision("src/lisp/kernel/contrib/alexandria",
+                        "https://github.com/clasp-developers/alexandria.git",
+                        "e5c54bc30b0887c237bde2827036d17315f88737")
+-    fetch_git_revision("src/mps",
++    record_git_revision("src/mps",
+                        "https://github.com/Ravenbrook/mps.git",
+                        #DLM says this will be faster.
+ #                       label = "master", revision = "b1cc9aa5f87f2619ff675c8756e83211865419de")
+@@ -300,7 +308,7 @@ def update_dependencies(cfg):
+ #                       label = "master", revision = "46e0a8d77ac470282de7300f5eaf471ca2fbee05")
+                        # David set up this branch/2018-08-18/exp-strategy-2 for clasp
+                        "b8a05a3846430bc36c8200f24d248c8293801503")
+-    fetch_git_revision("src/lisp/modules/asdf",
++    record_git_revision("src/lisp/modules/asdf",
+                        "https://gitlab.common-lisp.net/asdf/asdf.git",
+                        label = "master", revision = "3.3.1.2")
+     os.system("(cd src/lisp/modules/asdf; ${MAKE-make} --quiet)")

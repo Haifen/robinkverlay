@@ -54,10 +54,21 @@ pkg_setup() {
 
 src_unpack() {
 	git-r3_src_unpack
-	# Eventually we probably want to handle the various sub-repositories
-	# ourselves, but for now be lazy and rely on Clasp's wscript
 	cd ${S}
-	./waf update_dependencies
+	# Bluhhh, this bit is ugly, but it should work (I want nested arrays)
+	eapply "${FILESDIR}/clasp-9999-wscript-record-repo-urls.patch"
+	${S}/waf update_dependencies
+	egms=$(<${S}/.egitmodules)
+	egsubmodules=(${egms[@]})
+	for sru in egsubmodules; do
+		_IFS="${IFS}"
+		IFS=";"
+		sr=( ${sru[@]} )
+		IFS="${_IFS}"
+		unset _IFS
+		git-r3_fetch sr[0] sr[1]
+		git-r3_checkout sr[0] ${S}/sr[2]
+	done
 }
 
 src_prepare() {
