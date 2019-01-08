@@ -91,8 +91,8 @@ src_unpack() {
 		sr=( ${sru[@]} )
 		IFS="${_IFS}"
 		unset _IFS
-		git-r3_fetch sr[0] sr[1]
-		git-r3_checkout sr[0] ${S}/sr[2]
+		git-r3_fetch ${sr[0]} ${sr[1]}
+		git-r3_checkout ${sr[0]} ${S}/${sr[2]}
 	done
 }
 
