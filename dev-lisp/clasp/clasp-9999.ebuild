@@ -40,6 +40,14 @@ pkg_setup() {
 	python_setup
 }
 
+src_unpack() {
+	git-r3_src_unpack
+	# Eventually we probably want to handle the various sub-repositories
+	# ourselves, but for now be lazy and rely on Clasp's wscript
+	cd ${S}
+	./waf update_submodules
+}
+
 src_prepare() {
 	cd "${S}"
 	einfo "Copying wscript.config from wscript.config.template..."
@@ -60,10 +68,10 @@ src_prepare() {
 		einfo "Leaving default debug enablements alone..."
 	else
 		einfo "Disabling extra debugging features (DEBUG_CCLASP_LISP is still on)."
-		sed -i -e "s::\\(DEBUG_OPTIONS.+\\)\\s\\(\"DEBUG_RELEASE.+\\):\\1\#\\2:" wscript.config
-		sed -i -e "s::\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
-		sed -i -e "s::\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
-		sed -i -e "s::\\s\\(\\s+\"DEBUG_SLOW\",\\):\#\\1:" wscript.config
+		sed -i -e "s:\\(DEBUG_OPTIONS.+\\)\\s\\(\"DEBUG_RELEASE.+\\):\\1\#\\2:" wscript.config
+		sed -i -e "s:\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
+		sed -i -e "s:\\s\\(\\s+\"DEBUG_BCLASP_LISP\",\\):\#\\1:" wscript.config
+		sed -i -e "s:\\s\\(\\s+\"DEBUG_SLOW\",\\):\#\\1:" wscript.config
 	fi
 	eapply_user
 }
