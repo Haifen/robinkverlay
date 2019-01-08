@@ -43,9 +43,8 @@ multilib_src_configure() {
 }
 
 multilib_src_install_all() {
-	local HTML_DOCS=( doc/*.html )
-	einstalldocs
-	dodoc doc/README{.environment,.linux,.macros}
+	dodoc doc/*.md
+	dodoc README.md doc/README{.environment,.linux,.macros}
 
 	# package provides .pc files
 	find "${ED}" -name '*.la' -delete || die
