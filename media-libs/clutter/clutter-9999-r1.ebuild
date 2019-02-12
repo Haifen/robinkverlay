@@ -75,7 +75,7 @@ src_configure() {
 	# (GLX error blabla)
 	# XXX: coverage disabled for now
 	# XXX: What about cex100/win32 backends?
-	local emesonargs=( "-Dbackends=$(usex aqua quartz, "")$(usex egl eglnative, "")$(usex gtk gdk, "")$(usex wayland wayland, "")$(usex x11 x11 "")" \
+	local emesonargs=( "-Dbackends=$(usex aqua quartz, "")$(usex egl eglnative, "")$(usex gtk gdk, "")$(usex wayland wayland, "")$(usex X x11 "")" \
 		"-Ddocumentation=$(usex doc true false)" \
 		"-Dintrospection=$(usex introspection true false)" \
 		"-Dpixbuf_tests=$(usex test true false)" )
