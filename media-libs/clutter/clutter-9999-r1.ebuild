@@ -2,10 +2,9 @@
 # Distributed under the terms of the GNU General Public License v2
 # $Id$
 
-EAPI="6"
-GNOME2_LA_PUNT="yes"
+EAPI="7"
 
-inherit gnome2-live virtualx
+inherit git-r3 meson virtualx
 
 HOMEPAGE="https://wiki.gnome.org/Projects/Clutter"
 DESCRIPTION="Clutter is a library for creating graphical user interfaces"
@@ -66,10 +65,9 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	# We only need conformance tests, the rest are useless for us
-	sed -e 's/^\(SUBDIRS =\).*/\1 accessibility conform/g' \
-		-i tests/Makefile.am || die "am tests sed failed"
-
-	gnome2_src_prepare
+	sed -e 'd/.\+\(interactive\)\?\(micro-bench\)\?\(performance\)\?.\+/' \
+		-i tests/meson.build || die "meson tests sed failed"
+	default
 }
 
 src_configure() {
@@ -77,27 +75,13 @@ src_configure() {
 	# (GLX error blabla)
 	# XXX: coverage disabled for now
 	# XXX: What about cex100/win32 backends?
-	gnome2_src_configure \
-		--disable-maintainer-flags \
-		--disable-mir-backend \
-		--disable-gcov \
-		--disable-cex100-backend \
-		--disable-win32-backend \
-		--disable-tslib-input \
-		$(use_enable aqua quartz-backend) \
-		$(usex debug --enable-debug=yes --enable-debug=minimum) \
-		$(use_enable doc docs) \
-		$(use_enable egl egl-backend) \
-		$(use_enable egl evdev-input) \
-		$(use_enable gtk gdk-backend) \
-		$(use_enable introspection) \
-		$(use_enable test gdk-pixbuf) \
-		$(use_enable wayland wayland-backend) \
-		$(use_enable wayland wayland-compositor) \
-		$(use_enable X xinput) \
-		$(use_enable X x11-backend)
+	local emesonargs=( "-Dbackends=$(usex aqua quartz, "")$(usex egl eglnative, "")$(usex gtk gdk, "")$(usex wayland wayland, "")$(usex x11 x11 "")" \
+		"-Ddocumentation=$(usex doc true false)" \
+		"-Dintrospection=$(usex introspection true false)" \
+		"-Dpixbuf_tests=$(usex test true false)" )
+	meson_src_configure
 }
 
 src_test() {
-	Xemake check -C tests/conform
+	ninja -C tests/conform check
 }
