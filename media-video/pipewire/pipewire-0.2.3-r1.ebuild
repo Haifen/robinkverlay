@@ -1,10 +1,10 @@
 EAPI=6
 
-inherit git-r3 meson
+inherit meson
 
 DESCRIPTION="Multimedia processing graphs"
 HOMEPAGE="http://pipewire.org/"
-EGIT_REPO_URI="https://github.com/PipeWire/pipewire"
+SRC_URI="https://github.com/PipeWire/${PN}/archive/${PV}.tar.gz -> ${P}.tar.gz"
 
 LICENSE="LGPL-2.1"
 SLOT="0"
@@ -27,7 +27,7 @@ DEPEND="${RDEPEND}
 src_configure() {
 	local emesonargs=(
 		-Ddocs=$(usex doc true false)
-		-Dgstreamer=$(usex gstreamer enabled disabled)
+		-Dgstreamer=$(usex gstreamer true false)
 		-Dman=true
 		-Dsystemd=$(usex systemd true false)
 	)
