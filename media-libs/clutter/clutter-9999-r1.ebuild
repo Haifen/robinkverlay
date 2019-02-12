@@ -65,7 +65,7 @@ DEPEND="${RDEPEND}
 
 src_prepare() {
 	# We only need conformance tests, the rest are useless for us
-	sed -e 'd/.\+\(interactive\)\?\(micro-bench\)\?\(performance\)\?.\+/' \
+	sed -e '/.\+\(interactive\)\?\(micro-bench\)\?\(performance\)\?.\+/d' \
 		-i tests/meson.build || die "meson tests sed failed"
 	default
 }
