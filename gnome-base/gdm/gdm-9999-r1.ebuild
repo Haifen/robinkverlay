@@ -12,8 +12,6 @@ HOMEPAGE="https://wiki.gnome.org/Projects/GDM"
 SRC_URI="${SRC_URI}
 	branding? ( http://www.mail-archive.com/tango-artists@lists.freedesktop.org/msg00043/tango-gentoo-v1.1.tar.gz )
 "
-# gnome2-live.eclass gets it wrong, set correct EGIT_REPO_URI
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/gdm.git"
 
 LICENSE="
 	GPL-2+
