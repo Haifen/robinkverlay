@@ -7,7 +7,7 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python2_7 python3_{4,5} pypy )
 VALA_USE_DEPEND="vapigen"
 
-inherit db-use flag-o-matic gnome2 python-any-r1 vala virtualx
+inherit cmake-utils db-use flag-o-matic gnome2 python-any-r1 vala virtualx
 if [[ ${PV} = 9999 ]]; then
 	inherit gnome2-live
 fi
@@ -118,26 +118,28 @@ src_configure() {
 	use berkdb && append-cppflags "-I$(db_includedir)"
 
 	# phonenumber does not exist in tree
-	gnome2_src_configure \
-		$(use_enable api-doc-extras gtk-doc) \
-		$(use_with api-doc-extras private-docs) \
-		$(usex berkdb --with-libdb="${EPREFIX}"/usr --with-libdb=no) \
-		$(use_enable gnome-online-accounts goa) \
-		$(use_enable gtk) \
-		$(use_enable google google-auth) \
-		$(use_enable google) \
-		$(use_enable introspection) \
-		$(use_enable ipv6) \
-		$(use_with kerberos krb5 "${EPREFIX}"/usr) \
-		$(use_with kerberos krb5-libs "${EPREFIX}"/usr/$(get_libdir)) \
-		$(use_with ldap openldap) \
-		$(use_enable vala vala-bindings) \
-		$(use_enable weather) \
-		--enable-largefile \
-		--enable-smime \
-		--without-phonenumber \
-		--disable-examples \
-		--disable-uoa
+	mycmakeargs=(
+		-DENABLE_GTK_DOC=$(usex gtk-doc "ON" "OFF")
+		-DWITH_PRIVATE_DOCS=$(usex private-docs "ON" "OFF")
+		-DWITH_LIBDB=$(usex berkdb "${EPREFIX}/usr" "OFF")
+		-DENABLE_GOA=$(usex goa "ON" "OFF")
+		-DENABLE_GTK=$(usex gtk "ON" "OFF")
+		-DENABLE_OAUTH2=$(usex google "ON" "OFF")
+		-DENABLE_GOOGLE=$(usex google "ON" "OFF")
+		-DENABLE_INTROSPECTION=$(usex introspection "ON" "OFF")
+		-DENABLE_IPV6=$(usex ipv6 "ON" "OFF")
+		-DWITH_KRB5=$(usex kerberos "${EPREFIX}/usr" "OFF")
+		-DWITH_KRB5_LIBS=$(use kerberos "${EPREFIX}/usr/$(get_libdir)" "OFF")
+		-DWITH_OPENLDAP=$(usex ldap "ON" "OFF")
+		-DENABLE_VALA_BINDINGS=$(usex vala "ON" "OFF")
+		-DENABLE_WEATHER=$(usex weather "ON" "OFF")
+		-DENABLE_LARGEFILE
+		-DENABLE_SMIME=ON
+		-DWITH_PHONENUMBER=OFF
+		-DENABLE_EXAMPLES=OFF
+	)
+	cmake-utils_src_configure
+
 }
 
 src_test() {
@@ -164,3 +166,4 @@ pkg_postinst() {
 		ewarn "(pre-3.12 evolution versions) addressbook data"
 	fi
 }
+
