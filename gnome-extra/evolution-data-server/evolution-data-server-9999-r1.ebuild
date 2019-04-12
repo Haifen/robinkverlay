@@ -8,7 +8,7 @@ VALA_USE_DEPEND="vapigen"
 
 # gnome2-live.eclass sucks for non-autoconf GNOME packages (and there is
 # an increasing amount of them).
-EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PV}.git/"
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PN}.git/"
 inherit cmake-utils db-use flag-o-matic git-r3 gnome2 python-any-r1 systemd vala virtualx
 SRC_URI=""
 
