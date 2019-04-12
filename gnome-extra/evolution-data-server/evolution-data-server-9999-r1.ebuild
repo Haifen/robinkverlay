@@ -6,10 +6,11 @@ GNOME2_LA_PUNT="yes"
 PYTHON_COMPAT=( python2_7 python3_{4,5,6} pypy )
 VALA_USE_DEPEND="vapigen"
 
-inherit cmake-utils db-use flag-o-matic gnome2 python-any-r1 systemd vala virtualx
-if [[ ${PV} =~ 9999 ]]; then
-	inherit gnome2-live
-fi
+# gnome2-live.eclass sucks for non-autoconf GNOME packages (and there is
+# an increasing amount of them).
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/${PV}.git/"
+inherit cmake-utils db-use flag-o-matic git-r3 gnome2 python-any-r1 systemd vala virtualx
+SRC_URI=""
 
 DESCRIPTION="Evolution groupware backend"
 HOMEPAGE="https://wiki.gnome.org/Apps/Evolution"
@@ -81,7 +82,7 @@ pkg_setup() {
 src_prepare() {
 	use vala && vala_src_prepare
 	# evolution-data-server isn't using autoconf anymore
-	GNOME2_EAUTORECONF="no" gnome2_src_prepare
+	gnome2_src_prepare
 
 	# Make CMakeLists versioned vala enabled
 	sed -e "s;\(find_program(VALAC\) valac);\1 ${VALAC});" \
