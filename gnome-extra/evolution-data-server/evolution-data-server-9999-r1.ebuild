@@ -74,16 +74,14 @@ DEPEND="${RDEPEND}
 	vala? ( $(vala_depend) )
 "
 
-# evolution-data-server isn't using autoconf anymore
-GNOME2_EAUTORECONF="no"
-
 pkg_setup() {
 	python-any-r1_pkg_setup
 }
 
 src_prepare() {
 	use vala && vala_src_prepare
-	gnome2_src_prepare
+	# evolution-data-server isn't using autoconf anymore
+	GNOME2_EAUTORECONF="no" gnome2_src_prepare
 
 	# Make CMakeLists versioned vala enabled
 	sed -e "s;\(find_program(VALAC\) valac);\1 ${VALAC});" \
