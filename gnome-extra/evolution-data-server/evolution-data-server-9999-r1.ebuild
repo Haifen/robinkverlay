@@ -9,8 +9,6 @@ VALA_USE_DEPEND="vapigen"
 inherit cmake-utils db-use flag-o-matic gnome2 python-any-r1 systemd vala virtualx
 if [[ ${PV} =~ 9999 ]]; then
 	inherit gnome2-live
-	# evolution-data-server isn't using autoconf anymore
-	GNOME2_EAUTORECONF="no"
 fi
 
 DESCRIPTION="Evolution groupware backend"
@@ -75,6 +73,9 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 	vala? ( $(vala_depend) )
 "
+
+# evolution-data-server isn't using autoconf anymore
+GNOME2_EAUTORECONF="no"
 
 pkg_setup() {
 	python-any-r1_pkg_setup
