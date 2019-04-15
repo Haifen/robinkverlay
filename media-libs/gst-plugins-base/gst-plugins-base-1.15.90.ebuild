@@ -82,7 +82,7 @@ RDEPEND="
 	gles2? ( ${GL_DEPS} )
 	opengl? ( ${GL_DEPS} )
 
-	!<media-libs/gst-plugins-bad-1.13.1:1.0
+	!<media-libs/gst-plugins-bad-1.15.1:1.0
 "
 DEPEND="${RDEPEND}
 	dev-util/glib-utils
