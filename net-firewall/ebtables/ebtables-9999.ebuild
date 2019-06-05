@@ -4,7 +4,7 @@
 
 EAPI="6"
 
-inherit git-r3 versionator eutils toolchain-funcs multilib flag-o-matic
+inherit autotools git-r3 versionator eutils toolchain-funcs multilib flag-o-matic
 
 DESCRIPTION="Utility that enables basic Ethernet frame filtering on a Linux bridge, MAC NAT and brouting"
 HOMEPAGE="http://ebtables.sourceforge.net/"
@@ -32,7 +32,7 @@ src_prepare() {
 	# Fix ebtables output with custom chains, to fix ebtables-{save,restore}
 	eapply "${FILESDIR}/${PN}-2.0.10.4-ebt_standard.c.patch"
 
-	sed -i -e 's/^\(EBTD_ARGC_MAX\).+/\1 = 2048/' -e 's/^\(EBTD_CMDLINE_MAXLN\).+/\1 = 131072/' Makefile.am
+	sed -i -e 's/^\(EBTD_ARGC_MAX\s\?=\).\+/\1 2048/' -e 's/^\(EBTD_CMDLINE_MAXLN\s\?=\).\+/\1 131072/' Makefile.am
 
 	eautoreconf
 }
