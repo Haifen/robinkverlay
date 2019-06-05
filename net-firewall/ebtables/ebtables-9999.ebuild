@@ -9,7 +9,6 @@ inherit git-r3 versionator eutils toolchain-funcs multilib flag-o-matic
 DESCRIPTION="Utility that enables basic Ethernet frame filtering on a Linux bridge, MAC NAT and brouting"
 HOMEPAGE="http://ebtables.sourceforge.net/"
 EGIT_REPO_URI="git://git.netfilter.org/ebtables"
-EGIT_COMMIT="f4bdc80ae8c1a79b4ab5dcb8431ad85aea618d66"
 
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="static"
