@@ -10,10 +10,13 @@ DESCRIPTION="Utility that enables basic Ethernet frame filtering on a Linux brid
 HOMEPAGE="http://ebtables.sourceforge.net/"
 EGIT_REPO_URI="git://git.netfilter.org/ebtables"
 
+
 KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="static"
 LICENSE="GPL-2"
 SLOT="0"
+
+DOCS="ChangeLog"
 
 pkg_setup() {
 	if use static; then
@@ -38,7 +41,7 @@ src_prepare() {
 }
 
 src_configure() {
-	econf
+	econf --sbindir=/sbin
 }
 
 src_compile() {
@@ -71,6 +74,6 @@ src_install() {
 		insinto /etc
 		doins ethertypes
 	fi
-	dodoc ChangeLog || die
+	einstalldocs
 }
 
