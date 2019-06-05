@@ -1,6 +1,21 @@
---- extensions/ebt_among.c	2015-03-11 22:04:19.512855582 +0000
-+++ extensions/ebt_among.c	2015-03-11 22:07:15.814269639 +0000
-@@ -197,7 +197,7 @@ static struct ebt_mac_wormhash *create_w
+From ddf2d61ed622b0687ef361e4f0be18aef654c6e5 Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Wed, 5 Jun 2019 12:16:51 -0700
+Subject: [PATCH 2/3] Apply srcsheldon's ebt_among.c patch.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Allow newline-separated ‘among' files, and fix trailing comma
+---
+ extensions/ebt_among.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/extensions/ebt_among.c b/extensions/ebt_among.c
+index 30c098c..d933f88 100644
+--- a/extensions/ebt_among.c
++++ b/extensions/ebt_among.c
+@@ -197,7 +197,7 @@ static struct ebt_mac_wormhash *create_wormhash(const char *arg)
  
  		/* collect MAC; all its bytes are followed by ':' (colon),
  		 * except for the last one which can be followed by 
@@ -9,7 +24,7 @@
  		for (i = 0; i < 5; i++) {
  			if (read_until(&pc, ":", token, 2) < 0
  			    || token[0] == 0) {
-@@ -213,7 +213,7 @@ static struct ebt_mac_wormhash *create_w
+@@ -213,7 +213,7 @@ static struct ebt_mac_wormhash *create_wormhash(const char *arg)
  			}
  			pc++;
  		}
@@ -18,7 +33,7 @@
  			ebt_print_error("MAC parse error: %.20s", anchor);
  			return NULL;
  		}
-@@ -238,7 +238,7 @@ static struct ebt_mac_wormhash *create_w
+@@ -238,7 +238,7 @@ static struct ebt_mac_wormhash *create_wormhash(const char *arg)
  				}
  				pc++;
  			}
@@ -27,7 +42,7 @@
  				ebt_print_error("IP parse error: %.20s", anchor);
  				return NULL;
  			}
-@@ -279,14 +279,14 @@ static struct ebt_mac_wormhash *create_w
+@@ -279,14 +279,14 @@ static struct ebt_mac_wormhash *create_wormhash(const char *arg)
  		/* now `pc' points to comma if we are here; */
  		/* increment this to the next char */
  		/* but first assert :-> */
@@ -45,7 +60,7 @@
  		if (!*pc) {
  			break;
  		}
-@@ -345,8 +345,6 @@ static int parse(int c, char **argv, int
+@@ -345,8 +345,6 @@ static int parse(int c, char **argv, int argc,
  				ebt_print_error("Couldn't map file to memory");
  			if (optarg[flen-1] != '\n')
  				ebt_print_error("File should end with a newline");
@@ -54,7 +69,7 @@
  			optarg[flen-1] = '\0';
  			if (ebt_errormsg[0] != '\0') {
  				munmap(argv, flen);
-@@ -424,7 +422,9 @@ static void wormhash_printout(const stru
+@@ -424,7 +422,9 @@ static void wormhash_printout(const struct ebt_mac_wormhash *wh)
  			ip = (unsigned char *) &p->ip;
  			printf("=%u.%u.%u.%u", ip[0], ip[1], ip[2], ip[3]);
  		}
@@ -65,3 +80,6 @@
  	}
  	printf(" ");
  }
+-- 
+2.20.1
+

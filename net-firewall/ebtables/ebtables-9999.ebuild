@@ -32,8 +32,6 @@ src_prepare() {
 	eapply "${FILESDIR}/${PN}-2.0.10.4-ebt_among.c.patch"
 	# Fix ebtables output with custom chains, to fix ebtables-{save,restore}
 	eapply "${FILESDIR}/${PN}-2.0.10.4-ebt_standard.c.patch"
-	# Allow the use of '--*-target RETURN' after invoking a module with '-j'
-	eapply "${FILESDIR}/${PN}-2.0.10.4-libebtc.c.patch"
 
 	sed -i -e 's/^\(EBTD_ARGC_MAX\).+/\1 = 2048/' -e 's/^\(EBTD_CMDLINE_MAXLN\).+/\1 = 131072/' Makefile.am
 

@@ -1,6 +1,18 @@
---- extensions/ebt_standard.c	2015-03-11 22:23:10.623576752 +0000
-+++ extensions/ebt_standard.c	2015-03-11 22:23:12.300447096 +0000
-@@ -48,7 +48,7 @@ static void print(const struct ebt_u_ent
+From e696b3cdb8e553fe5d731540c3b24316be1fbb29 Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Wed, 5 Jun 2019 12:18:26 -0700
+Subject: [PATCH 3/3] Apply srcsheldon's ebt_standard.c patch
+
+Fix missing whitespace (as expected by ebtables-save) for custom chains.
+---
+ extensions/ebt_standard.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/extensions/ebt_standard.c b/extensions/ebt_standard.c
+index f3c3308..51bdf1e 100644
+--- a/extensions/ebt_standard.c
++++ b/extensions/ebt_standard.c
+@@ -48,7 +48,7 @@ static void print(const struct ebt_u_entry *entry,
  		struct ebt_u_entries *entries;
  
  		entries = entry->replace->chains[verdict + NF_BR_NUMHOOKS];
@@ -9,3 +21,6 @@
  		return;
  	}
  	if (verdict == EBT_CONTINUE)
+-- 
+2.20.1
+
