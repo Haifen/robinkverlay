@@ -35,11 +35,13 @@ src_prepare() {
 	# Allow the use of '--*-target RETURN' after invoking a module with '-j'
 	eapply "${FILESDIR}/${PN}-2.0.10.4-libebtc.c.patch"
 
-	sed -i -e "s,^MANDIR:=.*,MANDIR:=/usr/share/man," \
-		-e "s,^BINDIR:=.*,BINDIR:=/sbin," \
-		-e "s,^INITDIR:=.*,INITDIR:=/usr/share/doc/${PF}," \
-		-e "s,^SYSCONFIGDIR:=.*,SYSCONFIGDIR:=/usr/share/doc/${PF}," \
-		-e "s,^LIBDIR:=.*,LIBDIR:=/$(get_libdir)/\$(PROGNAME)," Makefile
+	sed -i -e 's/^\(EBTD_ARGC_MAX\).+/\1 = 2048/' -e 's/^\(EBTD_CMDLINE_MAXLN\).+/\1 = 131072/' Makefile.am
+
+	eautoreconf
+}
+
+src_configure() {
+	econf
 }
 
 src_compile() {
@@ -53,8 +55,6 @@ src_compile() {
 	emake \
 		CC="$(tc-getCC)" \
 		CFLAGS="${CFLAGS}" \
-		EBTD_ARGC_MAX=2048 \
-		EBTD_CMDLINE_MAXLN=131072 \
 		$(use static && echo static)
 }
 
