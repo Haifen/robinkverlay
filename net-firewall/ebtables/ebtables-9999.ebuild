@@ -59,10 +59,6 @@ src_compile() {
 src_install() {
 	if ! use static; then
 		make DESTDIR="${D}" install
-		rm \
-			"${ED}"/usr/share/doc/"${P}"/ebtables \
-			"${ED}"/usr/share/doc/"${P}"/ebtables-config \
-		|| die "Failed to remove bundled init script and config file"
 		keepdir /var/lib/ebtables/
 		newinitd "${FILESDIR}"/ebtables.initd-r1 ebtables
 		newconfd "${FILESDIR}"/ebtables.confd-r1 ebtables
@@ -72,5 +68,6 @@ src_install() {
 		insinto /etc
 		doins ethertypes
 	fi
+	dodoc ChangeLog
 }
 
