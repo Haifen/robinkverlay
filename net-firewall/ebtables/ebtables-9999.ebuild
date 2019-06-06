@@ -4,7 +4,7 @@
 
 EAPI="6"
 
-inherit autotools git-r3 versionator eutils toolchain-funcs multilib flag-o-matic
+inherit autotools git-r3 versionator toolchain-funcs multilib flag-o-matic
 
 DESCRIPTION="Utility that enables basic Ethernet frame filtering on a Linux bridge, MAC NAT and brouting"
 HOMEPAGE="http://ebtables.sourceforge.net/"
@@ -15,8 +15,6 @@ KEYWORDS="~amd64 ~ppc ~x86"
 IUSE="static"
 LICENSE="GPL-2"
 SLOT="0"
-
-DOCS="ChangeLog"
 
 pkg_setup() {
 	if use static; then
@@ -74,6 +72,5 @@ src_install() {
 		insinto /etc
 		doins ethertypes
 	fi
-	einstalldocs
 }
 
