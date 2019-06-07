@@ -3,7 +3,7 @@
 # $Id$
 
 EAPI=6
-inherit autotools eutils git-r3 udev
+inherit eutils git-r3 meson udev
 
 DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
@@ -12,7 +12,7 @@ EGIT_REPO_URI="git://anongit.freedesktop.org/wayland/libinput.git"
 LICENSE="MIT"
 SLOT="0/10"
 KEYWORDS="~alpha ~amd64 ~arm ~arm64 ~hppa ~ia64 ~m68k ~mips ~ppc ~ppc64 ~s390 ~sh ~sparc ~x86"
-IUSE="input_devices_wacom test"
+IUSE="doc debug input_devices_wacom test"
 # Tests require write access to udev rules directory which is a no-no for live system.
 # Other tests are just about logs, exported symbols and autotest of the test library.
 RESTRICT="test"
@@ -30,28 +30,15 @@ DEPEND="${RDEPEND}
 #		dev-util/valgrind
 #		sys-libs/libunwind )
 
-src_prepare() {
-	# Doc handling in kinda strange but everything
-	# is available in the tarball already.
-	sed -e 's/^\(SUBDIRS =.*\)doc\(.*\)$/\1\2/' \
-		-i Makefile.am || die
-	eapply_user
-	eautoreconf
-}
-
 src_configure() {
 	# gui can be built but will not be installed
 	# building documentation silently fails with graphviz syntax errors
-	econf \
-		--disable-documentation \
-		--disable-event-gui \
-		$(use_enable input_devices_wacom libwacom) \
-		$(use_enable test tests) \
-		--with-udev-dir="$(get_udevdir)"
+	local emesonargs=(
+		"-Ddocumentation=(usex doc true false)"
+		"-Ddebug-gui=$(usex debug true false)"
+		"-Dlibwacom=$(usex input_devices_wacom true false)"
+		"-Dtests=$(usex test true false)"
+		"-Dudev-dir=$(get_udevdir)" )
+	meson_src_configure
 }
 
-src_install() {
-	emake install DESTDIR="${D}"
-	dodoc -r doc/html
-	prune_libtool_files
-}
