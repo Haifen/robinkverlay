@@ -25,6 +25,7 @@ COMMON_DEPEND="
 	>=x11-libs/pango-1.2[X,introspection?]
 	>=x11-libs/cairo-1.10[X]
 	>=x11-libs/gtk+-3.19.8:3[X,introspection?]
+	>=dev-libs/fribidi-1.0.0
 	>=dev-libs/glib-2.36.0:2[dbus]
 	>=media-libs/clutter-1.25.6:1.0[X,introspection?]
 	>=media-libs/cogl-1.17.1:1.0=[introspection?]
