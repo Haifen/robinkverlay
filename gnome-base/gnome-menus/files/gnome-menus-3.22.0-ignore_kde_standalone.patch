@@ -1,17 +1,18 @@
-From bf91222f05076f32c0a21aa22f8629dc6ce19eb4 Mon Sep 17 00:00:00 2001
-From: Sobhan Mohammadpour <sobhanmohammadpour1@yahoo.fr>
-Date: Mon, 25 Feb 2013 16:36:44 +0330
-Subject: [PATCH] gnome-menus-3.7.90-ignore_kde_standalone
+From eb463868a4d0604817f75715bf6609207b4bb0f6 Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Tue, 11 Jun 2019 19:03:26 -0700
+Subject: [PATCH] Add KDE categories to ignore list
 
+Hand-applied patch from Gentoo upstream
 ---
  layout/gnome-applications.menu | 14 +++++++++++++-
  1 file changed, 13 insertions(+), 1 deletion(-)
 
 diff --git a/layout/gnome-applications.menu b/layout/gnome-applications.menu
-index 9242eff..94ea6d4 100644
+index 3ad7226..0637be1 100644
 --- a/layout/gnome-applications.menu
 +++ b/layout/gnome-applications.menu
-@@ -277,7 +277,19 @@
+@@ -234,7 +234,19 @@
        <And>
          <Not><Category>Core</Category></Not>
          <Not><Category>Screensaver</Category></Not>
@@ -29,9 +30,9 @@ index 9242eff..94ea6d4 100644
 +        <Not><Category>X-KDE-settings-sound</Category></Not>
 +        <Not><Category>X-KDE-settings-system</Category></Not>
 +        <Not><Category>X-KDE-information</Category></Not>
-         <!-- Really Fedora ??? -->
-         <Not><Filename>gnome-eog.desktop</Filename></Not>
-         <Not><Filename>gnome-file-roller.desktop</Filename></Not>
+       </And>
+     </Include>
+   </Menu> <!-- End Other -->
 -- 
-1.8.1.2
+2.20.1
 
