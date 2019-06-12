@@ -34,8 +34,6 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-PATCHES=( "${FILESDIR}"/${PV}-elogind.patch )
-
 src_configure() {
 	# -Dwith_sysprofd=host currently unavailable from ebuild
 	local emesonargs=(
