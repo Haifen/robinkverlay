@@ -1,16 +1,31 @@
-diff -purN a/source/creator/CMakeLists.txt b/source/creator/CMakeLists.txt
---- a/source/creator/CMakeLists.txt	2016-09-28 10:26:55.000000000 +0100
-+++ b/source/creator/CMakeLists.txt	2016-10-03 12:17:08.938928486 +0100
-@@ -328,12 +328,6 @@ endif()
+From 8e6ad94c41b5dcd288afd810644a7873dd658276 Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Wed, 31 Jul 2019 19:25:45 -0700
+Subject: [PATCH] Apply Gentoo "Fix Install Rules" patch
+
+From upstream.  Manually applied, as it's just a single deletion, and
+the original patch doesn't apply cleanly to Git master.
+---
+ source/creator/CMakeLists.txt | 6 ------
+ 1 file changed, 6 deletions(-)
+
+diff --git a/source/creator/CMakeLists.txt b/source/creator/CMakeLists.txt
+index e911a591881..0cd6f2e38f4 100644
+--- a/source/creator/CMakeLists.txt
++++ b/source/creator/CMakeLists.txt
+@@ -351,12 +351,6 @@ endif()
  # Install Targets (Generic, All Platforms)
  
  
 -# important to make a clean  install each time, else old scripts get loaded.
 -install(
--	CODE
--	"file(REMOVE_RECURSE ${TARGETDIR_VER})"
+-  CODE
+-  "file(REMOVE_RECURSE ${TARGETDIR_VER})"
 -)
 -
  if(WITH_PYTHON)
- 	# install(CODE "message(\"copying blender scripts...\")")
- 	
+   # install(CODE "message(\"copying blender scripts...\")")
+ 
+-- 
+2.20.1
+
