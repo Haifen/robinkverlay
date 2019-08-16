@@ -34,7 +34,7 @@ src_configure() {
 	# gui can be built but will not be installed
 	# building documentation silently fails with graphviz syntax errors
 	local emesonargs=(
-		"-Ddocumentation=(usex doc true false)"
+		"-Ddocumentation=$(usex doc true false)"
 		"-Ddebug-gui=$(usex debug true false)"
 		"-Dlibwacom=$(usex input_devices_wacom true false)"
 		"-Dtests=$(usex test true false)"
