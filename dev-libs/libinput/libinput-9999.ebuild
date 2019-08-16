@@ -7,7 +7,7 @@ inherit eutils git-r3 meson udev
 
 DESCRIPTION="Library to handle input devices in Wayland"
 HOMEPAGE="https://www.freedesktop.org/wiki/Software/libinput/"
-EGIT_REPO_URI="git://anongit.freedesktop.org/wayland/libinput.git"
+EGIT_REPO_URI="https://gitlab.freedesktop.org/libinput/libinput.git/"
 
 LICENSE="MIT"
 SLOT="0/10"
