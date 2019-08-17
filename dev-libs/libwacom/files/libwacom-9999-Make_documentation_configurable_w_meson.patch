@@ -1,4 +1,4 @@
-From 6a6e9d50b26f024de80330d73a2f902d064426b2 Mon Sep 17 00:00:00 2001
+From c6d1de4226864e9874c4b7541b31ea04a96f106c Mon Sep 17 00:00:00 2001
 From: Robin Kauffman <robink@creosotehill.org>
 Date: Fri, 16 Aug 2019 17:11:36 -0700
 Subject: [PATCH] Make documentation configurable w/ meson
@@ -26,17 +26,17 @@ index 908811b..41c0906 100644
  		join_paths(dir_src, 'libwacom.h'),
  	]
 diff --git a/meson_options.txt b/meson_options.txt
-index 1d75434..bb81ad6 100644
+index 1d75434..f59db4c 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
 @@ -6,4 +6,8 @@ option('tests',
         type: 'boolean',
         value: true,
         description: 'Build the tests [default=true]')
-+option('documentation'
++option('documentation',
 +	type: 'boolean',
 +	value: 'true',
-+	description: 'Build the documentation' )
++	description: 'Build the documentation')
  
 -- 
 2.20.1
