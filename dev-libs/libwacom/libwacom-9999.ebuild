@@ -35,12 +35,13 @@ src_prepare() {
 
 src_configure() {
 	local emesonargs=( -Dudev-dir=$(get_udevdir)
+					   -Ddocumentation=$(usex doc true false)
 					   -Ddefault_library=$(usex static-libs both shared) )
 	meson_src_configure
 }
 
 src_install() {
-	use doc && HTML_DOCS=( doc/html/. )
+	use doc && HTML_DOCS=( html/. )
 	default
 	local udevdir="$(get_udevdir)"
 	dodir "${udevdir}/rules.d"
