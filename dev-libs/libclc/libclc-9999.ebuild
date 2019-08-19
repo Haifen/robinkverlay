@@ -49,7 +49,7 @@ src_prepare() {
 
 src_configure() {
 	./configure.py \
-		--with-llvm-config="$(get_llvm_prefix)/bin/llvm-config" \
+		--with-llvm-config="$(get_llvm_prefix "${LLVM_MAX_SLOT}")/bin/llvm-config" \
 		--prefix="${EPREFIX}/usr" || die
 }
 
