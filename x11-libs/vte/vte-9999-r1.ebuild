@@ -6,14 +6,17 @@ EAPI="6"
 VALA_USE_DEPEND="vapigen"
 VALA_MIN_API_VERSION="0.18"
 
-inherit eutils gnome2-live vala
+inherit eutils git-r3 gnome2 meson vala
 
 DESCRIPTION="Library providing a virtual terminal emulator widget"
 HOMEPAGE="https://wiki.gnome.org/action/show/Apps/Terminal/VTE"
 
+SRC_URI=""
+EGIT_REPO_URI="https://gitlab.gnome.org/GNOME/vte.git/"
+
 LICENSE="LGPL-2+"
 SLOT="2.91"
-IUSE="+crypt debug doc glade +introspection vala"
+IUSE="+crypt debug doc fribidi glade gtk4 iconv +introspection vala"
 KEYWORDS=""
 
 RDEPEND="
@@ -55,27 +58,18 @@ src_prepare() {
 }
 
 src_configure() {
-	local myconf=""
+	local emesonargs=(
+		-Ddocs=$(usex doc true false)
+		-Dgir=$(usex introspection true false)
+		-Dfribidi=$(usex fribidi true false)
+		-Dgnutls=$(usex crypt true false)
+		-Dgtk3=true
+		-Dgtk4=$(usex gtk4 true false)
+		-Diconv=$(usex iconv true false)
+		-Dvapi=$(usex vala true false)
+	)
 
-	if [[ ${CHOST} == *-interix* ]]; then
-		myconf="${myconf} --disable-Bsymbolic"
-
-		# interix stropts.h is empty...
-		export ac_cv_header_stropts_h=no
-	fi
-
-	# Python bindings are via gobject-introspection
-	# Ex: from gi.repository import Vte
-	# FIXME: add USE for pcre
-	gnome2_src_configure \
-		--disable-test-application \
-		--disable-static \
-		$(use_enable debug) \
-		$(use_enable glade glade-catalogue) \
-		$(use_with crypt gnutls) \
-		$(use_enable introspection) \
-		$(use_enable vala) \
-		${myconf}
+	meson_src_configure
 }
 
 src_install() {
@@ -83,3 +77,4 @@ src_install() {
 	gnome2_src_install
 	mv "${D}"/etc/profile.d/vte{,-${SLOT}}.sh || die
 }
+
