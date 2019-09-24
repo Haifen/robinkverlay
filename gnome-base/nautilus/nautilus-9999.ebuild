@@ -55,7 +55,7 @@ PDEPEND="
 " # Need gvfs[gtk] for recent:/// support; always built (without USE=gtk) since gvfs-1.34
 
 PATCHES=(
-	"${FILESDIR}"/${PV}-docs-build.patch # Always install pregenerated manpage, keeping docs option for gtk-doc
+	"${FILESDIR}"/3.34.0-docs-build.patch # Always install pregenerated manpage, keeping docs option for gtk-doc
 )
 
 src_prepare() {
