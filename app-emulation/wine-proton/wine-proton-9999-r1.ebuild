@@ -11,7 +11,7 @@ inherit autotools estack eutils flag-o-matic gnome2-utils l10n multilib multilib
 MY_PN="${PN%%-*}"
 MY_P="${MY_PN}-${PV}"
 
-if [[ ${PV} == "9999" ]] ; then
+if [[ ${PV} =~ "9999" ]] ; then
 	EGIT_REPO_URI="https://github.com/ValveSoftware/wine.git"
 	inherit git-r3
 	SRC_URI=""
