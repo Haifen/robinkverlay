@@ -23,13 +23,13 @@ else
 fi
 S="${WORKDIR}/${MY_P}"
 
-GWP_V="20180120"
+GWP_V="20191008"
 PATCHDIR="${WORKDIR}/gentoo-wine-patches"
 
 DESCRIPTION="Free implementation of Windows(tm) on Unix, with a bit of extra spice"
 HOMEPAGE="https://github.com/ValveSoftware/wine https://github.com/ValveSoftware/Proton"
 SRC_URI="${SRC_URI}
-	https://dev.gentoo.org/~np-hardass/distfiles/wine/gentoo-wine-patches-${GWP_V}.tar.xz
+	https://storage.googleapis.com/rgcs.creosotehill.org/gentoo/distfiles/wine/gentoo-wine-patches-${GWP_V}.tar.xz
 "
 
 LICENSE="LGPL-2.1"
