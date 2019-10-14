@@ -75,7 +75,6 @@ src_configure() {
 		$(use_enable amr opencore-amr) \
 		$(use_enable silk) \
 		$(use_enable opus) \
-		# PJProject's ./aconfigure handling of SSL is stupid.
 		$(usex ssl "" "--disable-ssl") \
 		$(use_enable webrtc) \
 		"${myconf[@]}"
