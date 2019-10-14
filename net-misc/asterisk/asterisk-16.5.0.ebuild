@@ -10,7 +10,7 @@ MY_P="${PN}-${PV/_/-}"
 DESCRIPTION="Asterisk: A Modular Open Source PBX System"
 HOMEPAGE="http://www.asterisk.org/"
 SRC_URI="http://downloads.asterisk.org/pub/telephony/asterisk/releases/${MY_P}.tar.gz
-	 https://storage.googleapis.com/rgcs.creosotehill.org/gentoo/distfiles/asterisk-patchset-14.6.1.tar.xz"
+	 https://storage.googleapis.com/rgcs.creosotehill.org/gentoo/distfiles/asterisk-patchset-${PV}.tar.xz"
 LICENSE="GPL-2"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
