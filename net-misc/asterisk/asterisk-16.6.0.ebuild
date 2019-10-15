@@ -75,7 +75,7 @@ DEPEND="${CDEPEND}
 	!net-libs/pjsip
 	voicemail_storage_imap? ( virtual/imap-c-client )
 	virtual/pkgconfig
-	pjproject? ( net-libs/pjproject )
+	pjproject? ( >=net-libs/pjproject-2.9 )
 "
 
 RDEPEND="${CDEPEND}
@@ -102,7 +102,7 @@ pkg_setup() {
 
 src_prepare() {
 	default
-	AT_M4DIR="autoconf third-party third-party/pjproject" eautoreconf
+	AT_M4DIR="autoconf third-party third-party/pjproject third-party/jansson" eautoreconf
 }
 
 src_configure() {
@@ -121,7 +121,8 @@ src_configure() {
 		$(use_with http gmime) \
 		$(use_with newt) \
 		$(use_with portaudio) \
-		$(use_with pjproject)
+		$(use_with pjproject) \
+		--without-pjproject-bundled # Never use the bundled pjproject.
 
 	# Blank out sounds/sounds.xml file to prevent
 	# asterisk from installing sounds files (we pull them in via
