@@ -1,11 +1,11 @@
 # Copyright 1999-2018 Gentoo Foundation
 # Distributed under the terms of the GNU General Public License v2
 
-EAPI="6"
+EAPI="7"
 GNOME2_LA_PUNT="yes"
 GNOME2_EAUTORECONF="yes"
 
-inherit eutils gnome2-live pam readme.gentoo-r1 systemd user versionator
+inherit eutils gnome2-live pam readme.gentoo-r1 systemd user
 
 DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
 HOMEPAGE="https://wiki.gnome.org/Projects/GDM"
@@ -216,7 +216,7 @@ pkg_postinst() {
 
 	readme.gentoo_print_elog
 
-	if ! version_is_at_least 3.16.0 ${REPLACING_VERSIONS}; then
+	if ! ver_is_at_least 3.16.0 ${REPLACING_VERSIONS}; then
 		ewarn "GDM will now use a new TTY per logged user as explained at:"
 		ewarn "https://wiki.gentoo.org/wiki/Project:GNOME/GNOME3-Troubleshooting#GDM_.3E.3D_3.16_opens_one_graphical_session_per_user"
 	fi
