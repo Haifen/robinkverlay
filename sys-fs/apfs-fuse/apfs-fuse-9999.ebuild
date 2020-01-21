@@ -20,3 +20,5 @@ DEPEND="sys-fs/fuse:3
 		app-arch/bzip2
 		sys-apps/attr"
 RDEPEND="${DEPEND}"
+
+PATCHES="${FILESDIR}/${P}-Add-library-install-directives.patch"

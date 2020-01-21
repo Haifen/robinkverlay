@@ -1,0 +1,26 @@
+From 714001e1fed455550b87690ac7ad62f2d9a01ad9 Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Mon, 20 Jan 2020 22:29:14 -0800
+Subject: [PATCH] Add library install directives.
+
+By default, the CMake build rules for apfs-fuse don't install the needed
+libraries.  Fix that.
+---
+ CMakeLists.txt | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 64aa2f8..e315d67 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -133,5 +133,7 @@ add_executable(apfsutil ApfsUtil/ApfsUtil.cpp)
+ target_link_libraries(apfsutil apfs)
+ 
+ include(GNUInstallDirs)
++install(TARGETS lzfse LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
++install(TARGETS apfs LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ install(TARGETS apfs-fuse RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+ install(TARGETS apfsutil RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}")
+-- 
+2.24.1
+
