@@ -32,6 +32,7 @@ COMMON_DEPEND="
 	media-libs/fontconfig
 	media-libs/libcanberra[gtk3]
 	>=media-sound/pulseaudio-2
+	>=sys-apps/usbguard-0.7.5
 	>=sys-power/upower-0.99:=
 	x11-libs/cairo
 	x11-libs/gdk-pixbuf:2
