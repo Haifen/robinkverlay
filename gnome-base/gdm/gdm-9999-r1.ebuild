@@ -3,8 +3,9 @@
 
 EAPI="6"
 GNOME2_LA_PUNT="yes"
+GNOME2_EAUTORECONF="yes"
 
-inherit autotools eutils gnome2-live pam readme.gentoo-r1 systemd user versionator
+inherit eutils gnome2-live pam readme.gentoo-r1 systemd user versionator
 
 DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
 HOMEPAGE="https://wiki.gnome.org/Projects/GDM"
@@ -138,8 +139,6 @@ src_prepare() {
 
 	# Show logo when branding is enabled
 	use branding && eapply "${FILESDIR}/${PN}-3.8.4-logo.patch"
-
-	eautoreconf
 
 	gnome2_src_prepare
 }
