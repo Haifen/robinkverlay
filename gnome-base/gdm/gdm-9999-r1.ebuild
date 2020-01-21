@@ -3,7 +3,6 @@
 
 EAPI="7"
 GNOME2_LA_PUNT="yes"
-GNOME2_EAUTORECONF="yes"
 
 inherit eutils gnome2-live pam readme.gentoo-r1 systemd user
 
@@ -141,6 +140,8 @@ src_prepare() {
 	use branding && eapply "${FILESDIR}/${PN}-3.8.4-logo.patch"
 
 	gnome2_src_prepare
+
+	eautoreconf
 }
 
 src_configure() {
