@@ -1,4 +1,4 @@
-From 8962b2ec89699cb60e5c533c4b3b5152e77d4355 Mon Sep 17 00:00:00 2001
+From d691f51f6814ed5e1a9ea4fbf91f23f9be449edf Mon Sep 17 00:00:00 2001
 From: Robin Kauffman <robink@creosotehill.org>
 Date: Tue, 12 Feb 2019 15:45:10 -0800
 Subject: [PATCH] Apply Gentoo branding
@@ -22,5 +22,5 @@ index 7b5c54d1..c11f3176 100644
          Path to small image at top of user list
        </summary>
 -- 
-2.20.1
+2.24.1
 
