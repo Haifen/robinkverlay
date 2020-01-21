@@ -4,7 +4,7 @@
 EAPI="7"
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2-live pam readme.gentoo-r1 systemd user
+inherit autotools eutils gnome2-live pam readme.gentoo-r1 systemd user
 
 DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
 HOMEPAGE="https://wiki.gnome.org/Projects/GDM"
