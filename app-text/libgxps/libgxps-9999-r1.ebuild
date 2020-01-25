@@ -57,7 +57,7 @@ src_configure() {
 		-Denable-test=true
 		-Denable-gtk-doc=$(usex doc true false)
 		-Denable-man=true
-		-Ddisable-introspection=$(usex introspection true false)
+		-Ddisable-introspection=$(usex introspection false true)
 		-Dwith-liblcms2=$(usex lcms true false)
 		-Dwith-libjpeg=$(usex jpeg true false)
 		-Dwith-libtiff=$(usex tiff true false) )
