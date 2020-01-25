@@ -41,7 +41,7 @@ DEPEND="${RDEPEND}
 	virtual/pkgconfig
 "
 
-if [[ ${PV} = 9999 ]]; then
+if [[ ${PV} =~ 9999 ]]; then
 	DEPEND="${DEPEND}
 		doc? (
 			app-text/docbook-xml-dtd:4.1.2
