@@ -11,6 +11,8 @@ DESCRIPTION="Python interface to the SANE scanner and frame grabber"
 HOMEPAGE="https://github.com/python-pillow/Sane"
 SRC_URI="https://github.com/python-pillow/Sane/archive/v${PV}.tar.gz -> ${P}.tar.gz"
 
+S="${WORKDIR}/Sane-${PV}"
+
 LICENSE="PYTHON"
 SLOT="0"
 KEYWORDS="~amd64 ~x86"
