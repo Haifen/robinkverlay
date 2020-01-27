@@ -50,6 +50,12 @@ DEPEND="${RDEPEND}
         doc? ( app-doc/doxygen )
         app-doc/xmltoman"
 
+src_prepare() {
+	einfo "Patching doc/meson.build to place docs in Gentoo-compatible directory."
+	sed -i -e "s/\(docdir\,\s'\)pipewire.*\('\)/\1${P}\2/g" "${S}/doc/meson.build"
+	default
+}
+
 src_configure() {
 	local emesonargs=(
 		-Dpipewire-alsa=$(usex alsa true false)
