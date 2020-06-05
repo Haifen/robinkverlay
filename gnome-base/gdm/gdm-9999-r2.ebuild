@@ -135,17 +135,18 @@ src_configure() {
 			-Dinitial-vt=1
 			-Dipv6=$(usex ipv6 true false)
 			-Dlang-file=/etc/locale.conf
-			-Dlibaudit=$(usex audit true false)
+			-Dlibaudit=$(usex audit enabled disabled)
 			-Dlog-dir="${EPREFIX}"/var/log/gdm
 			-Dpam-mod-dir=$(getpam_mod_dir)
 			-Dpam-prefix="${EPREFIX}"/etc/pam.d
 			-Dpid-file=/var/run/gdm.pid
-			-Dplymouth=$(usex plymouth true false)
+			-Dplymouth=$(usex plymouth enabled disabled)
 			-Dprofiling=$(usex profiling true false)
 			-Dran-once-marker-dir="${EPREFIX}"/var/run
 			-Drun-dir=/run/gdm
 			-Druntime-conf="${EPREFIX}"/etc/gdm/custom.conf
 			-Dscreenshot-dir="${EPREFIX}"/var/lib/gdm/screenshots
+			-Dselinux=$(usex selinux enabled disabled)
 			-Dsplit-authentication=true
 			-Dsysconfsubdir=gdm
 			-Dsystemd-journal=$(usex systemd true false)
@@ -157,7 +158,7 @@ src_configure() {
 			-Dwayland-support=$(usex wayland true false)
 			-Dworking-dir="${EPREFIX}"/var/lib/gdm
 			-Dxauth-dir="${EPREFIX}"/var/lib/gdm
-			-Dxdmcp=$(usex xdmcp true false) )
+			-Dxdmcp=$(usex xdmcp enabled disabled) )
 	meson_src_configure
 
 }
