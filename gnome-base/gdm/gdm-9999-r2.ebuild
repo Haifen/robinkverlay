@@ -4,7 +4,7 @@
 EAPI=7
 GNOME2_LA_PUNT="yes"
 
-inherit eutils gnome2-live meson pam readme.gentoo-r1 systemd user
+inherit eutils gnome2-live meson pam readme.gentoo-r1 systemd udev user
 
 DESCRIPTION="GNOME Display Manager for managing graphical display servers and user logins"
 HOMEPAGE="https://wiki.gnome.org/Projects/GDM"
@@ -152,7 +152,7 @@ src_configure() {
 			-Dsystemd-journal=false
 			-Dsystemdsystemunitdir="$(systemd_get_systemunitdir)"
 			-Dtcp-wrappers=$(usex tcpd true false)
-			-Dudev-dir="$(get_udevdir)"/rules.d
+			-Dudev-dir="$(udev_get_udevdir)"/rules.d
 			-Duser=gdm
 			-Duser-display-server=true
 			-Dwayland-support=$(usex wayland true false)
