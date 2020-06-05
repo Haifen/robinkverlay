@@ -166,10 +166,6 @@ src_configure() {
 src_install() {
 	gnome2_src_install
 
-	if ! use accessibility ; then
-		rm "${ED}"/usr/share/gdm/greeter/autostart/orca-autostart.desktop || die
-	fi
-
 	exeinto /etc/X11/xinit/xinitrc.d
 	newexe "${FILESDIR}/49-keychain-r1" 49-keychain
 	newexe "${FILESDIR}/50-ssh-agent-r1" 50-ssh-agent
