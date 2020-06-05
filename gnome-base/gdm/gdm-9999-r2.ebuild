@@ -159,6 +159,7 @@ src_configure() {
 			-Dworking-dir="${EPREFIX}"/var/lib/gdm
 			-Dxauth-dir="${EPREFIX}"/var/lib/gdm
 			-Dxdmcp=$(usex xdmcp enabled disabled) )
+	BUILD_DIR="${WORKDIR}/${P}-build"
 	mkdir -p "${BUILD_DIR}"/data
 	cp "${S}"/data/XSession.in ${BUILD_DIR}/data
 	meson_src_configure
