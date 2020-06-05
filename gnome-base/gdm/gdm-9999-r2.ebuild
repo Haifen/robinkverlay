@@ -152,7 +152,7 @@ src_configure() {
 			-Dsystemd-journal=false
 			-Dsystemdsystemunitdir="$(systemd_get_systemunitdir)"
 			-Dtcp-wrappers=$(usex tcpd true false)
-			-Dudev-dir="$(udev_get_udevdir)"/rules.d
+			-Dudev-dir="$(get_udevdir)"/rules.d
 			-Duser=gdm
 			-Duser-display-server=true
 			-Dwayland-support=$(usex wayland true false)
