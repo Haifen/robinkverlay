@@ -1,0 +1,90 @@
+From 90c8edf5cd2ba468a302b68fc2d8a013d5041bf7 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 21:50:19 +0200
+Subject: [PATCH 09/18] output/kms: Allow setting the variable refresh rate
+ mode for an output
+
+Add a function that enables variable refresh rate on a CRTC when it
+is enabled and requested for the given output. If it isn't requested
+or enabled for the output, it is disabled on the CRTC.
+
+An output is considered capable of variable refresh rate if its
+connector supports it.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/backends/meta-output.h            |  4 ++++
+ src/backends/native/meta-output-kms.c | 20 ++++++++++++++++++++
+ src/backends/native/meta-output-kms.h |  3 +++
+ 3 files changed, 27 insertions(+)
+
+diff --git a/src/backends/meta-output.h b/src/backends/meta-output.h
+index 24a10cf04..62af6644c 100644
+--- a/src/backends/meta-output.h
++++ b/src/backends/meta-output.h
+@@ -102,6 +102,10 @@ struct _MetaOutput
+   gboolean is_underscanning;
+   gboolean supports_underscanning;
+ 
++  gboolean vrr_enabled;
++  gboolean vrr_capable;
++  gboolean vrr_requested;
++
+   gpointer driver_private;
+   GDestroyNotify driver_notify;
+ 
+diff --git a/src/backends/native/meta-output-kms.c b/src/backends/native/meta-output-kms.c
+index e552113c0..ab2b788ac 100644
+--- a/src/backends/native/meta-output-kms.c
++++ b/src/backends/native/meta-output-kms.c
+@@ -91,6 +91,24 @@ meta_output_kms_set_underscan (MetaOutput    *output,
+     }
+ }
+ 
++void
++meta_output_kms_set_vrr_mode (MetaOutput    *output,
++                              MetaKmsUpdate *kms_update)
++{
++  MetaCrtc *crtc;
++  MetaKmsCrtc *kms_crtc;
++
++  if (!output->vrr_capable)
++    return;
++
++  crtc = meta_output_get_assigned_crtc (output);
++  kms_crtc = meta_crtc_kms_get_kms_crtc (crtc);
++
++  meta_kms_crtc_set_vrr_mode (kms_crtc,
++                              kms_update,
++                              output->vrr_enabled && output->vrr_requested);
++}
++
+ uint32_t
+ meta_output_kms_get_connector_id (MetaOutput *output)
+ {
+@@ -389,6 +407,8 @@ meta_create_kms_output (MetaGpuKms        *gpu_kms,
+   output->supports_underscanning =
+     meta_kms_connector_is_underscanning_supported (kms_connector);
+ 
++  output->vrr_capable = connector_state->vrr_capable;
++
+   meta_output_parse_edid (output, connector_state->edid_data);
+ 
+   output->connector_type = meta_kms_connector_get_connector_type (kms_connector);
+diff --git a/src/backends/native/meta-output-kms.h b/src/backends/native/meta-output-kms.h
+index 47ce68a3c..b588852e2 100644
+--- a/src/backends/native/meta-output-kms.h
++++ b/src/backends/native/meta-output-kms.h
+@@ -34,6 +34,9 @@ void meta_output_kms_set_power_save_mode (MetaOutput    *output,
+ void meta_output_kms_set_underscan (MetaOutput    *output,
+                                     MetaKmsUpdate *kms_update);
+ 
++void meta_output_kms_set_vrr_mode (MetaOutput    *output,
++                                   MetaKmsUpdate *kms_update);
++
+ gboolean meta_output_kms_can_clone (MetaOutput *output,
+                                     MetaOutput *other_output);
+ 
+-- 
+2.26.2
+

@@ -1,0 +1,174 @@
+From 2e03105de019e58fe209e642d6026532545e6e57 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 22:17:59 +0200
+Subject: [PATCH 07/18] update/kms: Allow setting CRTC properties
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/backends/native/meta-kms-impl-simple.c    | 40 +++++++++++++++++++
+ src/backends/native/meta-kms-update-private.h | 15 +++++++
+ src/backends/native/meta-kms-update.c         | 29 ++++++++++++++
+ 3 files changed, 84 insertions(+)
+
+diff --git a/src/backends/native/meta-kms-impl-simple.c b/src/backends/native/meta-kms-impl-simple.c
+index b5c7bb742..a99839e6a 100644
+--- a/src/backends/native/meta-kms-impl-simple.c
++++ b/src/backends/native/meta-kms-impl-simple.c
+@@ -105,6 +105,39 @@ process_connector_property (MetaKmsImpl    *impl,
+   return TRUE;
+ }
+ 
++static gboolean
++process_crtc_property (MetaKmsImpl   *impl,
++                       MetaKmsUpdate *update,
++                       gpointer       update_entry,
++                       GError       **error)
++{
++  MetaKmsCrtcProperty *crtc_property = update_entry;
++  MetaKmsCrtc *crtc = crtc_property->crtc;
++  MetaKmsDevice *device = meta_kms_crtc_get_device (crtc);
++  MetaKmsImplDevice *impl_device = meta_kms_device_get_impl_device (device);
++  int fd;
++  int ret;
++
++  fd = meta_kms_impl_device_get_fd (impl_device);
++
++  ret = drmModeObjectSetProperty (fd,
++                                  meta_kms_crtc_get_id (crtc),
++                                  DRM_MODE_OBJECT_CRTC,
++                                  crtc_property->prop_id,
++                                  crtc_property->value);
++  if (ret != 0)
++    {
++      g_set_error (error, G_IO_ERROR, g_io_error_from_errno (-ret),
++                   "Failed to set crtc %u property %u: %s",
++                   meta_kms_crtc_get_id (crtc),
++                   crtc_property->prop_id,
++                   g_strerror (-ret));
++      return FALSE;
++    }
++
++  return TRUE;
++}
++
+ static gboolean
+ process_plane_property (MetaKmsImpl      *impl,
+                         MetaKmsPlane     *plane,
+@@ -929,6 +962,13 @@ meta_kms_impl_simple_process_update (MetaKmsImpl   *impl,
+                         &error))
+     goto err_planes_not_assigned;
+ 
++  if (!process_entries (impl,
++                        update,
++                        meta_kms_update_get_crtc_properties (update),
++                        process_crtc_property,
++                        &error))
++    goto err_planes_not_assigned;
++
+   if (!process_entries (impl,
+                         update,
+                         meta_kms_update_get_mode_sets (update),
+diff --git a/src/backends/native/meta-kms-update-private.h b/src/backends/native/meta-kms-update-private.h
+index 4d4d4a276..c00a0dbb1 100644
+--- a/src/backends/native/meta-kms-update-private.h
++++ b/src/backends/native/meta-kms-update-private.h
+@@ -66,6 +66,14 @@ typedef struct _MetaKmsModeSet
+   drmModeModeInfo *drm_mode;
+ } MetaKmsModeSet;
+ 
++typedef struct _MetaKmsCrtcProperty
++{
++  MetaKmsDevice *device;
++  MetaKmsCrtc *crtc;
++  uint32_t prop_id;
++  uint64_t value;
++} MetaKmsCrtcProperty;
++
+ typedef struct _MetaKmsConnectorProperty
+ {
+   MetaKmsDevice *device;
+@@ -112,6 +120,11 @@ void meta_kms_update_set_connector_property (MetaKmsUpdate    *update,
+                                              uint32_t          prop_id,
+                                              uint64_t          value);
+ 
++void meta_kms_update_set_crtc_property (MetaKmsUpdate *update,
++                                        MetaKmsCrtc   *crtc,
++                                        uint32_t       prop_id,
++                                        uint64_t       value);
++
+ void meta_kms_update_set_crtc_gamma (MetaKmsUpdate  *update,
+                                      MetaKmsCrtc    *crtc,
+                                      int             size,
+@@ -134,6 +147,8 @@ GList * meta_kms_update_get_page_flips (MetaKmsUpdate *update);
+ 
+ GList * meta_kms_update_get_connector_properties (MetaKmsUpdate *update);
+ 
++GList * meta_kms_update_get_crtc_properties (MetaKmsUpdate *update);
++
+ GList * meta_kms_update_get_crtc_gammas (MetaKmsUpdate *update);
+ 
+ G_DEFINE_AUTOPTR_CLEANUP_FUNC (MetaKmsPlaneFeedback,
+diff --git a/src/backends/native/meta-kms-update.c b/src/backends/native/meta-kms-update.c
+index 5ace83021..a671f3371 100644
+--- a/src/backends/native/meta-kms-update.c
++++ b/src/backends/native/meta-kms-update.c
+@@ -34,6 +34,7 @@ struct _MetaKmsUpdate
+   GList *plane_assignments;
+   GList *page_flips;
+   GList *connector_properties;
++  GList *crtc_properties;
+   GList *crtc_gammas;
+ };
+ 
+@@ -248,6 +249,27 @@ meta_kms_update_set_connector_property (MetaKmsUpdate    *update,
+                                                  prop);
+ }
+ 
++void
++meta_kms_update_set_crtc_property (MetaKmsUpdate *update,
++                                   MetaKmsCrtc   *crtc,
++                                   uint32_t       prop_id,
++                                   uint64_t       value)
++{
++  MetaKmsCrtcProperty *prop;
++
++  g_assert (!meta_kms_update_is_sealed (update));
++
++  prop = g_new0 (MetaKmsCrtcProperty, 1);
++  *prop = (MetaKmsCrtcProperty) {
++    .crtc = crtc,
++    .prop_id = prop_id,
++    .value = value,
++  };
++
++  update->crtc_properties = g_list_prepend (update->crtc_properties,
++                                            prop);
++}
++
+ static void
+ meta_kms_crtc_gamma_free (MetaKmsCrtcGamma *gamma)
+ {
+@@ -385,6 +407,12 @@ meta_kms_update_get_page_flips (MetaKmsUpdate *update)
+   return update->page_flips;
+ }
+ 
++GList *
++meta_kms_update_get_crtc_properties (MetaKmsUpdate *update)
++{
++  return update->crtc_properties;
++}
++
+ GList *
+ meta_kms_update_get_connector_properties (MetaKmsUpdate *update)
+ {
+@@ -424,6 +452,7 @@ meta_kms_update_free (MetaKmsUpdate *update)
+                     (GDestroyNotify) meta_kms_mode_set_free);
+   g_list_free_full (update->page_flips, g_free);
+   g_list_free_full (update->connector_properties, g_free);
++  g_list_free_full (update->crtc_properties, g_free);
+   g_list_free_full (update->crtc_gammas, (GDestroyNotify) meta_kms_crtc_gamma_free);
+ 
+   g_free (update);
+-- 
+2.26.2
+

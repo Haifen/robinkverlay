@@ -1,0 +1,69 @@
+From ffdd38f53f67eaac5970cf3b9f44bbbd456357e9 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 01:45:30 +0200
+Subject: [PATCH 16/18] temp: x11: Keep track of variable refresh rate support
+ in X windows
+
+Use the _VARIABLE_REFRESH property to identify top-level X windows
+that support variable refresh rate.
+
+This has the limitation that only top-level windows are tracked, and
+is only intended as a temporary measure for the purpsoe of testing.
+
+A better solution for this would be to have Xwayland inform the
+Wayland compositor about surfaces that support variable refresh
+rate via a Wayland protocol.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/x11/atomnames.h    |  1 +
+ src/x11/window-props.c | 14 ++++++++++++++
+ 2 files changed, 15 insertions(+)
+
+diff --git a/src/x11/atomnames.h b/src/x11/atomnames.h
+index 4b25b099a..7b30a57de 100644
+--- a/src/x11/atomnames.h
++++ b/src/x11/atomnames.h
+@@ -84,6 +84,7 @@ item(WL_SURFACE_ID)
+ item(_XWAYLAND_MAY_GRAB_KEYBOARD)
+ item(_XWAYLAND_RANDR_EMU_MONITOR_RECTS)
+ item(_XWAYLAND_ALLOW_COMMITS)
++item(_VARIABLE_REFRESH)
+ 
+ /* Oddities: These are used, and we need atoms for them,
+  * but when we need all _NET_WM hints (i.e. when we're making
+diff --git a/src/x11/window-props.c b/src/x11/window-props.c
+index 11bf50c88..bd2549512 100644
+--- a/src/x11/window-props.c
++++ b/src/x11/window-props.c
+@@ -1772,6 +1772,19 @@ reload_window_opacity (MetaWindow    *window,
+   meta_window_set_opacity (window, opacity);
+ }
+ 
++static void
++reload_vrr_requested (MetaWindow    *window,
++                      MetaPropValue *value,
++                      gboolean       initial)
++{
++  gboolean vrr_requested = FALSE;
++
++  if (value->type != META_PROP_VALUE_INVALID)
++    vrr_requested = (guint32) value->v.cardinal;
++
++  meta_window_set_vrr_requested (window, vrr_requested);
++}
++
+ #define RELOAD_STRING(var_name, propname) \
+   static void                                       \
+   reload_ ## var_name (MetaWindow    *window,       \
+@@ -1867,6 +1880,7 @@ meta_x11_display_init_window_prop_hooks (MetaX11Display *x11_display)
+     { x11_display->atom__NET_WM_STRUT_PARTIAL, META_PROP_VALUE_INVALID, reload_struts, NONE },
+     { x11_display->atom__NET_WM_BYPASS_COMPOSITOR, META_PROP_VALUE_CARDINAL,  reload_bypass_compositor, LOAD_INIT | INCLUDE_OR },
+     { x11_display->atom__NET_WM_WINDOW_OPACITY, META_PROP_VALUE_CARDINAL, reload_window_opacity, LOAD_INIT | INCLUDE_OR },
++    { x11_display->atom__VARIABLE_REFRESH, META_PROP_VALUE_CARDINAL, reload_vrr_requested, LOAD_INIT },
+     { 0 },
+   };
+ 
+-- 
+2.26.2
+

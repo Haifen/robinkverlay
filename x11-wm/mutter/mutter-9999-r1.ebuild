@@ -93,6 +93,7 @@ BDEPEND="
 
 PATCHES=(
 	"${FILESDIR}"/3.32.2-no-cogl-gles2.patch
+	"${FILESDIR}"/wl-vrr/
 )
 
 src_configure() {

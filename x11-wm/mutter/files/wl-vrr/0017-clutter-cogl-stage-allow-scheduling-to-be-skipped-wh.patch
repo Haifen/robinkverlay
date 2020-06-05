@@ -1,0 +1,27 @@
+From 77a4d6ef887e4a8124c24d3975f4458c1e7d4606 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Sat, 25 Apr 2020 17:00:21 +0300
+Subject: [PATCH 17/18] clutter/cogl/stage: allow scheduling to be skipped when
+ an update is already scheduled
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ clutter/clutter/cogl/clutter-stage-cogl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/clutter/clutter/cogl/clutter-stage-cogl.c b/clutter/clutter/cogl/clutter-stage-cogl.c
+index 4e0ecd097..283c55897 100644
+--- a/clutter/clutter/cogl/clutter-stage-cogl.c
++++ b/clutter/clutter/cogl/clutter-stage-cogl.c
+@@ -170,7 +170,7 @@ clutter_stage_cogl_schedule_update (ClutterStageWindow *stage_window,
+   int64_t max_render_time_allowed;
+   int64_t next_presentation_time;
+ 
+-  if (stage_cogl->update_time != -1)
++  if (stage_cogl->update_time != -1 && sync_delay >= 0)
+     return;
+ 
+   stage_cogl->last_sync_delay = sync_delay;
+-- 
+2.26.2
+

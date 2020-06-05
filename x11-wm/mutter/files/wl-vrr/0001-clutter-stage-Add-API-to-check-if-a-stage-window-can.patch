@@ -1,0 +1,97 @@
+From 5a4e2320cf5694c6abec1b9eefbaccb2e758bc86 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 5 May 2020 01:33:41 +0300
+Subject: [PATCH 01/18] clutter/stage: Add API to check if a stage window can
+ redraw
+
+A stage window can redraw only when it has a framebuffer available to
+be used as the back buffer.
+
+The stage window is double-buffered, so it only has a maximum of one
+framebuffer available to be used as the back buffer at any given time.
+
+If that one framebuffer was submitted for swap, the stage window is
+considered not ready to redraw.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1241
+---
+ clutter/clutter/clutter-stage-window.c    | 14 ++++++++++++++
+ clutter/clutter/clutter-stage-window.h    |  2 ++
+ clutter/clutter/cogl/clutter-stage-cogl.c |  9 +++++++++
+ 3 files changed, 25 insertions(+)
+
+diff --git a/clutter/clutter/clutter-stage-window.c b/clutter/clutter/clutter-stage-window.c
+index fe09aa1db..8a846b187 100644
+--- a/clutter/clutter/clutter-stage-window.c
++++ b/clutter/clutter/clutter-stage-window.c
+@@ -168,6 +168,20 @@ _clutter_stage_window_clear_update_time (ClutterStageWindow *window)
+   iface->clear_update_time (window);
+ }
+ 
++gboolean
++_clutter_stage_window_can_redraw (ClutterStageWindow *window)
++{
++  ClutterStageWindowInterface *iface;
++
++  g_return_val_if_fail (CLUTTER_IS_STAGE_WINDOW (window), FALSE);
++
++  iface = CLUTTER_STAGE_WINDOW_GET_IFACE (window);
++  if (iface->can_redraw)
++    return iface->can_redraw (window);
++
++  return FALSE;
++}
++
+ void
+ _clutter_stage_window_redraw (ClutterStageWindow *window)
+ {
+diff --git a/clutter/clutter/clutter-stage-window.h b/clutter/clutter/clutter-stage-window.h
+index 9f78ed25c..13254ae4c 100644
+--- a/clutter/clutter/clutter-stage-window.h
++++ b/clutter/clutter/clutter-stage-window.h
+@@ -49,6 +49,7 @@ struct _ClutterStageWindowInterface
+   gint64            (* get_update_time)         (ClutterStageWindow *stage_window);
+   void              (* clear_update_time)       (ClutterStageWindow *stage_window);
+ 
++  gboolean          (* can_redraw)              (ClutterStageWindow *stage_window);
+   void              (* redraw)                  (ClutterStageWindow *stage_window);
+ 
+   gboolean          (* can_clip_redraws)        (ClutterStageWindow *stage_window);
+@@ -86,6 +87,7 @@ void              _clutter_stage_window_clear_update_time       (ClutterStageWin
+ void              _clutter_stage_window_set_accept_focus        (ClutterStageWindow *window,
+                                                                  gboolean            accept_focus);
+ 
++gboolean          _clutter_stage_window_can_redraw              (ClutterStageWindow *window);
+ void              _clutter_stage_window_redraw                  (ClutterStageWindow *window);
+ 
+ gboolean          _clutter_stage_window_can_clip_redraws        (ClutterStageWindow *window);
+diff --git a/clutter/clutter/cogl/clutter-stage-cogl.c b/clutter/clutter/cogl/clutter-stage-cogl.c
+index db87e3933..be6d3e770 100644
+--- a/clutter/clutter/cogl/clutter-stage-cogl.c
++++ b/clutter/clutter/cogl/clutter-stage-cogl.c
+@@ -754,6 +754,14 @@ clutter_stage_cogl_scanout_view (ClutterStageCogl *stage_cogl,
+   cogl_onscreen_direct_scanout (onscreen, scanout);
+ }
+ 
++static gboolean
++clutter_stage_cogl_can_redraw (ClutterStageWindow *stage_window)
++{
++  ClutterStageCogl *stage_cogl = CLUTTER_STAGE_COGL (stage_window);
++
++  return stage_cogl->pending_swaps == 0;
++}
++
+ static void
+ clutter_stage_cogl_redraw (ClutterStageWindow *stage_window)
+ {
+@@ -815,6 +823,7 @@ clutter_stage_window_iface_init (ClutterStageWindowInterface *iface)
+   iface->schedule_update = clutter_stage_cogl_schedule_update;
+   iface->get_update_time = clutter_stage_cogl_get_update_time;
+   iface->clear_update_time = clutter_stage_cogl_clear_update_time;
++  iface->can_redraw = clutter_stage_cogl_can_redraw;
+   iface->redraw = clutter_stage_cogl_redraw;
+ }
+ 
+-- 
+2.26.2
+

@@ -1,0 +1,69 @@
+From c4ae086c7faf52e5b95b514f356b7c9ce7c78994 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Fri, 20 Mar 2020 20:52:13 +0200
+Subject: [PATCH 14/18] renderer/native: Allow queuing a mode set on a specific
+ view
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/backends/native/meta-renderer-native.c | 23 ++++++++++++++--------
+ src/backends/native/meta-renderer-native.h |  2 ++
+ 2 files changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/src/backends/native/meta-renderer-native.c b/src/backends/native/meta-renderer-native.c
+index cccc39b37..6c1530d7c 100644
+--- a/src/backends/native/meta-renderer-native.c
++++ b/src/backends/native/meta-renderer-native.c
+@@ -2913,6 +2913,19 @@ _cogl_winsys_egl_vtable = {
+   .context_init = meta_renderer_native_init_egl_context
+ };
+ 
++void
++meta_renderer_native_view_queue_mode_set (MetaRendererView *view)
++{
++  ClutterStageView *stage_view = CLUTTER_STAGE_VIEW (view);
++  CoglFramebuffer *framebuffer =
++    clutter_stage_view_get_onscreen (stage_view);
++  CoglOnscreen *onscreen = COGL_ONSCREEN (framebuffer);
++  CoglOnscreenEGL *onscreen_egl = onscreen->winsys;
++  MetaOnscreenNative *onscreen_native = onscreen_egl->platform;
++
++  onscreen_native->pending_set_crtc = TRUE;
++}
++
+ static void
+ meta_renderer_native_queue_modes_reset (MetaRendererNative *renderer_native)
+ {
+@@ -2921,14 +2934,8 @@ meta_renderer_native_queue_modes_reset (MetaRendererNative *renderer_native)
+ 
+   for (l = meta_renderer_get_views (renderer); l; l = l->next)
+     {
+-      ClutterStageView *stage_view = l->data;
+-      CoglFramebuffer *framebuffer =
+-        clutter_stage_view_get_onscreen (stage_view);
+-      CoglOnscreen *onscreen = COGL_ONSCREEN (framebuffer);
+-      CoglOnscreenEGL *onscreen_egl = onscreen->winsys;
+-      MetaOnscreenNative *onscreen_native = onscreen_egl->platform;
+-
+-      onscreen_native->pending_set_crtc = TRUE;
++      MetaRendererView *view = l->data;
++      meta_renderer_native_view_queue_mode_set (view);
+     }
+ 
+   renderer_native->pending_unset_disabled_crtcs = TRUE;
+diff --git a/src/backends/native/meta-renderer-native.h b/src/backends/native/meta-renderer-native.h
+index 3ea2c9cc0..02e780084 100644
+--- a/src/backends/native/meta-renderer-native.h
++++ b/src/backends/native/meta-renderer-native.h
+@@ -53,6 +53,8 @@ struct gbm_device * meta_gbm_device_from_gpu (MetaGpuKms *gpu_kms);
+ 
+ MetaGpuKms * meta_renderer_native_get_primary_gpu (MetaRendererNative *renderer_native);
+ 
++void meta_renderer_native_view_queue_mode_set (MetaRendererView *view);
++
+ void meta_renderer_native_finish_frame (MetaRendererNative *renderer_native);
+ 
+ int64_t meta_renderer_native_get_frame_counter (MetaRendererNative *renderer_native);
+-- 
+2.26.2
+

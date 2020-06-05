@@ -1,0 +1,113 @@
+From d68c97dc44ff69d266d055d61df5c4fa0e008029 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 21:44:15 +0200
+Subject: [PATCH 08/18] crtc/kms: Allow setting the "VRR_ENABLED" property on a
+ CRTC
+
+Add the ability to query for CRTC property IDs and add a function
+which sets the value of the "VRR_ENABLED" property using its ID.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/backends/native/meta-kms-crtc.c | 48 +++++++++++++++++++++++++++++
+ src/backends/native/meta-kms-crtc.h |  4 +++
+ 2 files changed, 52 insertions(+)
+
+diff --git a/src/backends/native/meta-kms-crtc.c b/src/backends/native/meta-kms-crtc.c
+index 6cf752494..6e8460a4b 100644
+--- a/src/backends/native/meta-kms-crtc.c
++++ b/src/backends/native/meta-kms-crtc.c
+@@ -36,6 +36,8 @@ struct _MetaKmsCrtc
+   int idx;
+ 
+   MetaKmsCrtcState current_state;
++
++  gboolean vrr_enabled_prop_id;
+ };
+ 
+ G_DEFINE_TYPE (MetaKmsCrtc, meta_kms_crtc, G_TYPE_OBJECT)
+@@ -51,6 +53,17 @@ meta_kms_crtc_set_gamma (MetaKmsCrtc    *crtc,
+   meta_kms_update_set_crtc_gamma (update, crtc, size, red, green, blue);
+ }
+ 
++void
++meta_kms_crtc_set_vrr_mode (MetaKmsCrtc   *crtc,
++                            MetaKmsUpdate *update,
++                            gboolean       enable)
++{
++  meta_kms_update_set_crtc_property(update,
++                                    crtc,
++                                    crtc->vrr_enabled_prop_id,
++                                    enable);
++}
++
+ MetaKmsDevice *
+ meta_kms_crtc_get_device (MetaKmsCrtc *crtc)
+ {
+@@ -243,6 +256,39 @@ meta_kms_crtc_predict_state (MetaKmsCrtc   *crtc,
+     }
+ }
+ 
++static void
++find_property_ids (MetaKmsCrtc       *crtc,
++                   MetaKmsImplDevice *impl_device,
++                   drmModeCrtc       *drm_crtc)
++{
++  drmModeObjectProperties *props;
++  int fd;
++  int i;
++
++  fd = meta_kms_impl_device_get_fd (impl_device);
++
++  props = drmModeObjectGetProperties(fd,
++                                     drm_crtc->crtc_id,
++                                     DRM_MODE_OBJECT_CRTC);
++  if (!props)
++    return;
++
++  for (i = 0; i < props->count_props; i++)
++    {
++      drmModePropertyPtr prop;
++
++      prop = drmModeGetProperty (fd, props->props[i]);
++      if (!prop)
++        continue;
++
++      if ((prop->flags & DRM_MODE_PROP_RANGE) &&
++          strcmp (prop->name, "VRR_ENABLED") == 0)
++        crtc->vrr_enabled_prop_id = prop->prop_id;
++
++      drmModeFreeProperty (prop);
++    }
++}
++
+ MetaKmsCrtc *
+ meta_kms_crtc_new (MetaKmsImplDevice *impl_device,
+                    drmModeCrtc       *drm_crtc,
+@@ -255,6 +301,8 @@ meta_kms_crtc_new (MetaKmsImplDevice *impl_device,
+   crtc->id = drm_crtc->crtc_id;
+   crtc->idx = idx;
+ 
++  find_property_ids (crtc, impl_device, drm_crtc);
++
+   return crtc;
+ }
+ 
+diff --git a/src/backends/native/meta-kms-crtc.h b/src/backends/native/meta-kms-crtc.h
+index fa9938199..f78ceae4d 100644
+--- a/src/backends/native/meta-kms-crtc.h
++++ b/src/backends/native/meta-kms-crtc.h
+@@ -47,6 +47,10 @@ G_DECLARE_FINAL_TYPE (MetaKmsCrtc, meta_kms_crtc,
+                       META, KMS_CRTC,
+                       GObject)
+ 
++void meta_kms_crtc_set_vrr_mode (MetaKmsCrtc   *crtc,
++                                 MetaKmsUpdate *update,
++                                 gboolean       enable);
++
+ void meta_kms_crtc_set_gamma (MetaKmsCrtc    *crtc,
+                               MetaKmsUpdate  *update,
+                               int             size,
+-- 
+2.26.2
+

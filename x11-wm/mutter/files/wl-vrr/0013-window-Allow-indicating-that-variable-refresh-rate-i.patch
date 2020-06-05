@@ -1,0 +1,76 @@
+From d661f0d6342dda254834a7828d570f962fdf21bd Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 21:39:49 +0200
+Subject: [PATCH 13/18] window: Allow indicating that variable refresh rate is
+ requested
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/core/window-private.h |  8 ++++++++
+ src/core/window.c         | 24 ++++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
+
+diff --git a/src/core/window-private.h b/src/core/window-private.h
+index ed5d8059b..0dacf6226 100644
+--- a/src/core/window-private.h
++++ b/src/core/window-private.h
+@@ -550,6 +550,8 @@ struct _MetaWindow
+   guint unmanage_idle_id;
+ 
+   pid_t client_pid;
++
++  gboolean vrr_requested;
+ };
+ 
+ struct _MetaWindowClass
+@@ -809,6 +811,12 @@ void meta_window_set_transient_for        (MetaWindow *window,
+ void meta_window_set_opacity              (MetaWindow *window,
+                                            guint8      opacity);
+ 
++void meta_window_set_vrr_requested (MetaWindow *window,
++                                    gboolean    vrr_requested);
++
++gboolean meta_window_vrr_requested (MetaWindow *window);
++
++
+ void meta_window_handle_enter (MetaWindow  *window,
+                                guint32      timestamp,
+                                guint        root_x,
+diff --git a/src/core/window.c b/src/core/window.c
+index 0a5de6743..68523345d 100644
+--- a/src/core/window.c
++++ b/src/core/window.c
+@@ -3033,6 +3033,30 @@ meta_window_is_on_primary_monitor (MetaWindow *window)
+   return window->monitor->is_primary;
+ }
+ 
++/**
++ * meta_window_set_vrr_requested:
++ * @window: a #MetaWindow
++ * @vrr_requested: whether the window requests variable refresh rate
++ */
++void
++meta_window_set_vrr_requested (MetaWindow *window,
++                               gboolean    vrr_requested)
++{
++  window->vrr_requested = vrr_requested;
++}
++
++/**
++ * meta_window_vrr_requested:
++ * @window: a #MetaWindow
++ *
++ * Return value: %TRUE if the window requested variable refresh rate
++ */
++gboolean
++meta_window_vrr_requested (MetaWindow *window)
++{
++  return window->vrr_requested;
++}
++
+ static void
+ meta_window_get_tile_fraction (MetaWindow   *window,
+                                MetaTileMode  tile_mode,
+-- 
+2.26.2
+

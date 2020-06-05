@@ -1,0 +1,83 @@
+From 0a1397b8d0db74079bbc6f863f48c6e089d68c48 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Fri, 17 Apr 2020 13:06:39 +0300
+Subject: [PATCH 18/18] temp: wayland/surface: flip committed client frames as
+ soon as possible
+
+This synchronizes page flipping with client surface commits, allowing
+client frames to be flipped as soon as possible.
+
+Flipping at the same frequency as the VRR client is drawing its frames
+is required in order to communicate the requested refresh rate to the
+VRR driver.
+
+This is generally a bad idea because it disables frame scheduling
+completely, introducing output latency in multi-window scenarios where
+multiple clients commit their frames. It also introduces jitter when
+those clients commit their frames at different frequencies.
+
+A better solution would be to enable this synchronization only when
+VRR is enabled for the output, so that the VRR client is the only
+client being drawn on the monitor. However, this would require frame
+scheduling to be performed per-output, which is still not the case in
+Mutter.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ clutter/clutter/clutter-stage.c    |  4 ++--
+ src/wayland/meta-wayland-surface.c | 17 +++++++++++++++++
+ 2 files changed, 19 insertions(+), 2 deletions(-)
+
+diff --git a/clutter/clutter/clutter-stage.c b/clutter/clutter/clutter-stage.c
+index 46d35bbd8..74f80226f 100644
+--- a/clutter/clutter/clutter-stage.c
++++ b/clutter/clutter/clutter-stage.c
+@@ -3194,7 +3194,7 @@ clutter_stage_ensure_redraw (ClutterStage *stage)
+   priv = stage->priv;
+ 
+   if (!_clutter_stage_needs_update (stage))
+-    clutter_stage_schedule_update (stage);
++    clutter_stage_skip_sync_delay (stage);
+ 
+   priv->redraw_pending = TRUE;
+ 
+@@ -3560,7 +3560,7 @@ _clutter_stage_queue_actor_redraw (ClutterStage                 *stage,
+ 
+       CLUTTER_NOTE (PAINT, "First redraw request");
+ 
+-      clutter_stage_schedule_update (stage);
++      clutter_stage_skip_sync_delay (stage);
+       priv->redraw_pending = TRUE;
+ 
+       master_clock = _clutter_master_clock_get_default ();
+diff --git a/src/wayland/meta-wayland-surface.c b/src/wayland/meta-wayland-surface.c
+index 515c67957..2932c54b7 100644
+--- a/src/wayland/meta-wayland-surface.c
++++ b/src/wayland/meta-wayland-surface.c
+@@ -812,6 +812,23 @@ cleanup:
+             meta_window_actor_notify_damaged (toplevel_window_actor);
+         }
+     }
++
++  {
++    MetaWindow *toplevel_window = meta_wayland_surface_get_toplevel_window (surface);
++
++    if (toplevel_window)
++      {
++        MetaWindowActor *toplevel_window_actor = meta_window_actor_from_window (toplevel_window);
++
++        if (toplevel_window_actor)
++          {
++            MetaSurfaceActor *toplevel_surface_actor = meta_window_actor_get_surface (META_WINDOW_ACTOR (toplevel_window_actor));
++
++            if (toplevel_surface_actor)
++              clutter_actor_queue_redraw (CLUTTER_ACTOR (toplevel_surface_actor));
++          }
++      }
++  }
+ }
+ 
+ void
+-- 
+2.26.2
+

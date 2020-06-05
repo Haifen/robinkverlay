@@ -1,0 +1,93 @@
+From 209c9f562a27419e5bf96cb680d35b794555c90b Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 20:57:41 +0200
+Subject: [PATCH 11/18] monitor: Allow requesting variable refresh rate and
+ checking its state
+
+A monitor is considered to have variable refresh rate support if its
+main output supports it.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/backends/meta-monitor.c | 41 +++++++++++++++++++++++++++++++++++++
+ src/backends/meta-monitor.h | 12 +++++++++++
+ 2 files changed, 53 insertions(+)
+
+diff --git a/src/backends/meta-monitor.c b/src/backends/meta-monitor.c
+index 07857e00b..32cf89450 100644
+--- a/src/backends/meta-monitor.c
++++ b/src/backends/meta-monitor.c
+@@ -339,6 +339,47 @@ meta_monitor_is_underscanning (MetaMonitor *monitor)
+   return output->is_underscanning;
+ }
+ 
++gboolean
++meta_monitor_is_vrr_enabled (MetaMonitor *monitor)
++{
++  MetaOutput *output;
++
++  output = meta_monitor_get_main_output (monitor);
++
++  return output->vrr_enabled;
++}
++
++gboolean
++meta_monitor_is_vrr_capable (MetaMonitor *monitor)
++{
++  MetaOutput *output;
++
++  output = meta_monitor_get_main_output (monitor);
++
++  return output->vrr_capable;
++}
++
++gboolean
++meta_monitor_is_vrr_requested (MetaMonitor *monitor)
++{
++  MetaOutput *output;
++
++  output = meta_monitor_get_main_output (monitor);
++
++  return output->vrr_requested;
++}
++
++void
++meta_monitor_set_vrr_requested (MetaMonitor *monitor,
++                                gboolean     vrr_requested)
++{
++  MetaOutput *output;
++
++  output = meta_monitor_get_main_output (monitor);
++
++  output->vrr_requested = vrr_requested;
++}
++
+ gboolean
+ meta_monitor_is_laptop_panel (MetaMonitor *monitor)
+ {
+diff --git a/src/backends/meta-monitor.h b/src/backends/meta-monitor.h
+index eb6b99fea..50e55492b 100644
+--- a/src/backends/meta-monitor.h
++++ b/src/backends/meta-monitor.h
+@@ -126,6 +126,18 @@ gboolean meta_monitor_supports_underscanning (MetaMonitor *monitor);
+ META_EXPORT_TEST
+ gboolean meta_monitor_is_underscanning (MetaMonitor *monitor);
+ 
++META_EXPORT_TEST
++gboolean meta_monitor_is_vrr_capable (MetaMonitor *monitor);
++
++META_EXPORT_TEST
++gboolean meta_monitor_is_vrr_enabled (MetaMonitor *monitor);
++
++META_EXPORT_TEST
++gboolean meta_monitor_is_vrr_requested (MetaMonitor *monitor);
++
++META_EXPORT_TEST
++void meta_monitor_set_vrr_requested (MetaMonitor *monitor, gboolean vrr_requested);
++
+ META_EXPORT_TEST
+ gboolean meta_monitor_is_laptop_panel (MetaMonitor *monitor);
+ 
+-- 
+2.26.2
+

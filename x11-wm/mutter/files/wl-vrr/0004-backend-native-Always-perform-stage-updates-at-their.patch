@@ -1,0 +1,65 @@
+From 552479fa319322314d9cc7f8a7591d0841bfb262 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 5 May 2020 02:39:54 +0300
+Subject: [PATCH 04/18] backend/native: Always perform stage updates at their
+ scheduled time
+
+Stage updates include operations such as moving the hardware cursor
+and dispatching input events to Wayland clients, which are operations
+that should never be delayed beyond their scheduled frame.
+
+However, since stage updates are delayed until the stage is able to
+redraw, these operations are delayed as well, binding their frequency
+to the frequency of stage redraws, which decrease as the rendering
+workloads of clients increase.
+
+Instead, allow stage updates to always occur at their scheduled update
+time, and make sure that redraws occur during an update only when the
+stage is able to redraw.
+
+Since updates are still scheduled to occur not more than once in every
+refresh period, and only when an update is due, the update frequency
+in idle and light rendering workloads remains the same and isn't
+affected by this change.
+
+However, in scenarios where the rendering workload is more intense and
+Mutter is expected to redraw at a rate which is lower than the maximum
+refresh rate, this change guarantees that updates would still occur
+at their scheduled time.
+
+The result of this is smooth hardware cursor movement even under load,
+and maximum input event latency of a single refresh period between
+Mutter and Wayland clients.
+
+Since this change does not affect the rate of updates in idle and
+light rendering workloads, it should provide a good balance between
+latency and power usage.
+
+This change wasn't applied to the X11 backend because it currently
+cannot guarantee that an update without a redraw could usually occur
+at a consistent rate of once in every refresh period under high load.
+This is because of several blocking synchroizations with the X server
+that would often block for more than whole refresh period at a time.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1241
+---
+ src/backends/native/meta-stage-native.c | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/src/backends/native/meta-stage-native.c b/src/backends/native/meta-stage-native.c
+index cb69286c7..f2966ef30 100644
+--- a/src/backends/native/meta-stage-native.c
++++ b/src/backends/native/meta-stage-native.c
+@@ -210,9 +210,6 @@ meta_stage_native_get_update_time (ClutterStageWindow *stage_window)
+ {
+   ClutterStageCogl *stage_cogl = CLUTTER_STAGE_COGL (stage_window);
+ 
+-  if (stage_cogl->pending_swaps)
+-    return -1; /* in the future, indefinite */
+-
+   return stage_cogl->update_time;
+ }
+ 
+-- 
+2.26.2
+

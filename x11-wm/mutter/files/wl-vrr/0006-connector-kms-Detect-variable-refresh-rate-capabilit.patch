@@ -1,0 +1,52 @@
+From d99148c5fda49314818f1e779189cd0dc84cbc53 Mon Sep 17 00:00:00 2001
+From: Dor Askayo <dor.askayo@gmail.com>
+Date: Tue, 17 Mar 2020 21:42:37 +0200
+Subject: [PATCH 06/18] connector/kms: Detect variable refresh rate capability
+
+The "vrr_capable" property indicates whether variable refresh rate is
+supported for a connector.
+
+https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
+---
+ src/backends/native/meta-kms-connector.c | 4 ++++
+ src/backends/native/meta-kms-connector.h | 2 ++
+ 2 files changed, 6 insertions(+)
+
+diff --git a/src/backends/native/meta-kms-connector.c b/src/backends/native/meta-kms-connector.c
+index ce8d28ae0..02a327716 100644
+--- a/src/backends/native/meta-kms-connector.c
++++ b/src/backends/native/meta-kms-connector.c
+@@ -206,6 +206,9 @@ state_set_properties (MetaKmsConnectorState *state,
+       else if ((prop->flags & DRM_MODE_PROP_ENUM) &&
+                strcmp (prop->name, "panel orientation") == 0)
+         set_panel_orientation (state, prop, drm_connector->prop_values[i]);
++      else if ((prop->flags & DRM_MODE_PROP_RANGE) &&
++               strcmp (prop->name, "vrr_capable") == 0)
++        state->vrr_capable = drm_connector->prop_values[i];
+ 
+       drmModeFreeProperty (prop);
+     }
+@@ -441,6 +444,7 @@ meta_kms_connector_state_new (void)
+   state = g_new0 (MetaKmsConnectorState, 1);
+   state->suggested_x = -1;
+   state->suggested_y = -1;
++  state->vrr_capable = FALSE;
+ 
+   return state;
+ }
+diff --git a/src/backends/native/meta-kms-connector.h b/src/backends/native/meta-kms-connector.h
+index b6198b467..7c4784cc8 100644
+--- a/src/backends/native/meta-kms-connector.h
++++ b/src/backends/native/meta-kms-connector.h
+@@ -57,6 +57,8 @@ typedef struct _MetaKmsConnectorState
+   gboolean hotplug_mode_update;
+ 
+   MetaMonitorTransform panel_orientation_transform;
++
++  gboolean vrr_capable;
+ } MetaKmsConnectorState;
+ 
+ MetaKmsDevice * meta_kms_connector_get_device (MetaKmsConnector *connector);
+-- 
+2.26.2
+
