@@ -149,7 +149,7 @@ src_configure() {
 			-Dselinux=$(usex selinux enabled disabled)
 			-Dsplit-authentication=true
 			-Dsysconfsubdir=gdm
-			-Dsystemd-journal=$(usex systemd true false)
+			-Dsystemd-journal=false
 			-Dsystemdsystemunitdir="$(systemd_get_systemunitdir)"
 			-Dtcp-wrappers=$(usex tcpd true false)
 			-Dudev-dir="$(get_udevdir)"/rules.d
