@@ -164,6 +164,7 @@ src_configure() {
 }
 
 src_install() {
+	meson_src_install
 	gnome2_src_install
 
 	exeinto /etc/X11/xinit/xinitrc.d
