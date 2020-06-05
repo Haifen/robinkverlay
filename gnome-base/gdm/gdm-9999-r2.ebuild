@@ -101,7 +101,7 @@ DOC_CONTENTS="
 	for smartcard support
 "
 
-PATCHES="${FILESDIR}/${P}-Apply-gentoo-branding.patch
+PATCHES="${FILESDIR}/${P}-Apply-Gentoo-branding.patch
 		 ${FILESDIR}/${P}-Fix-capitalization-issue-in-data-meson.build.patch"
 
 pkg_setup() {
