@@ -130,7 +130,7 @@ src_configure() {
 			-Ddefault-pam-config=exherbo
 			-Ddefaults-conf="${EPREFIX}"/etc/gdm/defaults.conf
 			-Ddmconfdir=/etc/gdm
-			-Dgdm-xsession=false
+			-Dgdm-xsession=true
 			-Dgnome-settings-daemon-dir="${EPREFIX}"/usr/libexec
 			-Dinitial-vt=1
 			-Dipv6=$(usex ipv6 true false)
@@ -159,6 +159,8 @@ src_configure() {
 			-Dworking-dir="${EPREFIX}"/var/lib/gdm
 			-Dxauth-dir="${EPREFIX}"/var/lib/gdm
 			-Dxdmcp=$(usex xdmcp enabled disabled) )
+	mkdir -p "${BUILD_DIR}"/data
+	cp "${S}"/data/XSession.in ${BUILD_DIR}/data
 	meson_src_configure
 
 }
