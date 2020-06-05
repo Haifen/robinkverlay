@@ -130,7 +130,7 @@ src_configure() {
 			-Ddefault-pam-config=exherbo
 			-Ddefaults-conf="${EPREFIX}"/etc/gdm/defaults.conf
 			-Ddmconfdir=/etc/gdm
-			-Dgdm-xsession=true
+			-Dgdm-xsession=false
 			-Dgnome-settings-daemon-dir="${EPREFIX}"/usr/libexec
 			-Dinitial-vt=1
 			-Dipv6=$(usex ipv6 true false)
