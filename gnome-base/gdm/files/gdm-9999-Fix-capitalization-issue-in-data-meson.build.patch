@@ -1,0 +1,26 @@
+From 1768e8ef954838dd214243ea8109e2b25ffc924c Mon Sep 17 00:00:00 2001
+From: Robin Kauffman <robink@creosotehill.org>
+Date: Thu, 4 Jun 2020 23:10:24 -0700
+Subject: [PATCH 2/2] Fix capitalization issue in data/meson.build
+
+It's 'Xsession.in', not 'XSession.in'.
+---
+ data/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/meson.build b/data/meson.build
+index 02353422..27ecc5b3 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -161,7 +161,7 @@ configure_file(
+ # XSession
+ if get_option('gdm-xsession')
+   configure_file(
+-    input: 'XSession.in',
++    input: 'Xsession.in',
+     output: '@BASENAME@',
+     configuration: {
+       'libexecdir': gdm_prefix / get_option('libexecdir'),
+-- 
+2.26.2
+

@@ -101,6 +101,9 @@ DOC_CONTENTS="
 	for smartcard support
 "
 
+PATCHES="${FILESDIR}/${P}-Apply-gentoo-branding.patch
+		 ${FILESDIR}/${P}-Fix-capitalization-issue-in-data-meson.build.patch"
+
 pkg_setup() {
 	enewgroup gdm
 	enewgroup video # Just in case it hasn't been created yet
