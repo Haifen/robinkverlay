@@ -20,7 +20,7 @@ LICENSE="
 
 SLOT="0"
 
-IUSE="accessibility audit branding fprint +introspection ipv6 plymouth profiling selinux smartcard tcpd test wayland xinerama xdmcp"
+IUSE="accessibility audit branding fprint +introspection ipv6 plymouth profiling selinux smartcard systemd tcpd test wayland xinerama xdmcp"
 
 KEYWORDS="~alpha ~amd64 ~arm ~ia64 ~ppc ~ppc64 ~sh ~sparc ~x86"
 
