@@ -29,6 +29,12 @@ DEPEND="sys-devel/bison
 	doc? ( app-doc/doxygen )"
 RDEPEND=""
 
+src_prepare() {
+	einfo "Munging docdir to match Gentoo's path standard…"
+	sed -i -r -e "s/(docdir\s\=.+)\)$/\1 + '-${PV}'))/" ${S}/meson.build
+	eapply_user
+}
+
 multilib_src_configure() {
 	emesonargs=(
 		-Dxkb-config-root="${EPREFIX}/usr/share/X11/xkb"
