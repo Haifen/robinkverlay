@@ -1,4 +1,4 @@
-From c4ae086c7faf52e5b95b514f356b7c9ce7c78994 Mon Sep 17 00:00:00 2001
+From 00405ff7130c82faa6d8808a1f0c30f44383d50c Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Fri, 20 Mar 2020 20:52:13 +0200
 Subject: [PATCH 14/18] renderer/native: Allow queuing a mode set on a specific

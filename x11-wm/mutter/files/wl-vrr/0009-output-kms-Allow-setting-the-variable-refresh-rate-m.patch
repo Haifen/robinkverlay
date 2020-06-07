@@ -1,4 +1,4 @@
-From 90c8edf5cd2ba468a302b68fc2d8a013d5041bf7 Mon Sep 17 00:00:00 2001
+From f758037b228c72b6c7171dc587b01def5170ac20 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 21:50:19 +0200
 Subject: [PATCH 09/18] output/kms: Allow setting the variable refresh rate

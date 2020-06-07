@@ -1,4 +1,4 @@
-From 0a1397b8d0db74079bbc6f863f48c6e089d68c48 Mon Sep 17 00:00:00 2001
+From d025b97944a072d441df9bd248d6b474800cd801 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Fri, 17 Apr 2020 13:06:39 +0300
 Subject: [PATCH 18/18] temp: wayland/surface: flip committed client frames as
@@ -24,24 +24,53 @@ Mutter.
 
 https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
 ---
- clutter/clutter/clutter-stage.c    |  4 ++--
- src/wayland/meta-wayland-surface.c | 17 +++++++++++++++++
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ clutter/clutter/clutter-stage.c    | 33 +++++++++++++++++++++++++++++-
+ src/wayland/meta-wayland-surface.c | 17 +++++++++++++++
+ 2 files changed, 49 insertions(+), 1 deletion(-)
 
 diff --git a/clutter/clutter/clutter-stage.c b/clutter/clutter/clutter-stage.c
-index 46d35bbd8..74f80226f 100644
+index 2a257c2e4..f073301d9 100644
 --- a/clutter/clutter/clutter-stage.c
 +++ b/clutter/clutter/clutter-stage.c
-@@ -3194,7 +3194,7 @@ clutter_stage_ensure_redraw (ClutterStage *stage)
-   priv = stage->priv;
+@@ -3172,6 +3172,37 @@ _clutter_stage_maybe_setup_viewport (ClutterStage     *stage,
  
-   if (!_clutter_stage_needs_update (stage))
--    clutter_stage_schedule_update (stage);
+ #undef _DEG_TO_RAD
+ 
++/**
++ * clutter_stage_ensure_redraw:
++ * @stage: a #ClutterStage
++ *
++ * Ensures that @stage is redrawn
++ *
++ * This function should not be called by applications: it is
++ * used when embedding a #ClutterStage into a toolkit with
++ * another windowing system, like GTK+.
++ *
++ * Since: 1.0
++ */
++void
++clutter_stage_ensure_redraw (ClutterStage *stage)
++{
++  ClutterMasterClock *master_clock;
++  ClutterStagePrivate *priv;
++
++  g_return_if_fail (CLUTTER_IS_STAGE (stage));
++
++  priv = stage->priv;
++
++  if (!_clutter_stage_needs_update (stage))
 +    clutter_stage_skip_sync_delay (stage);
- 
-   priv->redraw_pending = TRUE;
- 
-@@ -3560,7 +3560,7 @@ _clutter_stage_queue_actor_redraw (ClutterStage                 *stage,
++
++  priv->redraw_pending = TRUE;
++
++  master_clock = _clutter_master_clock_get_default ();
++  _clutter_master_clock_start_running (master_clock);
++}
++
+ /**
+  * clutter_stage_is_redraw_queued: (skip)
+  */
+@@ -3530,7 +3561,7 @@ _clutter_stage_queue_actor_redraw (ClutterStage                 *stage,
  
        CLUTTER_NOTE (PAINT, "First redraw request");
  

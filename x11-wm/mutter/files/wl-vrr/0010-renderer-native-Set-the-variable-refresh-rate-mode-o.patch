@@ -1,4 +1,4 @@
-From 85f47b37bdd85dd90f5ad6dd9db8654143e0d7db Mon Sep 17 00:00:00 2001
+From c78f99c2f6d76cc741a4c788ec2031dc28a03242 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 21:53:44 +0200
 Subject: [PATCH 10/18] renderer/native: Set the variable refresh rate mode on

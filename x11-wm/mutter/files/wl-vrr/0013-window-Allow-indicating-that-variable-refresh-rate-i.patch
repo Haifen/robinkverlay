@@ -1,4 +1,4 @@
-From d661f0d6342dda254834a7828d570f962fdf21bd Mon Sep 17 00:00:00 2001
+From c1b6094bbab898fe282adb66ecbb2663f1495c69 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 21:39:49 +0200
 Subject: [PATCH 13/18] window: Allow indicating that variable refresh rate is

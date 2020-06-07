@@ -1,4 +1,4 @@
-From e57f4acff7a1a31d6dd98bbc00024304197a529c Mon Sep 17 00:00:00 2001
+From 232e4b8b0671e50c6a33a0de635cced564523421 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 01:44:25 +0200
 Subject: [PATCH 15/18] wip: compositor/native: Request variable refresh rate
@@ -12,7 +12,7 @@ https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1154
  3 files changed, 148 insertions(+)
 
 diff --git a/src/compositor/meta-compositor-native.c b/src/compositor/meta-compositor-native.c
-index 85929c035..8d627f8a4 100644
+index cbbca374b..f34fb22fc 100644
 --- a/src/compositor/meta-compositor-native.c
 +++ b/src/compositor/meta-compositor-native.c
 @@ -23,11 +23,14 @@
@@ -123,7 +123,7 @@ index 85929c035..8d627f8a4 100644
  }
  
  MetaCompositorNative *
-@@ -139,10 +219,23 @@ meta_compositor_native_init (MetaCompositorNative *compositor_native)
+@@ -141,10 +221,23 @@ meta_compositor_native_init (MetaCompositorNative *compositor_native)
  {
  }
  
@@ -148,18 +148,16 @@ index 85929c035..8d627f8a4 100644
    compositor_class->pre_paint = meta_compositor_native_pre_paint;
  }
 diff --git a/src/compositor/meta-compositor-native.h b/src/compositor/meta-compositor-native.h
-index d276a5905..c5c90c42e 100644
+index 2b1c65208..2ad57741b 100644
 --- a/src/compositor/meta-compositor-native.h
 +++ b/src/compositor/meta-compositor-native.h
-@@ -27,6 +27,9 @@
- G_DECLARE_FINAL_TYPE (MetaCompositorNative, meta_compositor_native,
-                       META, COMPOSITOR_NATIVE, MetaCompositor)
+@@ -30,4 +30,7 @@ G_DECLARE_FINAL_TYPE (MetaCompositorNative, meta_compositor_native,
+ MetaCompositorNative * meta_compositor_native_new (MetaDisplay *display,
+                                                    MetaBackend *backend);
  
 +void meta_compositor_native_request_vrr_for_logical_monitor (MetaCompositorNative *compositor_native,
 +                                                             MetaLogicalMonitor   *logical_monitor);
 +
- MetaCompositorNative * meta_compositor_native_new (MetaDisplay *display);
- 
  #endif /* META_COMPOSITOR_NATIVE_H */
 diff --git a/src/compositor/meta-window-actor.c b/src/compositor/meta-window-actor.c
 index 79f4ce6a6..f23451e17 100644

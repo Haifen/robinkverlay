@@ -1,4 +1,4 @@
-From d68c97dc44ff69d266d055d61df5c4fa0e008029 Mon Sep 17 00:00:00 2001
+From dd7ee7ff0b68c377c3b97364d274ac909b50fccd Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 21:44:15 +0200
 Subject: [PATCH 08/18] crtc/kms: Allow setting the "VRR_ENABLED" property on a

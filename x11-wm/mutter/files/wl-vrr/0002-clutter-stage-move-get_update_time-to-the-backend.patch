@@ -1,4 +1,4 @@
-From aaa2a9f78c66d2a342ade726224d95e5ed7802d5 Mon Sep 17 00:00:00 2001
+From 4298ccab8f8909ab727d34de52b0b97d9d589b16 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 12 May 2020 22:45:59 +0300
 Subject: [PATCH 02/18] clutter/stage: move get_update_time to the backend

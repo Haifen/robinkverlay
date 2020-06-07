@@ -1,4 +1,4 @@
-From 8e0bbce7a50f4a387d1b0a4baa52dd893a4a534d Mon Sep 17 00:00:00 2001
+From 03c532ab79d4da28b3a9c8caec90466efa483820 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 20:52:16 +0200
 Subject: [PATCH 12/18] monitor-manager: Add variable refresh rate

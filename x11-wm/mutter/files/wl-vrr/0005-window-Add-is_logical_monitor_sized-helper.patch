@@ -1,4 +1,4 @@
-From c1eef89327495c731abc90236da2b9422e8ae16d Mon Sep 17 00:00:00 2001
+From 6004f9eb1699e3d50cc66e09d833fdefa1c1c5e9 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Jonas=20=C3=85dahl?= <jadahl@gmail.com>
 Date: Wed, 11 Sep 2019 22:04:00 +0200
 Subject: [PATCH 05/18] window: Add is_logical_monitor_sized() helper

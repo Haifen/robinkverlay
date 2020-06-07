@@ -1,4 +1,4 @@
-From 2e03105de019e58fe209e642d6026532545e6e57 Mon Sep 17 00:00:00 2001
+From 851a2ba8a43d5007215cac7680c55b6b441dbaf5 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 22:17:59 +0200
 Subject: [PATCH 07/18] update/kms: Allow setting CRTC properties

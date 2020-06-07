@@ -1,4 +1,4 @@
-From 209c9f562a27419e5bf96cb680d35b794555c90b Mon Sep 17 00:00:00 2001
+From 584b894677d8a111a6d42dbaf3875b80e7460cb5 Mon Sep 17 00:00:00 2001
 From: Dor Askayo <dor.askayo@gmail.com>
 Date: Tue, 17 Mar 2020 20:57:41 +0200
 Subject: [PATCH 11/18] monitor: Allow requesting variable refresh rate and
