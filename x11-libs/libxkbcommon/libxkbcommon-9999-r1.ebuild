@@ -31,7 +31,7 @@ RDEPEND=""
 
 src_prepare() {
 	einfo "Munging docdir to match Gentoo's path standard…"
-	sed -i -r -e "s/(docdir\s\=.+)\)$/\1 + '-${PV}'))/" ${S}/meson.build
+	sed -i -r -e "s/(docdir\s\=.+)\)$/\1 + '-${PV}')/" ${S}/meson.build
 	eapply_user
 }
 
