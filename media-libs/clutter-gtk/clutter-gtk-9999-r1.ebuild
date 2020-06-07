@@ -14,7 +14,7 @@ LICENSE="LGPL-2.1+"
 SLOT="1.0"
 KEYWORDS=""
 IUSE="${IUSE} doc"
-IUSE="X doc examples gtk wayland"
+IUSE="X doc examples gtk introspection wayland"
 
 RDEPEND="
 	>=x11-libs/gtk+-3.8.0:3[X=,introspection,wayland=]
