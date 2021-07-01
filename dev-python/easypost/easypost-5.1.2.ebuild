@@ -4,12 +4,12 @@
 
 EAPI=7
 
-PYTHON_COMPAT=( python2_7 python3_5 python3_6 python3_7 )
+PYTHON_COMPAT=( python3_8 python3_9 )
 inherit distutils-r1
 
 DESCRIPTION="Python module for the EasyPost API"
-HOMEPAGE="https://github.com/EasyPost/eastypost-python"
-SRC_URI="https://files.pythonhosted.org/packages/2d/60/02f50e068035a78b4ec41578e1c46e925a7aa99826fdcfdfde1fcee50be3/easypost-4.0.0.tar.gz"
+HOMEPAGE="https://github.com/EasyPost/easypost-python"
+SRC_URI="https://files.pythonhosted.org/packages/46/de/a85791657c9de07d94592ac35f951ee28177c3e7ddb68a09773869021080/easypost-5.1.2.tar.gz"
 
 LICENSE="MIT"
 SLOT="0"
