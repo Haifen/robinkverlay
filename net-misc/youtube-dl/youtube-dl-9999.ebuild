@@ -4,7 +4,7 @@
 EAPI=8
 
 DISTUTILS_USE_PEP517=setuptools
-PYTHON_COMPAT=( python3_{9..10} )
+PYTHON_COMPAT=( python3_{10..13} )
 inherit bash-completion-r1 distutils-r1 git-r3 optfeature
 
 DESCRIPTION="Download videos from YouTube.com (and more sites...)"
